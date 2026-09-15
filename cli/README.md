@@ -122,3 +122,7 @@ All config values can be overridden at runtime:
 | `json` | Piping to `jq` or other tools |
 | `csv` | Spreadsheet import |
 | `jsonl` | Streaming / log pipelines |
+
+## Drips Wave
+
+This CLI is part of the StellarClassic Pulse project which participates in the [Stellar Wave Program](https://drips.network/wave).
