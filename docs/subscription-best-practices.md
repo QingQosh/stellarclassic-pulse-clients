@@ -1,6 +1,6 @@
 # Subscription Best Practices
 
-This guide covers how to configure subscriptions for maximum reliability and efficiency in SorobanPulse.
+This guide covers how to configure subscriptions for maximum reliability and efficiency in StellarClassicPulse.
 
 ## Filter Optimization
 
@@ -93,7 +93,7 @@ Sizing guidance for webhook endpoints:
 | 10–100 events/min | Enqueue to an internal queue (Redis/SQS) and process async |
 | > 100 events/min | Autoscaling consumer group; return `200` immediately and process in background |
 
-**Always return `200 OK` as fast as possible.** SorobanPulse marks a delivery as failed if your endpoint takes longer than `WEBHOOK_TIMEOUT_MS` (default 10 seconds) to respond, and schedules a retry regardless of what your handler ultimately does.
+**Always return `200 OK` as fast as possible.** StellarClassicPulse marks a delivery as failed if your endpoint takes longer than `WEBHOOK_TIMEOUT_MS` (default 10 seconds) to respond, and schedules a retry regardless of what your handler ultimately does.
 
 ### Batch processing via REST
 
@@ -110,7 +110,7 @@ Store `$LAST_LEDGER` in your application state after each successful batch so yo
 
 ### Webhook retry schedule (server-side)
 
-SorobanPulse retries failed webhook deliveries using exponential backoff with jitter. The default schedule:
+StellarClassicPulse retries failed webhook deliveries using exponential backoff with jitter. The default schedule:
 
 | Attempt | Delay |
 |---|---|
@@ -158,7 +158,7 @@ function connectSSE(url, apiKey, lastEventId) {
 }
 ```
 
-Pass the `Last-Event-ID` header on reconnect — SorobanPulse resumes the stream from that event so no events are lost during the gap.
+Pass the `Last-Event-ID` header on reconnect — StellarClassicPulse resumes the stream from that event so no events are lost during the gap.
 
 ### Client-side REST polling backoff
 
@@ -290,10 +290,10 @@ Instrument these signals before you have a production incident, not after:
 
 | Signal | Metric / query | Suggested alert threshold |
 |---|---|---|
-| Webhook delivery failures | `soroban_pulse_webhook_failures_total` (rate) | Alert if rate > 0 sustained for 5+ minutes for any single `webhook_id` |
+| Webhook delivery failures | `stellarclassic_pulse_webhook_failures_total` (rate) | Alert if rate > 0 sustained for 5+ minutes for any single `webhook_id` |
 | Delivery queue backlog | `SELECT COUNT(*) FROM delivery_logs WHERE status = 'pending'` | Alert if backlog exceeds a few thousand rows, or grows for 10+ consecutive minutes |
-| SSE connection churn | `soroban_pulse_sse_active_connections` | Alert on a sudden drop (mass disconnect) or unbounded growth (leaked clients) |
-| REST polling rate limiting | `soroban_pulse_rate_limit_rejected_total` | Alert if a specific API key is consistently hitting `429` — usually means their poll interval is too aggressive for their filter's event volume |
+| SSE connection churn | `stellarclassic_pulse_sse_active_connections` | Alert on a sudden drop (mass disconnect) or unbounded growth (leaked clients) |
+| REST polling rate limiting | `stellarclassic_pulse_rate_limit_rejected_total` | Alert if a specific API key is consistently hitting `429` — usually means their poll interval is too aggressive for their filter's event volume |
 | Subscription count per key | `SELECT COUNT(*) FROM subscriptions WHERE api_key_id = ?` | Flag keys with unusually high subscription counts for the [redundant subscription audit](#avoid-redundant-subscriptions) above |
 | Dead-letter rate | See [Dead-letter handling](#dead-letter-handling) query below | Alert when failures for one webhook exceed 10/hour |
 

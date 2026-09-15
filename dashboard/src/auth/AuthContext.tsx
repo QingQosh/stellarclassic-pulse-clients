@@ -12,7 +12,7 @@ interface AuthContextValue {
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-const STORAGE_KEY = "sorobanpulse.dashboard.auth";
+const STORAGE_KEY = "stellarclassicpulse.dashboard.auth";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);

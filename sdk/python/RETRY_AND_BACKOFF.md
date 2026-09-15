@@ -1,6 +1,6 @@
-# Retry Policy and Exponential Backoff in Soroban Pulse Python SDK
+# Retry Policy and Exponential Backoff in StellarClassic Pulse Python SDK
 
-This document explains how to configure and use the retry and backoff functionality in the Soroban Pulse Python SDK.
+This document explains how to configure and use the retry and backoff functionality in the StellarClassic Pulse Python SDK.
 
 ## Overview
 
@@ -19,7 +19,7 @@ Retries are automatically applied with exponential backoff: 1s, 2s, 4s, 8s, 16s 
 from openapi_client import ApiClient, Configuration
 
 config = Configuration(
-    host="https://api.sorobanpulse.com",
+    host="https://api.stellarclassicpulse.com",
 )
 api_client = ApiClient(configuration=config)
 
@@ -37,7 +37,7 @@ from openapi_client import ApiClient, Configuration
 from openapi_client import RetryPolicyConfig
 
 config = Configuration(
-    host="https://api.sorobanpulse.com",
+    host="https://api.stellarclassicpulse.com",
 )
 
 retry_config = RetryPolicyConfig(
@@ -140,7 +140,7 @@ def track_retry(attempt, delay, reason):
     metrics.retried += 1
     print(f"Retry {attempt} (total retries: {metrics.retried}): {reason}")
 
-config = Configuration(host="https://api.sorobanpulse.com")
+config = Configuration(host="https://api.stellarclassicpulse.com")
 retry_config = RetryPolicyConfig(on_retry=track_retry)
 
 api_client = ApiClient(configuration=config)
@@ -266,7 +266,7 @@ import asyncio
 from openapi_client import ApiClient, Configuration
 
 async def fetch_events():
-    config = Configuration(host="https://api.sorobanpulse.com")
+    config = Configuration(host="https://api.stellarclassicpulse.com")
     api_client = ApiClient(configuration=config)
     
     # API calls with automatic retries
@@ -353,7 +353,7 @@ from openapi_client import (
 )
 
 config = Configuration(
-    host="https://api.sorobanpulse.com",
+    host="https://api.stellarclassicpulse.com",
     api_key="your-api-key"
 )
 
@@ -386,7 +386,7 @@ from openapi_client import (
 )
 
 config = Configuration(
-    host="https://api.sorobanpulse.com",
+    host="https://api.stellarclassicpulse.com",
     api_key="your-api-key",
 )
 
@@ -467,6 +467,6 @@ return api.call()  # Retries automatically
 ## See Also
 
 - [Main Python SDK README](./README.md)
-- [Soroban Pulse API Documentation](https://soroban-pulse.com/docs)
+- [StellarClassic Pulse API Documentation](https://stellarclassic-pulse.com/docs)
 - [HTTP Retry Strategies Guide](https://en.wikipedia.org/wiki/Exponential_backoff)
 - [Python asyncio Documentation](https://docs.python.org/3/library/asyncio.html)

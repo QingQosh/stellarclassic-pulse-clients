@@ -1,6 +1,6 @@
 # Performance Tuning Guide
 
-Guidance on configuring Soroban Pulse for optimal throughput and latency.
+Guidance on configuring StellarClassic Pulse for optimal throughput and latency.
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@ Guidance on configuring Soroban Pulse for optimal throughput and latency.
 
 ## Connection Pool Tuning
 
-The connection pool is managed by SQLx and controls how many simultaneous PostgreSQL connections Soroban Pulse holds open.
+The connection pool is managed by SQLx and controls how many simultaneous PostgreSQL connections StellarClassic Pulse holds open.
 
 ### Variables
 
@@ -38,7 +38,7 @@ For most cloud databases (1–4 cores, SSD), values between `10` and `30` are ap
 
 ### Signs the pool is too small
 
-- `soroban_pulse_db_pool_size` == `soroban_pulse_db_pool_max` consistently
+- `stellarclassic_pulse_db_pool_size` == `stellarclassic_pulse_db_pool_max` consistently
 - HTTP latency spikes during traffic peaks
 - Logs show `PoolTimedOut` or `connection timed out` errors
 
@@ -62,7 +62,7 @@ default_pool_size = 20
 
 ```bash
 # Point the app at PgBouncer
-DATABASE_URL=postgres://user:pass@pgbouncer:5432/soroban_pulse
+DATABASE_URL=postgres://user:pass@pgbouncer:5432/stellarclassic_pulse
 DB_MAX_CONNECTIONS=20
 ```
 
@@ -70,10 +70,10 @@ DB_MAX_CONNECTIONS=20
 
 ```promql
 # Pool utilisation (alert if > 0.9)
-soroban_pulse_db_pool_size / soroban_pulse_db_pool_max
+stellarclassic_pulse_db_pool_size / stellarclassic_pulse_db_pool_max
 
 # Idle connections (should be > 0 at low load)
-soroban_pulse_db_pool_idle
+stellarclassic_pulse_db_pool_idle
 ```
 
 ---
@@ -241,7 +241,7 @@ WHERE relname = 'events';
 
 ### Query result cache (`query_cache`)
 
-Soroban Pulse includes a built-in in-memory query cache (`src/query_cache.rs`) for repeated identical requests. It is lightweight and zero-configuration — no Redis required.
+StellarClassic Pulse includes a built-in in-memory query cache (`src/query_cache.rs`) for repeated identical requests. It is lightweight and zero-configuration — no Redis required.
 
 The cache is most effective for:
 - The same paginated `GET /v1/events` query repeated by monitoring dashboards
@@ -317,7 +317,7 @@ The rate limiter uses a sliding-window token bucket per IP address. Rejected req
 
 ```promql
 # Request rejection rate (429s per second)
-rate(soroban_pulse_rate_limit_rejected_total[1m])
+rate(stellarclassic_pulse_rate_limit_rejected_total[1m])
 ```
 
 If legitimate clients are being rate-limited, raise the limit. If you see a single IP driving the counter, investigate abuse.
@@ -357,7 +357,7 @@ INDEXER_LOCK_RETRY_SECS=10  # retry every 10 s instead of 30 s
 
 Monitor which replica is the leader:
 ```promql
-soroban_pulse_indexer_is_leader == 1
+stellarclassic_pulse_indexer_is_leader == 1
 ```
 
 Exactly one replica should show `1`. Zero means the indexer is down; more than one means a split-brain scenario (requires immediate investigation).
@@ -497,7 +497,7 @@ node --version
 ### Running scenarios locally
 
 ```bash
-# 1. Start a local Soroban Pulse instance
+# 1. Start a local StellarClassic Pulse instance
 cargo run
 
 # 2. Run any individual scenario
@@ -583,7 +583,7 @@ The spike scenario has three distinct phases in the output:
 #### Soak test
 
 Compare `p95_ms_hour1` vs `p95_ms_hour12` vs `p95_ms_hour24` from the summary. More than a 10 % increase over 24 hours indicates latency drift, likely caused by:
-- Gradual memory growth (check `soroban_pulse_process_memory_bytes` in Prometheus)
+- Gradual memory growth (check `stellarclassic_pulse_process_memory_bytes` in Prometheus)
 - Table bloat (check `pg_stat_user_tables.n_dead_tup`)
 - Index fragmentation (check `docs/index-maintenance.md`)
 
@@ -614,7 +614,7 @@ The `db_size` input selects which baseline row to compare against (default `1M`)
 
 ### Webhook delivery setup
 
-The `webhook_delivery.js` scenario drives the admin replay endpoint and observes `soroban_pulse_webhook_failures_total` via `/metrics`. For end-to-end delivery latency measurement, point a stub receiver at `WEBHOOK_URL` before starting the service:
+The `webhook_delivery.js` scenario drives the admin replay endpoint and observes `stellarclassic_pulse_webhook_failures_total` via `/metrics`. For end-to-end delivery latency measurement, point a stub receiver at `WEBHOOK_URL` before starting the service:
 
 ```bash
 # Option 1: WireMock stub

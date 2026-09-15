@@ -3,17 +3,17 @@
 import asyncio
 import os
 
-from soroban_pulse import AsyncSorobanPulseClient
+from stellarclassic_pulse import AsyncStellarClassicPulseClient
 
 
 async def main() -> None:
-    async with AsyncSorobanPulseClient(api_key=os.environ["SOROBAN_PULSE_API_KEY"]) as client:
+    async with AsyncStellarClassicPulseClient(api_key=os.environ["SOROBAN_PULSE_API_KEY"]) as client:
         async for event in client.iter_events(contract_id="CABC123", limit=25):
             print(event["id"], event["event_type"])
 
         sub = await client.create_subscription(
             contract_id="CABC123",
-            webhook_url="https://example.com/webhooks/soroban-pulse",
+            webhook_url="https://example.com/webhooks/stellarclassic-pulse",
             event_types=["transfer", "mint"],
         )
         print("created subscription", sub["id"])

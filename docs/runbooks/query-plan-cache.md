@@ -16,15 +16,15 @@ the `EXPLAIN (FORMAT JSON, ANALYZE OFF)` round-trip to PostgreSQL, saving
 
 | Metric | Type | Purpose |
 |--------|------|---------|
-| `soroban_pulse_query_plan_cache_hits_total` | counter | Cumulative cache hits |
-| `soroban_pulse_query_plan_cache_misses_total` | counter | Cumulative cache misses |
-| `soroban_pulse_query_plan_cache_hit_ratio` | gauge | Rolling hit/(hit+miss), 0–1 |
-| `soroban_pulse_query_plan_cache_evictions_total` | counter | LRU/TTL evictions |
-| `soroban_pulse_query_plan_cache_entry_count` | gauge | Live entries in the cache |
-| `soroban_pulse_query_plans_cached_total` | counter | Cumulative inserts |
-| `soroban_pulse_query_planning_time_ms` | histogram | Planning time per query |
+| `stellarclassic_pulse_query_plan_cache_hits_total` | counter | Cumulative cache hits |
+| `stellarclassic_pulse_query_plan_cache_misses_total` | counter | Cumulative cache misses |
+| `stellarclassic_pulse_query_plan_cache_hit_ratio` | gauge | Rolling hit/(hit+miss), 0–1 |
+| `stellarclassic_pulse_query_plan_cache_evictions_total` | counter | LRU/TTL evictions |
+| `stellarclassic_pulse_query_plan_cache_entry_count` | gauge | Live entries in the cache |
+| `stellarclassic_pulse_query_plans_cached_total` | counter | Cumulative inserts |
+| `stellarclassic_pulse_query_planning_time_ms` | histogram | Planning time per query |
 
-**Target:** `soroban_pulse_query_plan_cache_hit_ratio` ≥ 0.80 for stable
+**Target:** `stellarclassic_pulse_query_plan_cache_hit_ratio` ≥ 0.80 for stable
 workloads.  Alert if it drops below 0.60 for more than 5 minutes.
 
 ---
@@ -53,8 +53,8 @@ The per-entry TTL is multiplied based on request frequency:
 | `f ≥ 100` | 4× | 4 hours |
 
 **Recommendation:** Keep these defaults unless you observe significant cache
-churn on hot queries.  If `soroban_pulse_query_plan_cache_evictions_total` is
-rising faster than `soroban_pulse_query_plans_cached_total`, increase
+churn on hot queries.  If `stellarclassic_pulse_query_plan_cache_evictions_total` is
+rising faster than `stellarclassic_pulse_query_plans_cached_total`, increase
 `max_plans` first before adjusting multipliers.
 
 ---
@@ -74,17 +74,17 @@ A hit ratio below 0.60 typically means one of:
 **Step 1 — Check the current ratio**
 
 ```promql
-soroban_pulse_query_plan_cache_hit_ratio
+stellarclassic_pulse_query_plan_cache_hit_ratio
 ```
 
 **Step 2 — Check the eviction rate vs insert rate**
 
 ```promql
 # Eviction rate (per minute)
-rate(soroban_pulse_query_plan_cache_evictions_total[5m]) * 60
+rate(stellarclassic_pulse_query_plan_cache_evictions_total[5m]) * 60
 
 # Insert rate (per minute)
-rate(soroban_pulse_query_plans_cached_total[5m]) * 60
+rate(stellarclassic_pulse_query_plans_cached_total[5m]) * 60
 ```
 
 If evictions ≈ inserts, the cache is thrashing — increase `max_plans`.
@@ -92,7 +92,7 @@ If evictions ≈ inserts, the cache is thrashing — increase `max_plans`.
 **Step 3 — Check entry count vs capacity**
 
 ```promql
-soroban_pulse_query_plan_cache_entry_count
+stellarclassic_pulse_query_plan_cache_entry_count
 ```
 
 If this is consistently at `max_plans` (default 1000), the cache is full.
@@ -112,7 +112,7 @@ entry for every unique value.
 **Step 5 — Check for recent schema migrations**
 
 ```promql
-soroban_pulse_migrations_applied_total
+stellarclassic_pulse_migrations_applied_total
 ```
 
 A bump here means plans may have been invalidated.  Manual flush:
@@ -127,9 +127,9 @@ cache.clear().await;
 
 ### Symptoms
 
-- `soroban_pulse_query_plan_cache_evictions_total` growing at a steady rate.
-- `soroban_pulse_query_plan_cache_hit_ratio` declining over time.
-- `soroban_pulse_query_plan_cache_entry_count` consistently near `max_plans`.
+- `stellarclassic_pulse_query_plan_cache_evictions_total` growing at a steady rate.
+- `stellarclassic_pulse_query_plan_cache_hit_ratio` declining over time.
+- `stellarclassic_pulse_query_plan_cache_entry_count` consistently near `max_plans`.
 
 ### Resolution steps
 

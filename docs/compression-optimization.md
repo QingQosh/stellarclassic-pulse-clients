@@ -2,7 +2,7 @@
 
 _Issue #961_
 
-Soroban Pulse compresses HTTP responses in-flight using
+StellarClassic Pulse compresses HTTP responses in-flight using
 [`tower_http::compression::CompressionLayer`](https://docs.rs/tower-http/latest/tower_http/compression/index.html),
 negotiated per-request via the client's `Accept-Encoding` header (gzip,
 deflate, or br). Configuration lives in
@@ -47,14 +47,14 @@ See `CompressionSettings::predicate` for the exact composition
 
 Every response that passes through the compression layer increments one of:
 
-- `soroban_pulse_http_compression_applied_total` — response left the layer
+- `stellarclassic_pulse_http_compression_applied_total` — response left the layer
   with a `Content-Encoding` header set.
-- `soroban_pulse_http_compression_bypassed_total` — response was left
+- `stellarclassic_pulse_http_compression_bypassed_total` — response was left
   untouched (too small, excluded content type, or the client didn't
   advertise a supported encoding).
 
-These are distinct from `soroban_pulse_compression_ratio` /
-`soroban_pulse_events_compressed_total`, which track storage-level event
+These are distinct from `stellarclassic_pulse_compression_ratio` /
+`stellarclassic_pulse_events_compressed_total`, which track storage-level event
 archival compression (see `src/event_compression.rs`), not the HTTP
 transport layer.
 

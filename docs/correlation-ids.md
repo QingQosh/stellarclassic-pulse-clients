@@ -1,6 +1,6 @@
 # Correlation IDs
 
-SorobanPulse propagates an `X-Correlation-ID` header across every service
+StellarClassicPulse propagates an `X-Correlation-ID` header across every service
 boundary so a single logical operation (an inbound API request, an indexer
 poll cycle, a webhook delivery) can be traced end to end, independent of
 whether full W3C trace-context (`traceparent`) propagation is enabled.
@@ -15,7 +15,7 @@ whether full W3C trace-context (`traceparent`) propagation is enabled.
   (`distributed_tracing::set_correlation_id` / `get_correlation_id`) for the
   lifetime of the request, and mirrored onto the outgoing response so
   browser/CLI callers can log it.
-- Outbound calls to other SorobanPulse services or webhooks should forward
+- Outbound calls to other StellarClassicPulse services or webhooks should forward
   the same header so downstream services join the same correlation group.
 
 ## Correlation-based debugging
@@ -32,9 +32,9 @@ backend (see `docs/runbooks`) for cross-instance search.
 ## Metrics
 
 `distributed_tracing::record_correlation_metrics(had_incoming_id)` increments
-`soroban_pulse_correlation_ids_total{source="propagated"|"generated"}`, and
+`stellarclassic_pulse_correlation_ids_total{source="propagated"|"generated"}`, and
 `record_correlation_log` increments
-`soroban_pulse_correlation_log_entries_total{service=...}`. Use these to
+`stellarclassic_pulse_correlation_log_entries_total{service=...}`. Use these to
 monitor what fraction of traffic arrives with a correlation ID already
 attached (indicating a well-instrumented caller) versus falling back to a
 freshly generated one.
@@ -42,7 +42,7 @@ freshly generated one.
 ## Usage example
 
 ```rust
-use soroban_pulse::distributed_tracing::{
+use stellarclassic_pulse::distributed_tracing::{
     record_correlation_log, search_by_correlation_id, set_correlation_id,
 };
 

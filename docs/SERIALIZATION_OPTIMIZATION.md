@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the JSON serialization optimizations implemented to improve event data serialization performance in SorobanPulse.
+This document describes the JSON serialization optimizations implemented to improve event data serialization performance in StellarClassicPulse.
 
 ## Optimization Strategies
 
@@ -36,9 +36,9 @@ The `serialize_compact()` function uses pre-allocated buffers to reduce memory a
 
 Comprehensive metrics are collected for serialization operations:
 
-- `soroban_pulse_serialization_cache_hits_total` - Number of cache hits
-- `soroban_pulse_serialization_cache_misses_total` - Number of cache misses  
-- `soroban_pulse_serialization_time_us` - Serialization time histogram
+- `stellarclassic_pulse_serialization_cache_hits_total` - Number of cache hits
+- `stellarclassic_pulse_serialization_cache_misses_total` - Number of cache misses  
+- `stellarclassic_pulse_serialization_time_us` - Serialization time histogram
 
 ## Performance Benchmarks
 
@@ -72,11 +72,11 @@ Monitor serialization performance via Prometheus:
 
 ```
 # Cache hit ratio
-soroban_pulse_serialization_cache_hits_total / 
-  (soroban_pulse_serialization_cache_hits_total + soroban_pulse_serialization_cache_misses_total)
+stellarclassic_pulse_serialization_cache_hits_total / 
+  (stellarclassic_pulse_serialization_cache_hits_total + stellarclassic_pulse_serialization_cache_misses_total)
 
 # P95 serialization time
-histogram_quantile(0.95, rate(soroban_pulse_serialization_time_us[5m]))
+histogram_quantile(0.95, rate(stellarclassic_pulse_serialization_time_us[5m]))
 ```
 
 ## Future Optimizations

@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from soroban_pulse.webhooks import verify_webhook_signature, WebhookVerificationError
+from stellarclassic_pulse.webhooks import verify_webhook_signature, WebhookVerificationError
 
 SECRET = "whsec_test_secret"
 

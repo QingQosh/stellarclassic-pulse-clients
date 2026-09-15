@@ -23,12 +23,12 @@ use query::{
 // CLI definition
 // ---------------------------------------------------------------------------
 
-/// spulse — query and analyze Soroban Pulse events from the command line.
+/// spulse — query and analyze StellarClassic Pulse events from the command line.
 #[derive(Parser)]
 #[command(name = "spulse", version, about, long_about = None)]
 #[command(propagate_version = true)]
 struct Cli {
-    /// Soroban Pulse base URL (overrides config)
+    /// StellarClassic Pulse base URL (overrides config)
     #[arg(long, env = "SPULSE_BASE_URL", global = true)]
     base_url: Option<String>,
 

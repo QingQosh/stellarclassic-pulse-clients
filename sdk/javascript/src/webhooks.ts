@@ -27,8 +27,8 @@ export interface VerifyWebhookOptions {
 }
 
 /**
- * Verifies a SorobanPulse webhook request body against its
- * `X-SorobanPulse-Signature` header (`t=<unix_ts>,v1=<hex_hmac>`), using
+ * Verifies a StellarClassicPulse webhook request body against its
+ * `X-StellarClassicPulse-Signature` header (`t=<unix_ts>,v1=<hex_hmac>`), using
  * HMAC-SHA256 over `{timestamp}.{rawBody}`.
  */
 export function verifyWebhookSignature(

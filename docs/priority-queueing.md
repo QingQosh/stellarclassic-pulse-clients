@@ -1,6 +1,6 @@
 # Priority-Based Webhook Delivery
 
-Soroban Pulse supports priority-based delivery for webhook events so that
+StellarClassic Pulse supports priority-based delivery for webhook events so that
 critical events (security incidents, payment failures, outage alerts) are
 delivered ahead of routine/low-priority notifications when the delivery
 pipeline is under load.
@@ -24,7 +24,7 @@ FIFO. Pushing a task assigns a monotonic sequence number used purely as a
 tiebreaker so ordering is deterministic.
 
 ```rust
-use soroban_pulse::webhook_priority::{WebhookDeliveryTask, WebhookPriority, WebhookPriorityQueue};
+use stellarclassic_pulse::webhook_priority::{WebhookDeliveryTask, WebhookPriority, WebhookPriorityQueue};
 
 let queue = WebhookPriorityQueue::new();
 queue.push(WebhookDeliveryTask::new(url, payload, WebhookPriority::Critical));
@@ -41,7 +41,7 @@ support) to a priority level. Rules are evaluated in order; the first match
 wins, falling back to a configured default:
 
 ```rust
-use soroban_pulse::webhook_priority::{PriorityRuleSet, WebhookPriority};
+use stellarclassic_pulse::webhook_priority::{PriorityRuleSet, WebhookPriority};
 
 let mut rules = PriorityRuleSet::new(WebhookPriority::Normal);
 rules.add_rule("security.*", WebhookPriority::Critical);
@@ -52,9 +52,9 @@ rules.add_rule("payment.failed", WebhookPriority::High);
 
 Every dequeue records:
 
-- `soroban_pulse_webhook_priority_dequeued_total{priority}` — delivery count per priority
-- `soroban_pulse_webhook_priority_wait_ms{priority}` — histogram of queue wait time
-- `soroban_pulse_webhook_priority_violations_total{priority}` — count of tasks that exceeded their priority's max-wait SLA
+- `stellarclassic_pulse_webhook_priority_dequeued_total{priority}` — delivery count per priority
+- `stellarclassic_pulse_webhook_priority_wait_ms{priority}` — histogram of queue wait time
+- `stellarclassic_pulse_webhook_priority_violations_total{priority}` — count of tasks that exceeded their priority's max-wait SLA
 
 ## Priority Violation Alerts
 

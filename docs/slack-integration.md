@@ -24,7 +24,7 @@ send path is used.
   in-thread instead of posting a new top-level message.
 - `send_with_retry(event, max_retries)` — wraps `send_event_notification`
   with exponential backoff (1s, 2s, 4s, ...) and records
-  `soroban_pulse_slack_failures_total` if every attempt fails.
+  `stellarclassic_pulse_slack_failures_total` if every attempt fails.
 - `deliver_slack(client, event)` — fire-and-forget wrapper around
   `send_with_retry` (3 attempts), logging on final failure.
 

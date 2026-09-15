@@ -1,6 +1,6 @@
 # Subscription Configuration Validator
 
-A pre-deployment validation tool for Soroban Pulse subscription configurations.
+A pre-deployment validation tool for StellarClassic Pulse subscription configurations.
 It catches malformed filters, incompatible schema versions, unsafe
 transformations, and missing/unsafe resource limits before a subscription is
 deployed to a running indexer.
@@ -40,7 +40,7 @@ step catch these problems ahead of time.
 ## Usage
 
 ```rust
-use soroban_pulse::subscription_validator::{ValidationEngine, SubscriptionConfig};
+use stellarclassic_pulse::subscription_validator::{ValidationEngine, SubscriptionConfig};
 
 let engine = ValidationEngine::with_default_rules();
 let config: SubscriptionConfig = serde_json::from_str(&raw_config_json)?;

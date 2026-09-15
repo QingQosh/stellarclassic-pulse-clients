@@ -27,7 +27,7 @@ export interface WebhookDelivery {
 }
 
 function authHeaders(): Record<string, string> {
-  const raw = localStorage.getItem("sorobanpulse.dashboard.auth");
+  const raw = localStorage.getItem("stellarclassicpulse.dashboard.auth");
   const token = raw ? JSON.parse(raw).token : null;
   return token ? { Authorization: `Bearer ${token}` } : {};
 }

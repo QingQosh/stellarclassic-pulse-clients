@@ -54,7 +54,7 @@ route:
 receivers:
   - name: "default-slack"
     slack_configs:
-      - channel: "#soroban-pulse-alerts"
+      - channel: "#stellarclassic-pulse-alerts"
         send_resolved: true
         title: '{{ template "slack.default.title" . }}'
         text: '{{ template "slack.default.text" . }}'
@@ -64,11 +64,11 @@ receivers:
             url: "{{ (index .Alerts 0).Annotations.runbook_url }}"
           - type: button
             text: "Dashboard :chart_with_upwards_trend:"
-            url: "https://grafana.soroban-pulse.io/d/soroban-pulse"
+            url: "https://grafana.stellarclassic-pulse.io/d/stellarclassic-pulse"
 
   - name: "slack-critical"
     slack_configs:
-      - channel: "#soroban-pulse-critical"
+      - channel: "#stellarclassic-pulse-critical"
         send_resolved: true
         title: '{{ template "slack.critical.title" . }}'
         text: '{{ template "slack.critical.text" . }}'
@@ -78,11 +78,11 @@ receivers:
             url: "{{ (index .Alerts 0).Annotations.runbook_url }}"
           - type: button
             text: "Acknowledge in PagerDuty"
-            url: "https://soroban-pulse.pagerduty.com/incidents"
+            url: "https://stellarclassic-pulse.pagerduty.com/incidents"
 
   - name: "slack-warning"
     slack_configs:
-      - channel: "#soroban-pulse-warnings"
+      - channel: "#stellarclassic-pulse-warnings"
         send_resolved: true
         title: '{{ template "slack.warning.title" . }}'
         text: '{{ template "slack.warning.text" . }}'
@@ -93,7 +93,7 @@ receivers:
 
   - name: "slack-indexer"
     slack_configs:
-      - channel: "#soroban-pulse-indexer"
+      - channel: "#stellarclassic-pulse-indexer"
         send_resolved: true
         title: '{{ template "slack.indexer.title" . }}'
         text: '{{ template "slack.indexer.text" . }}'
@@ -104,7 +104,7 @@ receivers:
 
   - name: "slack-database"
     slack_configs:
-      - channel: "#soroban-pulse-database"
+      - channel: "#stellarclassic-pulse-database"
         send_resolved: true
         title: '{{ template "slack.database.title" . }}'
         text: '{{ template "slack.database.text" . }}'
@@ -115,7 +115,7 @@ receivers:
 
   - name: "slack-notifications"
     slack_configs:
-      - channel: "#soroban-pulse-notifications"
+      - channel: "#stellarclassic-pulse-notifications"
         send_resolved: true
         title: '{{ template "slack.notifications.title" . }}'
         text: '{{ template "slack.notifications.text" . }}'
@@ -129,13 +129,13 @@ receivers:
       - service_key: "${PAGERDUTY_SERVICE_KEY}"
         description: '{{ .GroupLabels.alertname }}: {{ (index .Alerts 0).Annotations.summary }}'
         severity: '{{ (index .Alerts 0).Labels.severity }}'
-        source: "soroban-pulse"
+        source: "stellarclassic-pulse"
         component: '{{ (index .Alerts 0).Labels.component }}'
-        class: "soroban-pulse-alert"
+        class: "stellarclassic-pulse-alert"
         images:
-          - src: "https://grafana.soroban-pulse.io/render/d/soroban-pulse?orgId=1"
+          - src: "https://grafana.stellarclassic-pulse.io/render/d/stellarclassic-pulse?orgId=1"
             alt: "Grafana Dashboard"
-            href: "https://grafana.soroban-pulse.io/d/soroban-pulse"
+            href: "https://grafana.stellarclassic-pulse.io/d/stellarclassic-pulse"
         links:
           - href: "{{ (index .Alerts 0).Annotations.runbook_url }}"
             text: "Runbook"
@@ -152,11 +152,11 @@ receivers:
         description: "{{ .GroupLabels.alertname }}: {{ (index .Alerts 0).Annotations.summary }}"
         responders:
           - type: team
-            name: "SorobanPulse On-Call"
-        source: "soroban-pulse"
+            name: "StellarClassicPulse On-Call"
+        source: "stellarclassic-pulse"
         priority: "P1"
         tags:
-          - "soroban-pulse"
+          - "stellarclassic-pulse"
           - "{{ (index .Alerts 0).Labels.component }}"
           - "{{ (index .Alerts 0).Labels.severity }}"
 
@@ -166,7 +166,7 @@ receivers:
         api_url: "https://alert.victorops.com/integrations/0OMF575/summary"
         state: "{{ if eq .Status \"firing\" }}CRITICAL{{ else }}RECOVERY{{ end }}"
         message: '{{ .GroupLabels.alertname }}: {{ (index .Alerts 0).Annotations.summary }}'
-        entity_display_name: "soroban-pulse-{{ (index .Alerts 0).Labels.component }}"
+        entity_display_name: "stellarclassic-pulse-{{ (index .Alerts 0).Labels.component }}"
         monitoring_tool: "Prometheus"
 
 inhibit_rules:

@@ -1,6 +1,6 @@
 # Security Testing
 
-SorobanPulse treats security as a first-class engineering concern. This document covers the full automated security testing suite: what it tests, how to run it locally, how it integrates with CI, and how to extend it.
+StellarClassicPulse treats security as a first-class engineering concern. This document covers the full automated security testing suite: what it tests, how to run it locally, how it integrates with CI, and how to extend it.
 
 ---
 
@@ -66,7 +66,7 @@ Each OWASP risk category maps to specific test functions in `tests/security/owas
 
 ## SQL Injection Testing
 
-SorobanPulse uses SQLx with **parameterized queries** throughout, which prevents SQL injection at the database layer. The security tests verify the defensive validation layer above that.
+StellarClassicPulse uses SQLx with **parameterized queries** throughout, which prevents SQL injection at the database layer. The security tests verify the defensive validation layer above that.
 
 ### How parameterized queries protect us
 
@@ -131,7 +131,7 @@ async fn no_keys_configured_all_requests_pass() { ... }
 
 ### Two-layer auth model
 
-SorobanPulse has a two-layer auth model:
+StellarClassicPulse has a two-layer auth model:
 
 1. **Global auth gate** (`auth_middleware`) — guards all non-public endpoints
 2. **Admin auth gate** (`admin_auth_middleware`) — additionally guards `/v1/admin/*`

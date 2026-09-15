@@ -2,12 +2,12 @@
 
 - **Status:** Accepted
 - **Date:** 2026-08-29
-- **Owners:** SorobanPulse maintainers
+- **Owners:** StellarClassicPulse maintainers
 - **Related:** [Webhook endpoint circuit breaker](../webhook_circuit_breaker.md), [Webhook endpoint rate limits](../webhook-endpoint-rate-limits.md), [Webhook failures runbook](../runbooks/webhook-failures.md)
 
 ## Context
 
-Webhook subscribers are third-party HTTP endpoints that SorobanPulse does not control. They fail for reasons ranging from transient network blips to sustained outages to permanent misconfiguration (wrong URL, revoked credentials). A delivery strategy that retries too little loses events subscribers should have received; one that retries too aggressively or indefinitely wastes indexer resources, can look like a denial-of-service against a struggling subscriber, and delays detection of endpoints that will never recover without operator intervention.
+Webhook subscribers are third-party HTTP endpoints that StellarClassicPulse does not control. They fail for reasons ranging from transient network blips to sustained outages to permanent misconfiguration (wrong URL, revoked credentials). A delivery strategy that retries too little loses events subscribers should have received; one that retries too aggressively or indefinitely wastes indexer resources, can look like a denial-of-service against a struggling subscriber, and delays detection of endpoints that will never recover without operator intervention.
 
 Different notification channels also have different failure semantics: SMS and email have upstream providers with their own retry semantics, while webhooks are delivered directly to arbitrary subscriber infrastructure with widely varying reliability. A single fixed retry count and delay cannot serve both a transient timeout and a permanently dead endpoint well.
 

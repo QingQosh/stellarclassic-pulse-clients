@@ -1,6 +1,6 @@
 # Container Image Scanning and Signing (Issue #907)
 
-SorobanPulse's container image supply chain is secured in [`.github/workflows/docker-publish.yml`](../.github/workflows/docker-publish.yml), which runs on every push to `main` and on version tags (`v*.*.*`). This document explains the pipeline stages and how to consume their outputs.
+StellarClassicPulse's container image supply chain is secured in [`.github/workflows/docker-publish.yml`](../.github/workflows/docker-publish.yml), which runs on every push to `main` and on version tags (`v*.*.*`). This document explains the pipeline stages and how to consume their outputs.
 
 ## Pipeline Overview
 

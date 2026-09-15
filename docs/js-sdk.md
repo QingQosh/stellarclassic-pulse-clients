@@ -1,7 +1,7 @@
 # JavaScript / TypeScript SDK
 
 The official JS SDK lives in `sdk/javascript/` and provides a typed client
-for the SorobanPulse REST API, SSE-based event subscriptions, webhook
+for the StellarClassicPulse REST API, SSE-based event subscriptions, webhook
 signature verification, and automatic retry with exponential backoff.
 
 ## Installation
@@ -15,9 +15,9 @@ npm run build
 ## Quick start
 
 ```ts
-import { SorobanPulseClient } from "@sorobanpulse/sdk";
+import { StellarClassicPulseClient } from "@stellarclassicpulse/sdk";
 
-const client = new SorobanPulseClient({ apiKey: process.env.SOROBAN_PULSE_API_KEY! });
+const client = new StellarClassicPulseClient({ apiKey: process.env.SOROBAN_PULSE_API_KEY! });
 
 for await (const event of client.iterEvents({ contractId: "CABC123", limit: 50 })) {
   console.log(event.id, event.eventType);
@@ -27,9 +27,9 @@ for await (const event of client.iterEvents({ contractId: "CABC123", limit: 50 }
 ## Event subscriptions (SSE)
 
 ```ts
-import { SorobanPulseClient, EventSubscription } from "@sorobanpulse/sdk";
+import { StellarClassicPulseClient, EventSubscription } from "@stellarclassicpulse/sdk";
 
-const client = new SorobanPulseClient({ apiKey: "sp_live_..." });
+const client = new StellarClassicPulseClient({ apiKey: "sp_live_..." });
 const subscription = new EventSubscription(client, {
   contractId: "CABC123",
   eventTypes: ["transfer"],
@@ -45,10 +45,10 @@ Reconnection uses exponential backoff (capped at 30s) for up to
 ## Webhook verification
 
 ```ts
-import { verifyWebhookSignature, WebhookVerificationError } from "@sorobanpulse/sdk";
+import { verifyWebhookSignature, WebhookVerificationError } from "@stellarclassicpulse/sdk";
 
 try {
-  verifyWebhookSignature(rawBody, req.headers["x-sorobanpulse-signature"], webhookSecret);
+  verifyWebhookSignature(rawBody, req.headers["x-stellarclassicpulse-signature"], webhookSecret);
 } catch (err) {
   if (err instanceof WebhookVerificationError) {
     // reject the request
@@ -61,7 +61,7 @@ integration.
 
 ## Retry and backoff
 
-All `SorobanPulseClient` requests are automatically retried on network
+All `StellarClassicPulseClient` requests are automatically retried on network
 failures and `429`/`5xx` responses using exponential backoff with jitter
 (`sdk/javascript/src/retry.ts`). Configure via `maxRetries` in the client
 constructor (default 3).
@@ -94,7 +94,7 @@ and the retry/backoff helper (`sdk/javascript/tests/`).
 
 | Export | Purpose |
 |---|---|
-| `SorobanPulseClient` | REST client with built-in retry/backoff |
+| `StellarClassicPulseClient` | REST client with built-in retry/backoff |
 | `EventSubscription` | SSE event stream consumer with reconnect |
 | `verifyWebhookSignature` | HMAC-SHA256 webhook verification |
-| `SorobanPulseError`, `ApiError`, `AuthenticationError` | Typed error classes |
+| `StellarClassicPulseError`, `ApiError`, `AuthenticationError` | Typed error classes |

@@ -69,5 +69,5 @@ An invalid `status` value returns `400 Bad Request`.
 
 Two counters are exported on `/metrics`:
 
-- `soroban_pulse_notification_delivery_success_total` — successful deliveries.
-- `soroban_pulse_notification_delivery_failure_total` — failed deliveries.
+- `stellarclassic_pulse_notification_delivery_success_total` — successful deliveries.
+- `stellarclassic_pulse_notification_delivery_failure_total` — failed deliveries.

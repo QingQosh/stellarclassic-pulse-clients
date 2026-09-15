@@ -57,7 +57,7 @@ All functions live in `src/notification_delivery.rs`.
 ### Record a delivery (basic)
 
 ```rust
-use soroban_pulse::notification_delivery::{record_delivery, DeliveryStatus};
+use stellarclassic_pulse::notification_delivery::{record_delivery, DeliveryStatus};
 
 record_delivery(
     &pool,
@@ -73,7 +73,7 @@ record_delivery(
 ### Record a delivery with metadata (Issue #933)
 
 ```rust
-use soroban_pulse::notification_delivery::{
+use stellarclassic_pulse::notification_delivery::{
     record_delivery_with_metadata, DeliveryStatus,
 };
 use serde_json::json;
@@ -101,7 +101,7 @@ record_delivery_with_metadata(
 ### Fetch aggregated stats
 
 ```rust
-use soroban_pulse::notification_delivery::get_receipt_stats;
+use stellarclassic_pulse::notification_delivery::get_receipt_stats;
 
 let stats = get_receipt_stats(&pool).await?;
 for s in &stats {
@@ -119,7 +119,7 @@ for s in &stats {
 ### Fetch all receipts for a specific event
 
 ```rust
-use soroban_pulse::notification_delivery::get_receipts_by_event;
+use stellarclassic_pulse::notification_delivery::get_receipts_by_event;
 
 let receipts = get_receipts_by_event(&pool, event_id).await?;
 for r in &receipts {
@@ -137,7 +137,7 @@ for r in &receipts {
 ### Purge old receipts
 
 ```rust
-use soroban_pulse::notification_delivery::purge_old_receipts;
+use stellarclassic_pulse::notification_delivery::purge_old_receipts;
 
 // Delete receipts older than 90 days and log the count.
 let deleted = purge_old_receipts(&pool, 90).await?;
@@ -216,8 +216,8 @@ RETENTION_DAYS=90
 `record_delivery` and `record_delivery_with_metadata` both increment the
 matching Prometheus counters defined in `src/metrics.rs`:
 
-- `soroban_pulse_notification_deliveries_total{status="success"}`
-- `soroban_pulse_notification_deliveries_total{status="failure"}`
+- `stellarclassic_pulse_notification_deliveries_total{status="success"}`
+- `stellarclassic_pulse_notification_deliveries_total{status="failure"}`
 
 These counters are always incremented **before** the DB write, so Prometheus
 metrics remain accurate even if the DB insert fails.

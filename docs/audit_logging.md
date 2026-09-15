@@ -2,7 +2,7 @@
 
 ## Overview
 
-Soroban Pulse provides comprehensive audit logging for tracking sensitive operations including:
+StellarClassic Pulse provides comprehensive audit logging for tracking sensitive operations including:
 - **DELETE operations**: Tracks all data deletions with user and timestamp
 - **Configuration changes**: Records before/after values of configuration modifications
 - **Administrative API calls**: Logs all admin-level operations
@@ -197,7 +197,7 @@ curl -H "X-Api-Key: admin_key" \
 ### Log a Deletion
 
 ```rust
-use soroban_pulse::audit_logging::{
+use stellarclassic_pulse::audit_logging::{
     AuditLogEntry, AuditEventType, AuditSeverity, log_audit
 };
 
@@ -249,7 +249,7 @@ log_audit(&pool, &entry).await?;
 ### Query Audit Logs
 
 ```rust
-use soroban_pulse::audit_logging::{AuditLogQuery, query_audit_logs};
+use stellarclassic_pulse::audit_logging::{AuditLogQuery, query_audit_logs};
 
 let query = AuditLogQuery::new()
     .with_event_type("DELETE")

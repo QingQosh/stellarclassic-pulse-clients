@@ -1,6 +1,6 @@
 # Disaster Recovery Runbook (Issue #908)
 
-This document consolidates SorobanPulse's disaster recovery (DR) posture: recovery targets, procedures per failure scenario, automated testing, and communication templates. It ties together two docs that already cover pieces of this — [multi-deployment-architecture.md](multi-deployment-architecture.md) (replication/failover mechanics) and [backup-verification.md](backup-verification.md) (backup/restore integrity testing) — into a single incident-response reference.
+This document consolidates StellarClassicPulse's disaster recovery (DR) posture: recovery targets, procedures per failure scenario, automated testing, and communication templates. It ties together two docs that already cover pieces of this — [multi-deployment-architecture.md](multi-deployment-architecture.md) (replication/failover mechanics) and [backup-verification.md](backup-verification.md) (backup/restore integrity testing) — into a single incident-response reference.
 
 ## RTO / RPO Targets
 
@@ -31,21 +31,21 @@ If the daily-backup RPO of up to 24 hours is too coarse for a given deployment, 
 See [operator-runbook.md § Emergency Response Procedures](runbooks/operator-runbook.md#emergency-response-procedures) (SEV-1 triage → restart).
 
 ### 2. Single AZ / database primary outage
-Promote the standby replica and let the SorobanPulse instance re-acquire the indexer advisory lock. Full steps: [operator-runbook.md § Replica Failover Procedures](runbooks/operator-runbook.md#replica-failover-procedures) and [multi-deployment-architecture.md § Manual Failover Procedure](multi-deployment-architecture.md#manual-failover-procedure).
+Promote the standby replica and let the StellarClassicPulse instance re-acquire the indexer advisory lock. Full steps: [operator-runbook.md § Replica Failover Procedures](runbooks/operator-runbook.md#replica-failover-procedures) and [multi-deployment-architecture.md § Manual Failover Procedure](multi-deployment-architecture.md#manual-failover-procedure).
 
 ### 3. Full region outage
 1. Confirm the region is unreachable (health checks failing from Global Accelerator — see [multi-region.md](multi-region.md#load-balancing-and-failover-routing)).
 2. Global Accelerator automatically routes traffic away from the unhealthy region's endpoint group — no manual DNS action needed for read/HTTP traffic.
 3. Promote a standby region's database replica per the manual failover procedure above.
-4. Update that region's `DATABASE_URL` to the promoted primary and restart the SorobanPulse deployment there so it wins the advisory lock.
-5. Verify with `curl <region>/healthz/ready` and confirm `soroban_pulse_indexer_is_leader` is set on exactly one region.
+4. Update that region's `DATABASE_URL` to the promoted primary and restart the StellarClassicPulse deployment there so it wins the advisory lock.
+5. Verify with `curl <region>/healthz/ready` and confirm `stellarclassic_pulse_indexer_is_leader` is set on exactly one region.
 
 ### 4. Full database loss (backup restore required)
 1. Provision a fresh PostgreSQL instance in the target region.
 2. Restore from the most recent verified encrypted backup: `DATABASE_URL="..." BACKUP_ENCRYPTION_KEY="..." bash scripts/restore.sh <file>.dump.gpg` (see [backup-verification.md](backup-verification.md)).
 3. Apply any migrations committed after the backup was taken: `for f in migrations/*.sql; do psql "$DATABASE_URL" -f "$f"; done`.
 4. Point the application at the restored database and restart.
-5. Expect the indexer to replay from its last checkpoint in the restored data — verify `soroban_pulse_indexer_lag` converges back to normal rather than stalling.
+5. Expect the indexer to replay from its last checkpoint in the restored data — verify `stellarclassic_pulse_indexer_lag` converges back to normal rather than stalling.
 
 ### 5. Corrupted or bad data deployed (not infra failure)
 See [operator-runbook.md § Data Corruption Recovery](runbooks/operator-runbook.md#data-corruption-recovery) — this is a data-integrity incident, not a capacity/availability one, and does not require a regional failover.
@@ -79,7 +79,7 @@ Use these as a starting point for incident channels (Slack/status page); adapt s
 
 **Initial notification (within 5 minutes of declaring an incident):**
 ```
-[SEV-<n>] SorobanPulse — investigating {symptom, e.g. "indexer lag spiking in us-east-1"}
+[SEV-<n>] StellarClassicPulse — investigating {symptom, e.g. "indexer lag spiking in us-east-1"}
 Impact: {who/what is affected}
 Status: Investigating. Next update in 15 minutes.
 Incident lead: {name}
@@ -87,7 +87,7 @@ Incident lead: {name}
 
 **Update (every 15–30 minutes until resolved):**
 ```
-[SEV-<n>] SorobanPulse — update
+[SEV-<n>] StellarClassicPulse — update
 Since last update: {what was found/done}
 Current status: {e.g. "failover to eu-west-1 in progress"}
 ETA: {best estimate or "unknown, next update in 15 min"}
@@ -95,7 +95,7 @@ ETA: {best estimate or "unknown, next update in 15 min"}
 
 **Resolution:**
 ```
-[SEV-<n>] SorobanPulse — resolved
+[SEV-<n>] StellarClassicPulse — resolved
 Root cause: {one line}
 Resolution: {what fixed it, e.g. "failed over to eu-west-1 replica"}
 Duration: {start} – {end} ({total downtime})

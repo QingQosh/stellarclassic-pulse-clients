@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse uses per-test PostgreSQL schema isolation so that integration
+StellarClassicPulse uses per-test PostgreSQL schema isolation so that integration
 tests can run concurrently without interfering with each other.  The
 infrastructure (Issue #927) lives in `tests/parallel_test_infra.rs` and
 provides:
@@ -282,7 +282,7 @@ test-parallel:
     - uses: dtolnay/rust-toolchain@stable
     - name: Run parallel integration tests
       env:
-        DATABASE_URL: postgres://postgres:postgres@localhost/soroban_pulse_test
+        DATABASE_URL: postgres://postgres:postgres@localhost/stellarclassic_pulse_test
       run: |
         cargo test --test parallel_test_infra -- --test-threads=8
 ```

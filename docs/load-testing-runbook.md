@@ -1,6 +1,6 @@
 # Load Testing Runbook
 
-Operational guide for running, interpreting, and maintaining the Soroban Pulse load test suite (issue #811).
+Operational guide for running, interpreting, and maintaining the StellarClassic Pulse load test suite (issue #811).
 
 ## Table of Contents
 
@@ -343,7 +343,7 @@ A regression here usually means:
 - A new database migration added an unindexed column to the query path
 - The connection pool is undersized for the test runner
 
-Check `soroban_pulse_db_pool_size / soroban_pulse_db_pool_max` in Prometheus. If consistently near 1.0, increase `DB_MAX_CONNECTIONS`.
+Check `stellarclassic_pulse_db_pool_size / stellarclassic_pulse_db_pool_max` in Prometheus. If consistently near 1.0, increase `DB_MAX_CONNECTIONS`.
 
 ### Stress Test
 
@@ -360,7 +360,7 @@ Expected degradation pattern:
 
 The **recovery** phase (last 2 min) must show p99 returning to within 20 % of the pre-stress baseline. A slow recovery indicates:
 - Connection pool not draining (increase `DB_IDLE_TIMEOUT_SECS` or reduce `DB_MAX_CONNECTIONS`)
-- Memory pressure causing GC pauses (check `soroban_pulse_process_memory_bytes`)
+- Memory pressure causing GC pauses (check `stellarclassic_pulse_process_memory_bytes`)
 
 ### Spike Test
 
@@ -380,7 +380,7 @@ More than 10 % increase over 24 hours indicates latency drift, typically caused 
 
 | Symptom | Root cause | Fix |
 |---|---|---|
-| Gradual memory growth | Memory leak | Profile with `soroban_pulse_process_memory_bytes` |
+| Gradual memory growth | Memory leak | Profile with `stellarclassic_pulse_process_memory_bytes` |
 | Table bloat | High write rate, autovacuum lagging | `VACUUM ANALYZE events;` |
 | Index fragmentation | Hot-row updates | `REINDEX CONCURRENTLY idx_events_ledger;` |
 | Connection pool saturation | SSE connections not returning slots | Audit SSE connection lifecycle |
@@ -399,13 +399,13 @@ Per-query-type p99 values make it easy to isolate regressions:
 
 ### Webhook Delivery
 
-The webhook test drives the admin replay endpoint and observes `soroban_pulse_webhook_failures_total` via `/metrics`.
+The webhook test drives the admin replay endpoint and observes `stellarclassic_pulse_webhook_failures_total` via `/metrics`.
 
 A rising failure counter during the test indicates:
 - Webhook receiver is rate-limiting or timing out
 - Retry queue is saturated
 
-Check `soroban_pulse_webhook_failures_total` in the Grafana dashboard.
+Check `stellarclassic_pulse_webhook_failures_total` in the Grafana dashboard.
 
 ---
 
@@ -543,10 +543,10 @@ scripts/perf_regression.sh archive events_steady \
 
 ### Memory growth in soak test exceeds threshold
 
-1. Check `soroban_pulse_process_memory_bytes` in Prometheus over the soak window.
+1. Check `stellarclassic_pulse_process_memory_bytes` in Prometheus over the soak window.
 2. If RSS grows linearly with time, run a flamegraph against a live instance:
    ```bash
-   cargo flamegraph --bin soroban-pulse
+   cargo flamegraph --bin stellarclassic-pulse
    ```
 3. Common culprits: unbounded broadcast channel receiver list, leaking SSE connections, growing in-memory query cache with no eviction.
 

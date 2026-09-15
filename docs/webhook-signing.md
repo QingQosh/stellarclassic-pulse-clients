@@ -1,6 +1,6 @@
 # Webhook Signing
 
-Soroban Pulse signs every outgoing webhook delivery using HMAC-SHA256 so
+StellarClassic Pulse signs every outgoing webhook delivery using HMAC-SHA256 so
 subscribers can verify authenticity and integrity. This document covers the
 sender-side signing implementation
 ([`src/webhook_signing.rs`](../src/webhook_signing.rs)); see
@@ -30,7 +30,7 @@ Every signed delivery carries:
 active/inactive flag:
 
 ```rust
-use soroban_pulse::webhook_signing::{WebhookKeyManager, SigningKey};
+use stellarclassic_pulse::webhook_signing::{WebhookKeyManager, SigningKey};
 
 let keys = WebhookKeyManager::new();
 keys.add_key(SigningKey::new("key-2024-01", secret_bytes));
@@ -59,5 +59,5 @@ to avoid timing side channels.
 
 ## Metrics
 
-- `soroban_pulse_webhook_signatures_created_total{key_id}`
-- `soroban_pulse_webhook_signature_verifications_total{key_id,result}`
+- `stellarclassic_pulse_webhook_signatures_created_total{key_id}`
+- `stellarclassic_pulse_webhook_signature_verifications_total{key_id,result}`

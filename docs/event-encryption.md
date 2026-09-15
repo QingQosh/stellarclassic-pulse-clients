@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse supports optional transparent AES-256-GCM encryption for sensitive event data stored in PostgreSQL. This document covers implementation, key rotation, and integration guidelines.
+StellarClassicPulse supports optional transparent AES-256-GCM encryption for sensitive event data stored in PostgreSQL. This document covers implementation, key rotation, and integration guidelines.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ encryption = ["aes-gcm", "base64", "rand"]
 Initialize the encryption key store at application startup:
 
 ```rust
-use soroban_pulse::encryption;
+use stellarclassic_pulse::encryption;
 
 fn main() {
     let key = [0u8; 32]; // Load from KMS or environment
@@ -64,7 +64,7 @@ println!("Rotated to key version: {}", version);
 
 ```rust
 use serde_json::json;
-use soroban_pulse::encryption;
+use stellarclassic_pulse::encryption;
 
 let key = [0u8; 32];
 let plaintext = json!({"amount": "1000000"});

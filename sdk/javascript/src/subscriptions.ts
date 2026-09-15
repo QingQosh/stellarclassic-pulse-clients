@@ -1,4 +1,4 @@
-import type { SorobanPulseClient } from "./client";
+import type { StellarClassicPulseClient } from "./client";
 import type { EventHandler, SorobanEvent } from "./types";
 
 export interface EventSubscriptionOptions {
@@ -8,7 +8,7 @@ export interface EventSubscriptionOptions {
 }
 
 /**
- * Consumes the SorobanPulse Server-Sent Events (SSE) stream, dispatching
+ * Consumes the StellarClassicPulse Server-Sent Events (SSE) stream, dispatching
  * parsed events to registered handlers, with automatic reconnection using
  * exponential backoff.
  */
@@ -17,7 +17,7 @@ export class EventSubscription {
   private stopped = false;
 
   constructor(
-    private readonly client: SorobanPulseClient,
+    private readonly client: StellarClassicPulseClient,
     private readonly options: EventSubscriptionOptions = {},
   ) {}
 

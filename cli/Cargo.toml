@@ -2,13 +2,13 @@
 name = "spulse"
 version = "0.1.0"
 edition = "2021"
-description = "Command-line tool for querying and analyzing Soroban Pulse events locally"
+description = "Command-line tool for querying and analyzing StellarClassic Pulse events locally"
 license = "MIT"
-repository = "https://github.com/soroban-pulse/soroban-pulse"
-homepage = "https://github.com/soroban-pulse/soroban-pulse/tree/main/cli"
+repository = "https://github.com/stellarclassic-pulse/stellarclassic-pulse"
+homepage = "https://github.com/stellarclassic-pulse/stellarclassic-pulse/tree/main/cli"
 keywords = ["soroban", "stellar", "blockchain", "cli", "events"]
 categories = ["command-line-utilities"]
-authors = ["Soroban Pulse Contributors"]
+authors = ["StellarClassic Pulse Contributors"]
 readme = "README.md"
 
 [[bin]]

@@ -1,6 +1,6 @@
-import { SorobanPulseClient, EventSubscription } from "../src";
+import { StellarClassicPulseClient, EventSubscription } from "../src";
 
-const client = new SorobanPulseClient({ apiKey: process.env.SOROBAN_PULSE_API_KEY! });
+const client = new StellarClassicPulseClient({ apiKey: process.env.SOROBAN_PULSE_API_KEY! });
 
 const subscription = new EventSubscription(client, {
   contractId: "CABC123",

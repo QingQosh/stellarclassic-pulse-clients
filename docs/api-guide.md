@@ -1,6 +1,6 @@
 # API Guide
 
-Entry point for the Soroban Pulse API surface. This page ties together the
+Entry point for the StellarClassic Pulse API surface. This page ties together the
 REST API, GraphQL, Server-Sent Events, and webhooks/subscriptions, and links
 out to the detailed docs for each rather than repeating them.
 

@@ -27,7 +27,7 @@ Card](https://adaptivecards.io/) (schema 1.4) containing:
 
 `send_with_retry(event, mentions, actions, max_retries)` wraps this with
 exponential backoff (1s, 2s, 4s, ...), recording
-`soroban_pulse_teams_failures_total` if every attempt fails.
+`stellarclassic_pulse_teams_failures_total` if every attempt fails.
 `deliver_teams(client, event)` is a fire-and-forget wrapper (3 attempts, no
 mentions or actions).
 

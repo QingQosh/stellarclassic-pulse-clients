@@ -1,4 +1,4 @@
-export interface SorobanPulseClientOptions {
+export interface StellarClassicPulseClientOptions {
   apiKey: string;
   baseUrl?: string;
   timeoutMs?: number;

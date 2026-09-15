@@ -48,7 +48,7 @@ delivered without throttling.
 
 A counter is exported on `/metrics`:
 
-- `soroban_pulse_notification_rate_limited_total` — incremented once for each
+- `stellarclassic_pulse_notification_rate_limited_total` — incremented once for each
   notification that had to wait for the rate-limit window (i.e. was batched).
 
 A steadily rising value indicates the channel is regularly over budget and the

@@ -74,7 +74,7 @@ All functions live in `src/scheduled_replay.rs`.
 ### Create a schedule
 
 ```rust
-use soroban_pulse::scheduled_replay::{create_replay_schedule, CreateScheduleRequest};
+use stellarclassic_pulse::scheduled_replay::{create_replay_schedule, CreateScheduleRequest};
 use uuid::Uuid;
 
 // Replay the last hour of events for a subscription every 30 minutes.
@@ -97,7 +97,7 @@ println!("Created schedule {}", schedule.id);
 ### List schedules for a subscription
 
 ```rust
-use soroban_pulse::scheduled_replay::list_replay_schedules;
+use stellarclassic_pulse::scheduled_replay::list_replay_schedules;
 
 let schedules = list_replay_schedules(&pool, subscription_id).await?;
 for s in &schedules {
@@ -111,7 +111,7 @@ for s in &schedules {
 ### Poll for due schedules (scheduler loop)
 
 ```rust
-use soroban_pulse::scheduled_replay::{
+use stellarclassic_pulse::scheduled_replay::{
     get_due_schedules, record_schedule_run, calculate_next_run, update_next_run,
     update_schedule_status,
 };
@@ -167,7 +167,7 @@ loop {
 ### Deactivate / reactivate a schedule
 
 ```rust
-use soroban_pulse::scheduled_replay::update_schedule_status;
+use stellarclassic_pulse::scheduled_replay::update_schedule_status;
 
 // Pause
 update_schedule_status(&pool, schedule_id, false).await?;

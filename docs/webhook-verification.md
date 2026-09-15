@@ -1,10 +1,10 @@
 # Webhook Signature Verification
 
-This guide explains how to verify webhook signatures from Soroban Pulse to ensure the authenticity and integrity of webhook payloads.
+This guide explains how to verify webhook signatures from StellarClassic Pulse to ensure the authenticity and integrity of webhook payloads.
 
 ## Overview
 
-Soroban Pulse signs all webhook payloads using HMAC-SHA256. The signature is included in the `X-Signature-256` header of each webhook request. Verifying this signature is essential to:
+StellarClassic Pulse signs all webhook payloads using HMAC-SHA256. The signature is included in the `X-Signature-256` header of each webhook request. Verifying this signature is essential to:
 
 - Prevent replay attacks
 - Detect spoofed webhook deliveries
@@ -41,7 +41,7 @@ def verify_webhook_signature(
     webhook_secret: str
 ) -> Tuple[bool, str]:
     """
-    Verify a webhook signature from Soroban Pulse.
+    Verify a webhook signature from StellarClassic Pulse.
     
     Args:
         body: Raw request body (bytes)
@@ -79,7 +79,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 WEBHOOK_SECRET = "your-webhook-secret-here"
 
-@app.route("/webhooks/soroban-pulse", methods=["POST"])
+@app.route("/webhooks/stellarclassic-pulse", methods=["POST"])
 def handle_webhook():
     body = request.get_data()
     signature_header = request.headers.get("X-Signature-256", "")
@@ -112,7 +112,7 @@ function verifyWebhookSignature(
   webhookSecret: string
 ): VerificationResult {
   /**
-   * Verify a webhook signature from Soroban Pulse.
+   * Verify a webhook signature from StellarClassic Pulse.
    *
    * @param body - Raw request body
    * @param signatureHeader - Value of X-Signature-256 header
@@ -155,7 +155,7 @@ import express from "express";
 const app = express();
 const WEBHOOK_SECRET = "your-webhook-secret-here";
 
-app.post("/webhooks/soroban-pulse", express.raw({ type: "*/*" }), (req, res) => {
+app.post("/webhooks/stellarclassic-pulse", express.raw({ type: "*/*" }), (req, res) => {
   const signatureHeader = req.headers["x-signature-256"] as string;
   const result = verifyWebhookSignature(req.body, signatureHeader, WEBHOOK_SECRET);
 
@@ -186,7 +186,7 @@ import (
 	"strings"
 )
 
-// VerifyWebhookSignature verifies a webhook signature from Soroban Pulse.
+// VerifyWebhookSignature verifies a webhook signature from StellarClassic Pulse.
 func VerifyWebhookSignature(body []byte, signatureHeader, webhookSecret string) (bool, error) {
 	// Extract the signature from the header
 	if !strings.HasPrefix(signatureHeader, "sha256=") {
@@ -234,7 +234,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/webhooks/soroban-pulse", handleWebhook)
+	http.HandleFunc("/webhooks/stellarclassic-pulse", handleWebhook)
 	http.ListenAndServe(":8080", nil)
 }
 ```
@@ -300,7 +300,7 @@ if not is_valid:
 
 ## HTTPS Requirement
 
-Soroban Pulse can be configured to require HTTPS for all webhook URLs via the `WEBHOOK_REQUIRE_HTTPS` environment variable. When enabled, non-HTTPS webhook URLs will be rejected during webhook registration.
+StellarClassic Pulse can be configured to require HTTPS for all webhook URLs via the `WEBHOOK_REQUIRE_HTTPS` environment variable. When enabled, non-HTTPS webhook URLs will be rejected during webhook registration.
 
 ```bash
 # Require HTTPS for all webhooks (recommended for production)
@@ -318,7 +318,7 @@ BODY='{"event":"test"}'
 SIGNATURE=$(echo -n "$BODY" | openssl dgst -sha256 -hmac "$SECRET" -hex | cut -d' ' -f2)
 
 # Send a test webhook
-curl -X POST http://localhost:8080/webhooks/soroban-pulse \
+curl -X POST http://localhost:8080/webhooks/stellarclassic-pulse \
   -H "Content-Type: application/json" \
   -H "X-Signature-256: sha256=$SIGNATURE" \
   -d "$BODY"
@@ -331,7 +331,7 @@ import requests
 import hmac
 import hashlib
 
-webhook_url = "http://localhost:8080/webhooks/soroban-pulse"
+webhook_url = "http://localhost:8080/webhooks/stellarclassic-pulse"
 webhook_secret = "your-webhook-secret"
 payload = {"event": "test"}
 

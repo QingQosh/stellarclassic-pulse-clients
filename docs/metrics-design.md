@@ -58,14 +58,14 @@ addition:
 
 The first `increment()` call that causes a counter to saturate (i.e. it was
 below `u64::MAX` and the new value is `u64::MAX`) emits
-`soroban_pulse_counter_overflow_total{counter="<name>"}`, via
+`stellarclassic_pulse_counter_overflow_total{counter="<name>"}`, via
 `metrics::record_counter_overflow_detected`. This makes saturation an
 observable, alertable event rather than a silent data-quality issue.
 
 ## Counter state metric
 
 `metrics::record_counter_state(counter_name, value)` publishes a
-`soroban_pulse_counter_state{counter="<name>"}` gauge with the counter's
+`stellarclassic_pulse_counter_state{counter="<name>"}` gauge with the counter's
 current raw value, so operators can watch how close a long-running counter
 is to `u64::MAX` before it would saturate. Wired into
 `DeliveryAnalytics::snapshot()` for the two totals most likely to be

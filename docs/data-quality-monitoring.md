@@ -28,7 +28,7 @@ system implemented in `src/data_quality.rs`.
 ## Usage
 
 ```rust
-use soroban_pulse::data_quality::*;
+use stellarclassic_pulse::data_quality::*;
 
 let mut engine = QualityRuleEngine::new();
 engine

@@ -1,6 +1,6 @@
 # Troubleshooting Decision Tree
 
-A symptom-first entry point for operational issues in Soroban Pulse. Start at [What are you seeing?](#what-are-you-seeing) and follow the branch that matches; each leaf links to the detailed fix in [docs/troubleshooting.md](troubleshooting.md) or a dedicated [runbook](#runbook-index), plus what to check, how to keep it from recurring, and when to stop self-service and escalate.
+A symptom-first entry point for operational issues in StellarClassic Pulse. Start at [What are you seeing?](#what-are-you-seeing) and follow the branch that matches; each leaf links to the detailed fix in [docs/troubleshooting.md](troubleshooting.md) or a dedicated [runbook](#runbook-index), plus what to check, how to keep it from recurring, and when to stop self-service and escalate.
 
 This document is the *navigation* layer. [docs/troubleshooting.md](troubleshooting.md) remains the detailed reference (exact commands, error message text, config variables) — this guide exists to get you to the right section of it faster when you're not sure what's actually wrong yet.
 
@@ -67,13 +67,13 @@ Unexpected API response
 │     then confirm the indexer has actually reached that ledger — see Branch D.
 ├─ Empty array / stale data on GET /v1/events
 │   → docs/troubleshooting.md § API returns stale or empty data
-│   → Check: soroban_pulse_indexer_lag_ledgers — if non-trivial, this is really Branch D.
+│   → Check: stellarclassic_pulse_indexer_lag_ledgers — if non-trivial, this is really Branch D.
 └─ 500 / 503
     → 503 usually means /healthz/ready is failing — check that endpoint directly.
       500 → RUST_LOG=debug and reproduce; check for a stack trace naming the failing handler.
 ```
 
-**Metrics/logs to check**: `soroban_pulse_http_request_duration_seconds` (by route/status), `GET /healthz/ready`, `RUST_LOG=soroban_pulse::handlers=debug`.
+**Metrics/logs to check**: `stellarclassic_pulse_http_request_duration_seconds` (by route/status), `GET /healthz/ready`, `RUST_LOG=stellarclassic_pulse::handlers=debug`.
 
 **Runbook**: none dedicated — most API-behavior issues resolve via [docs/troubleshooting.md](troubleshooting.md) directly.
 
@@ -94,7 +94,7 @@ Requests are slow
     → docs/bulk_export.md and docs/query-caching.md
 ```
 
-**Metrics/logs to check**: `soroban_pulse_http_request_duration_seconds` histogram, `soroban_pulse_db_pool_size` vs. `soroban_pulse_db_pool_max`, `pg_stat_statements.mean_exec_time`.
+**Metrics/logs to check**: `stellarclassic_pulse_http_request_duration_seconds` histogram, `stellarclassic_pulse_db_pool_size` vs. `stellarclassic_pulse_db_pool_max`, `pg_stat_statements.mean_exec_time`.
 
 **Runbook**: [docs/runbooks/db-pool-exhaustion.md](runbooks/db-pool-exhaustion.md)
 
@@ -102,20 +102,20 @@ Requests are slow
 
 ```
 Events missing or delayed
-├─ soroban_pulse_indexer_lag_ledgers is climbing
+├─ stellarclassic_pulse_indexer_lag_ledgers is climbing
 │   → docs/troubleshooting.md § Indexer Lag Troubleshooting (full step-by-step)
 │   → docs/runbooks/indexer-lag.md
 ├─ Indexer not advancing at all (lag flat, current_ledger frozen)
 │   → Check which replica holds the advisory lock — is this even the leader?
 │   → docs/troubleshooting.md § Indexer not processing events / stuck
-├─ RPC errors climbing (soroban_pulse_rpc_errors_total)
+├─ RPC errors climbing (stellarclassic_pulse_rpc_errors_total)
 │   → docs/runbooks/rpc-errors.md
 └─ Events exist on-chain but never appear, even after lag clears
     → Confirm contract_id filter matches exactly (case-sensitive, full address)
     → docs/troubleshooting.md § API returns stale or empty data
 ```
 
-**Metrics/logs to check**: `soroban_pulse_indexer_lag_ledgers`, `soroban_pulse_indexer_is_leader`, `soroban_pulse_rpc_errors_total`, `soroban_pulse_indexer_current_ledger` vs. `_latest_ledger`.
+**Metrics/logs to check**: `stellarclassic_pulse_indexer_lag_ledgers`, `stellarclassic_pulse_indexer_is_leader`, `stellarclassic_pulse_rpc_errors_total`, `stellarclassic_pulse_indexer_current_ledger` vs. `_latest_ledger`.
 
 **Runbook**: [docs/runbooks/indexer-lag.md](runbooks/indexer-lag.md), [docs/runbooks/rpc-errors.md](runbooks/rpc-errors.md)
 
@@ -141,7 +141,7 @@ Notifications not arriving
     → docs/email-notifications.md and docs/runbooks/notifications.md
 ```
 
-**Metrics/logs to check**: `soroban_pulse_webhook_failures_total`, `soroban_pulse_email_failures_total`, `soroban_pulse_sse_active_connections`, `delivery_logs` table (`status = 'failed'`).
+**Metrics/logs to check**: `stellarclassic_pulse_webhook_failures_total`, `stellarclassic_pulse_email_failures_total`, `stellarclassic_pulse_sse_active_connections`, `delivery_logs` table (`status = 'failed'`).
 
 **Runbook**: [docs/runbooks/webhook-failures.md](runbooks/webhook-failures.md), [docs/runbooks/sse-connections.md](runbooks/sse-connections.md), [docs/runbooks/notifications.md](runbooks/notifications.md)
 
@@ -149,9 +149,9 @@ Notifications not arriving
 
 ```
 Memory or CPU climbing
-├─ Memory (soroban_pulse_process_memory_bytes climbing without bound)
+├─ Memory (stellarclassic_pulse_process_memory_bytes climbing without bound)
 │   → docs/troubleshooting.md § Diagnose memory growth
-│   → Check soroban_pulse_sse_active_connections first — the most common cause
+│   → Check stellarclassic_pulse_sse_active_connections first — the most common cause
 │     is accumulating long-lived SSE connections, not a leak in request handling
 ├─ CPU pegged on one core
 │   → Usually the indexer's decode/transform path — profile with flamegraph
@@ -160,7 +160,7 @@ Memory or CPU climbing
     → This is capacity, not a bug — docs/capacity-planning.md
 ```
 
-**Metrics/logs to check**: `soroban_pulse_process_memory_bytes`, `soroban_pulse_sse_active_connections`, `top -p $(pgrep soroban-pulse)`.
+**Metrics/logs to check**: `stellarclassic_pulse_process_memory_bytes`, `stellarclassic_pulse_sse_active_connections`, `top -p $(pgrep stellarclassic-pulse)`.
 
 ---
 
@@ -170,11 +170,11 @@ Recurring root causes and how to avoid hitting them again:
 
 | Root cause | Prevention |
 |---|---|
-| DB pool exhaustion under load | Set `DB_MAX_CONNECTIONS` using the sizing formula in [docs/performance-tuning.md](performance-tuning.md#connection-pool-tuning) *before* going to production, and alert at 90% utilization (`soroban_pulse_db_pool_size` / `_max`). |
-| Indexer lag from RPC flakiness | Point `STELLAR_RPC_URL` at a provider with an SLA, and alert on `soroban_pulse_rpc_errors_total` rate rather than waiting for lag to become visible to users. |
+| DB pool exhaustion under load | Set `DB_MAX_CONNECTIONS` using the sizing formula in [docs/performance-tuning.md](performance-tuning.md#connection-pool-tuning) *before* going to production, and alert at 90% utilization (`stellarclassic_pulse_db_pool_size` / `_max`). |
+| Indexer lag from RPC flakiness | Point `STELLAR_RPC_URL` at a provider with an SLA, and alert on `stellarclassic_pulse_rpc_errors_total` rate rather than waiting for lag to become visible to users. |
 | Reverse proxy killing SSE connections | Set proxy idle timeouts (≥60s) to exceed `SSE_KEEPALIVE_SECS` at deploy time, not after the first complaint — see [docs/sse_reverse_proxy_configuration.md](sse_reverse_proxy_configuration.md). |
 | Webhook endpoint overload | Follow the endpoint sizing guidance in [docs/subscription-best-practices.md](subscription-best-practices.md#webhook-delivery) *before* subscribing at production event volume, not after deliveries start failing. |
-| Silent memory growth from SSE clients that never disconnect | Alert on `soroban_pulse_sse_active_connections` trending upward with no matching traffic increase — this is almost always clients that stopped reading but never closed the connection. |
+| Silent memory growth from SSE clients that never disconnect | Alert on `stellarclassic_pulse_sse_active_connections` trending upward with no matching traffic increase — this is almost always clients that stopped reading but never closed the connection. |
 | Migration ordering conflicts | `make check-migrations` runs in CI, but run it locally before committing — see [CONTRIBUTING.md § Database Migrations](../CONTRIBUTING.md#database-migrations). |
 | Stale table statistics after bulk loads | Run `ANALYZE` after any bulk import job — see [docs/troubleshooting.md § Table statistics](troubleshooting.md#table-statistics) — rather than waiting for autovacuum to catch up on its own schedule. |
 

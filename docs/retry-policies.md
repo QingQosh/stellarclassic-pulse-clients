@@ -22,7 +22,7 @@ instant (the thundering herd problem).
 Policies are plain, serializable config:
 
 ```rust
-use sorobanpulse::retry_policy::{RetryPolicy, RetryPolicyRegistry};
+use stellarclassicpulse::retry_policy::{RetryPolicy, RetryPolicyRegistry};
 
 let webhook_policy = RetryPolicy::webhook_default(); // 5 attempts, exponential, jittered
 let email_policy = RetryPolicy::email_default();     // 1 attempt, no backoff
@@ -34,7 +34,7 @@ registry.register("custom-integration", RetryPolicy {
     initial_backoff_ms: 500,
     backoff_multiplier: 1.8,
     max_backoff_ms: 120_000,
-    strategy: Some(sorobanpulse::retry_policy::RetryStrategy::Exponential),
+    strategy: Some(stellarclassicpulse::retry_policy::RetryStrategy::Exponential),
     use_jitter: true,
 });
 ```

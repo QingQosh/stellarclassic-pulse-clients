@@ -1,5 +1,5 @@
 /**
- * Request and response interceptors for the Soroban Pulse TypeScript SDK
+ * Request and response interceptors for the StellarClassic Pulse TypeScript SDK
  * 
  * Interceptors allow you to modify requests before they're sent and responses after they're received.
  * Typical use cases:

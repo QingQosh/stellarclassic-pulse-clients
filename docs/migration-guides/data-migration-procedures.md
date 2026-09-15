@@ -6,7 +6,7 @@
 > change. Dry-run against a disposable copy of your data before using them
 > for real.
 
-Procedures for backfilling historical event data into Soroban Pulse's
+Procedures for backfilling historical event data into StellarClassic Pulse's
 PostgreSQL schema (`events` table, see
 `migrations/20260314000000_create_events.sql` and later migrations) when
 migrating from another system.
@@ -16,7 +16,7 @@ migrating from another system.
 Skip this entire document if downstream consumers only need events *going
 forward* — just create subscriptions with `from_ledger` set to the current
 ledger and start there. A backfill is only needed when consumers require
-historical event data inside Soroban Pulse itself (e.g. for its query API
+historical event data inside StellarClassic Pulse itself (e.g. for its query API
 or dashboards), not just forward delivery.
 
 ## Backfill sources, in order of preference
@@ -42,7 +42,7 @@ or dashboards), not just forward delivery.
    CREATE TABLE events_backfill_staging (LIKE events INCLUDING ALL);
    ```
 
-2. **Transform** old-system records into Soroban Pulse's `events` shape.
+2. **Transform** old-system records into StellarClassic Pulse's `events` shape.
    At minimum this means producing a valid `contract_id`, `ledger`,
    `tx_hash`, `event_type`, and the XDR-derived `event_data` payload Soroban
    Pulse expects — validate each record with the same XDR validation path
@@ -113,6 +113,6 @@ more work than partitioning before the backfill.
 ## After the backfill
 
 Run every check in [validation.md](validation.md), then update
-`soroban_pulse_migrations_applied_total` / operational runbooks to reflect
-that history now lives in Soroban Pulse, per your team's normal change-log
+`stellarclassic_pulse_migrations_applied_total` / operational runbooks to reflect
+that history now lives in StellarClassic Pulse, per your team's normal change-log
 process.

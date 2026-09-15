@@ -27,7 +27,7 @@ rows are inserted mid-stream.
 Two pieces are needed: rows that can locate themselves, and a fetcher.
 
 ```rust
-use soroban_pulse::query_streaming::{batch_fetcher, Cursored, QueryStream, StreamingQueryConfig};
+use stellarclassic_pulse::query_streaming::{batch_fetcher, Cursored, QueryStream, StreamingQueryConfig};
 
 impl Cursored for Event {
     fn cursor_key(&self) -> String {
@@ -189,15 +189,15 @@ dropped, `streaming_response` stops pulling, and this stream stops being polled.
 
 | Metric | Type | Meaning |
 |---|---|---|
-| `soroban_pulse_query_stream_rows_total` | counter | Rows handed out |
-| `soroban_pulse_query_stream_batches_total` | counter | Completed batch fetches |
-| `soroban_pulse_query_stream_batch_rows` | histogram | Rows per batch |
-| `soroban_pulse_query_stream_batch_errors_total` | counter | Failed batches |
-| `soroban_pulse_query_stream_keepalives_total` | counter | Keep-alive ticks |
-| `soroban_pulse_query_streams_cancelled_total` | counter | Streams stopped by a caller |
-| `soroban_pulse_query_streams_truncated_total` | counter | Streams stopped at `max_batches` |
-| `soroban_pulse_query_streams_completed_total` | counter | Streams that ran to exhaustion |
-| `soroban_pulse_query_stream_rows_per_stream` | histogram | Rows per completed stream |
+| `stellarclassic_pulse_query_stream_rows_total` | counter | Rows handed out |
+| `stellarclassic_pulse_query_stream_batches_total` | counter | Completed batch fetches |
+| `stellarclassic_pulse_query_stream_batch_rows` | histogram | Rows per batch |
+| `stellarclassic_pulse_query_stream_batch_errors_total` | counter | Failed batches |
+| `stellarclassic_pulse_query_stream_keepalives_total` | counter | Keep-alive ticks |
+| `stellarclassic_pulse_query_streams_cancelled_total` | counter | Streams stopped by a caller |
+| `stellarclassic_pulse_query_streams_truncated_total` | counter | Streams stopped at `max_batches` |
+| `stellarclassic_pulse_query_streams_completed_total` | counter | Streams that ran to exhaustion |
+| `stellarclassic_pulse_query_stream_rows_per_stream` | histogram | Rows per completed stream |
 
 ### Reading them
 

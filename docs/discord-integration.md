@@ -25,7 +25,7 @@ DiscordConfig {
 - `send_message(content)` — a plain text message via the same webhook.
 - `send_with_retry(event, max_retries)` — exponential backoff (1s, 2s, 4s,
   ...) around `send_event_notification`, recording
-  `soroban_pulse_discord_failures_total` if every attempt fails.
+  `stellarclassic_pulse_discord_failures_total` if every attempt fails.
 - `deliver_discord(client, event)` — fire-and-forget wrapper (3 attempts).
 
 ## Role mentions (Bot API)

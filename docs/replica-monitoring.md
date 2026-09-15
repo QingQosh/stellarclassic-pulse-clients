@@ -1,16 +1,16 @@
 # Replica Sync Monitoring
 
-Soroban Pulse monitors PostgreSQL streaming replication lag via a background task (`src/replica_monitor.rs`) and exposes the data through Prometheus metrics and an admin API endpoint.
+StellarClassic Pulse monitors PostgreSQL streaming replication lag via a background task (`src/replica_monitor.rs`) and exposes the data through Prometheus metrics and an admin API endpoint.
 
 ## Metrics
 
 | Metric | Type | Description |
 |--------|------|-------------|
-| `soroban_pulse_replica_count` | Gauge | Number of connected streaming replicas |
-| `soroban_pulse_replica_lag_bytes` | Gauge | WAL bytes not yet replayed on replica (label: `client_addr`) |
-| `soroban_pulse_replica_write_lag_seconds` | Gauge | Lag to replica write acknowledgement |
-| `soroban_pulse_replica_flush_lag_seconds` | Gauge | Lag to replica flush acknowledgement |
-| `soroban_pulse_replica_replay_lag_seconds` | Gauge | Lag to replay on replica (most meaningful for data currency) |
+| `stellarclassic_pulse_replica_count` | Gauge | Number of connected streaming replicas |
+| `stellarclassic_pulse_replica_lag_bytes` | Gauge | WAL bytes not yet replayed on replica (label: `client_addr`) |
+| `stellarclassic_pulse_replica_write_lag_seconds` | Gauge | Lag to replica write acknowledgement |
+| `stellarclassic_pulse_replica_flush_lag_seconds` | Gauge | Lag to replica flush acknowledgement |
+| `stellarclassic_pulse_replica_replay_lag_seconds` | Gauge | Lag to replay on replica (most meaningful for data currency) |
 
 ## API Endpoint
 

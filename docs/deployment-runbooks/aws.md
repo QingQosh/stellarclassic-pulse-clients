@@ -1,6 +1,6 @@
 # AWS Deployment Runbook (EC2 + RDS + ALB)
 
-Deploys SorobanPulse as a Docker container on a self-managed **EC2** instance
+Deploys StellarClassicPulse as a Docker container on a self-managed **EC2** instance
 inside a VPC you provision, backed by **RDS PostgreSQL** and fronted by an
 **Application Load Balancer** terminating TLS with an ACM certificate. This is
 the infrastructure-level alternative to the managed
@@ -20,7 +20,7 @@ sidecar processes) rather than a serverless container platform.
 - **DNS** — a domain/subdomain you control, to point at the ALB and to issue
   the ACM certificate against (e.g. `pulse.example.com`).
 - **Repository assets used by this runbook**:
-  - Root [`Dockerfile`](../../Dockerfile) — builds the `soroban-pulse` image
+  - Root [`Dockerfile`](../../Dockerfile) — builds the `stellarclassic-pulse` image
     (exposes port `3000`, health-checks `/healthz/ready`).
   - [`.env.example`](../../.env.example) — full environment variable reference.
   - `terraform/modules/vpc`, `terraform/modules/rds`, and
@@ -46,7 +46,7 @@ sidecar processes) rather than a serverless container platform.
                                  │            GET /healthz/ready)
                      ┌───────────▼────────────┐
                      │  EC2 instance           │   private subnet
-                     │  docker run soroban-pulse│
+                     │  docker run stellarclassic-pulse│
                      │  :3000                  │
                      └───────────┬────────────┘
                                  │ 5432
@@ -107,14 +107,14 @@ terraform output -raw alb_target_group_arn
 ```bash
 REGION=us-east-1
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-ECR_REPO="${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/soroban-pulse"
+ECR_REPO="${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/stellarclassic-pulse"
 
-aws ecr create-repository --repository-name soroban-pulse --region "$REGION" || true
+aws ecr create-repository --repository-name stellarclassic-pulse --region "$REGION" || true
 aws ecr get-login-password --region "$REGION" \
   | docker login --username AWS --password-stdin "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
 
-docker build -t soroban-pulse .
-docker tag soroban-pulse:latest "${ECR_REPO}:latest"
+docker build -t stellarclassic-pulse .
+docker tag stellarclassic-pulse:latest "${ECR_REPO}:latest"
 docker push "${ECR_REPO}:latest"
 ```
 
@@ -125,8 +125,8 @@ VPC_ID=$(terraform -chdir=terraform output -raw vpc_id)
 ALB_SG_ID=$(terraform -chdir=terraform output -raw alb_security_group_id)
 
 APP_SG_ID=$(aws ec2 create-security-group \
-  --group-name soroban-pulse-app \
-  --description "SorobanPulse app instance" \
+  --group-name stellarclassic-pulse-app \
+  --description "StellarClassicPulse app instance" \
   --vpc-id "$VPC_ID" \
   --query GroupId --output text)
 
@@ -155,8 +155,8 @@ aws ecr get-login-password --region ${REGION} \
 
 docker pull ${ECR_REPO}:latest
 
-cat > /etc/soroban-pulse.env <<ENV
-DATABASE_URL=postgres://soroban_admin:CHANGE_ME@${RDS_ENDPOINT}:5432/soroban_pulse
+cat > /etc/stellarclassic-pulse.env <<ENV
+DATABASE_URL=postgres://soroban_admin:CHANGE_ME@${RDS_ENDPOINT}:5432/stellarclassic_pulse
 STELLAR_RPC_URL=https://soroban-testnet.stellar.org
 PORT=3000
 RUST_LOG=info
@@ -166,8 +166,8 @@ RATE_LIMIT_PER_MINUTE=60
 START_LEDGER=0
 ENV
 
-docker run -d --name soroban-pulse --restart unless-stopped \
-  --env-file /etc/soroban-pulse.env \
+docker run -d --name stellarclassic-pulse --restart unless-stopped \
+  --env-file /etc/stellarclassic-pulse.env \
   -p 3000:3000 \
   ${ECR_REPO}:latest
 EOF
@@ -179,9 +179,9 @@ aws ec2 run-instances \
   --instance-type t3.small \
   --subnet-id "$PRIVATE_SUBNET_ID" \
   --security-group-ids "$APP_SG_ID" \
-  --iam-instance-profile Name=soroban-pulse-ec2-profile \
+  --iam-instance-profile Name=stellarclassic-pulse-ec2-profile \
   --user-data file://user-data.sh \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=soroban-pulse-app}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=stellarclassic-pulse-app}]' \
   --count 1
 ```
 
@@ -195,7 +195,7 @@ aws ec2 run-instances \
 
 ```bash
 INSTANCE_ID=$(aws ec2 describe-instances \
-  --filters "Name=tag:Name,Values=soroban-pulse-app" "Name=instance-state-name,Values=running" \
+  --filters "Name=tag:Name,Values=stellarclassic-pulse-app" "Name=instance-state-name,Values=running" \
   --query "Reservations[0].Instances[0].InstanceId" --output text)
 
 TG_ARN=$(terraform -chdir=terraform output -raw alb_target_group_arn)
@@ -232,7 +232,7 @@ aws ssm start-session --target "$INSTANCE_ID"
 psql "$DATABASE_URL" -c "SELECT 1;"
 
 # 5. Indexer is making progress
-curl -sf "https://${ALB_DNS}/metrics" | grep soroban_pulse_indexer_current_ledger
+curl -sf "https://${ALB_DNS}/metrics" | grep stellarclassic_pulse_indexer_current_ledger
 ```
 
 ## Rollback
@@ -240,14 +240,14 @@ curl -sf "https://${ALB_DNS}/metrics" | grep soroban_pulse_indexer_current_ledge
 - **Bad app deploy**: pull and run the previous image tag, then re-register:
   ```bash
   docker pull "${ECR_REPO}:<previous-tag>"
-  docker stop soroban-pulse && docker rm soroban-pulse
-  docker run -d --name soroban-pulse --restart unless-stopped \
-    --env-file /etc/soroban-pulse.env -p 3000:3000 "${ECR_REPO}:<previous-tag>"
+  docker stop stellarclassic-pulse && docker rm stellarclassic-pulse
+  docker run -d --name stellarclassic-pulse --restart unless-stopped \
+    --env-file /etc/stellarclassic-pulse.env -p 3000:3000 "${ECR_REPO}:<previous-tag>"
   ```
   Or, for a fleet, launch a new instance from the previous AMI/user-data and
   swap it into the target group before deregistering the bad one
   (zero-downtime).
-- **Bad DB migration**: SorobanPulse applies migrations automatically on
+- **Bad DB migration**: StellarClassicPulse applies migrations automatically on
   startup. Follow the migration rollback procedure in
   [docs/deployment.md § Migration Strategy](../deployment.md#migration-strategy)
   before rolling the app back, so the old binary isn't pointed at a newer
@@ -262,8 +262,8 @@ curl -sf "https://${ALB_DNS}/metrics" | grep soroban_pulse_indexer_current_ledge
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Target group shows `unhealthy` | Security group blocks ALB→app on 3000, or app isn't listening yet | `aws ec2 describe-security-groups --group-ids $APP_SG_ID`; confirm the ingress rule's source is the ALB SG; check `docker logs soroban-pulse` on the instance for a crash loop |
-| ALB returns `502 Bad Gateway` | App container crashed or is still starting (30 s `start_period` in the Dockerfile healthcheck) | `docker ps -a` on the instance; `docker logs soroban-pulse --tail 100` |
+| Target group shows `unhealthy` | Security group blocks ALB→app on 3000, or app isn't listening yet | `aws ec2 describe-security-groups --group-ids $APP_SG_ID`; confirm the ingress rule's source is the ALB SG; check `docker logs stellarclassic-pulse` on the instance for a crash loop |
+| ALB returns `502 Bad Gateway` | App container crashed or is still starting (30 s `start_period` in the Dockerfile healthcheck) | `docker ps -a` on the instance; `docker logs stellarclassic-pulse --tail 100` |
 | ALB returns `504 Gateway Timeout` | App is up but slow to respond (DB latency, connection pool exhaustion) | See [docs/runbooks/db-pool-exhaustion.md](../runbooks/db-pool-exhaustion.md) |
 | App can't reach RDS (`connection refused`/timeout) | RDS security group doesn't allow the app SG on 5432, or the instance is in the wrong subnet | `aws ec2 describe-security-groups --group-ids <rds-sg-id>`; confirm ingress source is `$APP_SG_ID` |
 | `docker pull` fails on instance with `no basic auth credentials` | ECR login token expired (12 h) or the instance profile lacks `ecr:GetAuthorizationToken` | Re-run the `aws ecr get-login-password` step; check the IAM instance profile's attached policy |

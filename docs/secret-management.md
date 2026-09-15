@@ -1,6 +1,6 @@
 # Secret Management and Secrets Scanning (Issue #943)
 
-This document covers SorobanPulse's approach to managing secrets and preventing them from being committed to the repository.
+This document covers StellarClassicPulse's approach to managing secrets and preventing them from being committed to the repository.
 
 ## What Counts as a Secret
 

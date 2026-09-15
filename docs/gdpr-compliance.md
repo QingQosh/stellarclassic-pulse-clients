@@ -1,10 +1,10 @@
 # GDPR Data Handling Compliance (Issue #945)
 
-This document describes SorobanPulse's GDPR compliance procedures.
+This document describes StellarClassicPulse's GDPR compliance procedures.
 
 ## Scope
 
-SorobanPulse indexes **publicly available on-chain data** from the Stellar network. Blockchain events are not personal data under GDPR. However, the following data SorobanPulse collects **does** fall under GDPR:
+StellarClassicPulse indexes **publicly available on-chain data** from the Stellar network. Blockchain events are not personal data under GDPR. However, the following data StellarClassicPulse collects **does** fall under GDPR:
 
 | Data | Table | Article 4 Classification |
 |---|---|---|
@@ -36,7 +36,7 @@ SELECT gdpr_get_subject_data('user@example.com');
 Or via the Rust API:
 
 ```rust
-use soroban_pulse::gdpr::export_subject_data;
+use stellarclassic_pulse::gdpr::export_subject_data;
 
 let data = export_subject_data(&pool, "user@example.com").await?;
 ```
@@ -46,7 +46,7 @@ Respond to the data subject within **30 days**.
 ### Right to Erasure (Article 17)
 
 ```rust
-use soroban_pulse::gdpr::{execute_erasure_request, create_data_subject_request, DsrType};
+use stellarclassic_pulse::gdpr::{execute_erasure_request, create_data_subject_request, DsrType};
 
 // Register the request
 let dsr_id = create_data_subject_request(
@@ -59,7 +59,7 @@ println!("Deleted {} subscriptions", result.subscriptions_deleted);
 println!("Deleted {} email deliveries", result.email_deliveries_deleted);
 
 // Mark request complete
-use soroban_pulse::gdpr::{update_dsr_status, DsrStatus};
+use stellarclassic_pulse::gdpr::{update_dsr_status, DsrStatus};
 update_dsr_status(&pool, &dsr_id, DsrStatus::Completed, Some("ops-team"), None).await?;
 ```
 
@@ -85,7 +85,7 @@ UPDATE email_deliveries SET recipient = 'new@example.com' WHERE recipient = 'old
 Record consent grants and withdrawals:
 
 ```rust
-use soroban_pulse::gdpr::{ConsentRecord, ConsentType, LegalBasis, record_consent};
+use stellarclassic_pulse::gdpr::{ConsentRecord, ConsentType, LegalBasis, record_consent};
 
 let record = ConsentRecord {
     subject_email: "user@example.com".to_string(),
@@ -123,7 +123,7 @@ ORDER BY deadline_at;
 **72-hour rule**: The supervisory authority must be notified within 72 hours of detecting a breach.
 
 ```rust
-use soroban_pulse::gdpr::{BreachNotification, record_breach, mark_authority_notified};
+use stellarclassic_pulse::gdpr::{BreachNotification, record_breach, mark_authority_notified};
 
 // Step 1: Record the breach immediately on detection
 let breach = BreachNotification {
@@ -153,7 +153,7 @@ Document PIA results in your organisation's compliance management system and ref
 
 ## Data Processing Agreements
 
-If you operate SorobanPulse as a SaaS on behalf of customers:
+If you operate StellarClassicPulse as a SaaS on behalf of customers:
 
 1. You are the **data processor**; your customers are **data controllers**.
 2. Execute a signed DPA with each customer before processing their personal data.

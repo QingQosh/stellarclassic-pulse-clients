@@ -1,5 +1,5 @@
 /**
- * Retry policy configuration and implementation for Soroban Pulse SDK
+ * Retry policy configuration and implementation for StellarClassic Pulse SDK
  * 
  * Features:
  * - Configurable retry policies

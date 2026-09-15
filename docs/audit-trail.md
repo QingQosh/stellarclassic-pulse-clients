@@ -1,10 +1,10 @@
 # Audit Trail for Compliance (Issue #946)
 
-This document describes SorobanPulse's comprehensive audit trail system for regulatory compliance.
+This document describes StellarClassicPulse's comprehensive audit trail system for regulatory compliance.
 
 ## Overview
 
-SorobanPulse maintains an immutable, tamper-evident audit trail covering every sensitive operation. The trail is designed to satisfy requirements from SOC 2 Type II, GDPR (Article 30 records of processing), and financial industry regulations.
+StellarClassicPulse maintains an immutable, tamper-evident audit trail covering every sensitive operation. The trail is designed to satisfy requirements from SOC 2 Type II, GDPR (Article 30 records of processing), and financial industry regulations.
 
 ## Architecture
 
@@ -38,7 +38,7 @@ The compliance migration adds to `audit_logs`:
 Every audit entry receives a `log_hash` computed from its immutable fields:
 
 ```rust
-use soroban_pulse::audit_trail::{compute_log_hash, verify_log_hash, ComplianceAuditEntry};
+use stellarclassic_pulse::audit_trail::{compute_log_hash, verify_log_hash, ComplianceAuditEntry};
 
 // Compute hash when creating an entry
 let mut entry = ComplianceAuditEntry { /* ... */ };
@@ -55,7 +55,7 @@ if !verify_log_hash(&entry) {
 Each record's `chain_hash` incorporates the previous record's chain hash, forming a Merkle-like chain. Modifying any entry invalidates all subsequent chain hashes, making bulk tampering detectable.
 
 ```rust
-use soroban_pulse::audit_trail::compute_chain_hash;
+use stellarclassic_pulse::audit_trail::compute_chain_hash;
 
 let chain_hash = compute_chain_hash(prev_chain_hash.as_deref(), &log_hash);
 ```
@@ -86,7 +86,7 @@ CREATE POLICY audit_logs_delete_expired ON audit_logs
 Assign a retention class when creating entries:
 
 ```rust
-use soroban_pulse::audit_trail::RetentionClass;
+use stellarclassic_pulse::audit_trail::RetentionClass;
 
 let class = RetentionClass::Regulatory;
 println!("Retention: {:?} days", class.retention_days());
@@ -99,7 +99,7 @@ println!("Retention: {:?} days", class.retention_days());
 Generate a health report on the audit trail:
 
 ```rust
-use soroban_pulse::audit_trail::generate_audit_trail_health_report;
+use stellarclassic_pulse::audit_trail::generate_audit_trail_health_report;
 use chrono::Utc;
 
 let report = generate_audit_trail_health_report(
@@ -116,7 +116,7 @@ println!("Coverage: {:.1}%", report.compliance_coverage_pct);
 ### Deletion Audit Report
 
 ```rust
-use soroban_pulse::compliance_report::generate_deletion_audit_report;
+use stellarclassic_pulse::compliance_report::generate_deletion_audit_report;
 
 let report = generate_deletion_audit_report(&pool, from, to).await?;
 println!("Total deletions: {}", report.total_delete_events);
@@ -128,7 +128,7 @@ println!("Successful: {}", report.successful_deletions);
 Export audit logs for an external SIEM or auditor:
 
 ```rust
-use soroban_pulse::audit_trail::{export_audit_logs, record_export, AuditSearchParams};
+use stellarclassic_pulse::audit_trail::{export_audit_logs, record_export, AuditSearchParams};
 
 let params = AuditSearchParams {
     from: Some(period_start),

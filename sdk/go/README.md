@@ -1,6 +1,6 @@
-# Soroban Pulse Go Client SDK
+# StellarClassic Pulse Go Client SDK
 
-A type-safe Go client library for consuming the Soroban Pulse API. Indexes Soroban smart contract events on the Stellar network.
+A type-safe Go client library for consuming the StellarClassic Pulse API. Indexes Soroban smart contract events on the Stellar network.
 
 ## Features
 
@@ -14,7 +14,7 @@ A type-safe Go client library for consuming the Soroban Pulse API. Indexes Sorob
 ## Installation
 
 ```bash
-go get github.com/soroban-pulse/client-go
+go get github.com/stellarclassic-pulse/client-go
 ```
 
 ## Quick Start
@@ -27,12 +27,12 @@ import (
 	"fmt"
 	"log"
 	
-	sp "github.com/soroban-pulse/client-go"
+	sp "github.com/stellarclassic-pulse/client-go"
 )
 
 func main() {
 	client := sp.NewClient(sp.ClientConfig{
-		BaseURL: "https://api.sorobanpulse.com",
+		BaseURL: "https://api.stellarclassicpulse.com",
 		APIKey:  "your-api-key", // optional
 	})
 	defer client.Close()
@@ -57,7 +57,7 @@ func main() {
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL: "https://api.sorobanpulse.com",
+	BaseURL: "https://api.stellarclassicpulse.com",
 	APIKey:  "your-api-key",
 	Timeout: 30 * time.Second,
 })
@@ -67,7 +67,7 @@ client := sp.NewClient(sp.ClientConfig{
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL:               "https://api.sorobanpulse.com",
+	BaseURL:               "https://api.stellarclassicpulse.com",
 	MaxRetries:           3,                    // Retry up to 3 times
 	RetryInitialDelay:    1 * time.Second,      // 1 second initial
 	RetryMaxDelay:        32 * time.Second,     // 32 seconds max
@@ -203,7 +203,7 @@ Best for most use cases. Retries up to 3 times with exponential backoff.
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL: "https://api.sorobanpulse.com",
+	BaseURL: "https://api.stellarclassicpulse.com",
 	// Uses default retry policy
 })
 ```
@@ -216,7 +216,7 @@ For critical operations that must succeed.
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL:            "https://api.sorobanpulse.com",
+	BaseURL:            "https://api.stellarclassicpulse.com",
 	MaxRetries:         5,
 	RetryInitialDelay:  500 * time.Millisecond,
 	RetryMaxDelay:      60 * time.Second,
@@ -231,7 +231,7 @@ For operations that should fail fast.
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL:               "https://api.sorobanpulse.com",
+	BaseURL:               "https://api.stellarclassicpulse.com",
 	MaxRetries:           1,
 	RetryInitialDelay:    2 * time.Second,
 	RetryMaxDelay:        5 * time.Second,
@@ -290,7 +290,7 @@ The client automatically manages connection pooling through the `http.Client`.
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL: "https://api.sorobanpulse.com",
+	BaseURL: "https://api.stellarclassicpulse.com",
 	Timeout: 30 * time.Second,
 })
 
@@ -307,7 +307,7 @@ for i := 0; i < 100; i++ {
 
 ```go
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL: "https://api.sorobanpulse.com",
+	BaseURL: "https://api.stellarclassicpulse.com",
 	OnRetry: func(attempt int, delay time.Duration, reason string) {
 		log.Printf(
 			"[Retry %d] %s - waiting %v",
@@ -331,7 +331,7 @@ type RequestMetrics struct {
 metrics := &RequestMetrics{}
 
 client := sp.NewClient(sp.ClientConfig{
-	BaseURL: "https://api.sorobanpulse.com",
+	BaseURL: "https://api.stellarclassicpulse.com",
 	OnRetry: func(attempt int, delay time.Duration, reason string) {
 		metrics.Retried++
 	},
@@ -412,10 +412,10 @@ Contributions are welcome! Please see our [Contributing Guide](../../CONTRIBUTIN
 
 ## License
 
-This SDK is licensed under the same license as the Soroban Pulse project.
+This SDK is licensed under the same license as the StellarClassic Pulse project.
 
 ## Resources
 
-- [Soroban Pulse API Documentation](https://soroban-pulse.com/docs)
+- [StellarClassic Pulse API Documentation](https://stellarclassic-pulse.com/docs)
 - [Stellar Network Documentation](https://developers.stellar.org/soroban)
 - [Go Context Best Practices](https://pkg.go.dev/context)

@@ -39,7 +39,7 @@ up front instead of discovering a missing credential halfway through:
 
 A short paragraph plus a diagram (ASCII is fine) describing the network and
 compute topology: which components are public vs. private, where TLS
-terminates, and how traffic reaches the SorobanPulse app container/process.
+terminates, and how traffic reaches the StellarClassicPulse app container/process.
 Call out anything that differs from the general guidance in
 [docs/deployment.md](../deployment.md) (TLS termination options, resource
 sizing) and [docs/multi-deployment-architecture.md](../multi-deployment-architecture.md)
@@ -69,7 +69,7 @@ Concrete commands that prove the deployment actually works — not just that
 - A smoke-test API request exercising a real endpoint (e.g.
   `GET /v1/events?limit=1`).
 - Where relevant, a metrics/log check confirming the indexer is making
-  progress (`soroban_pulse_indexer_current_ledger` increasing).
+  progress (`stellarclassic_pulse_indexer_current_ledger` increasing).
 
 ## Rollback
 

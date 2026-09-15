@@ -34,7 +34,7 @@ production or during load testing.
 ## Usage
 
 ```rust
-use soroban_pulse::query_profiler::{QueryProfile, QueryProfiler};
+use stellarclassic_pulse::query_profiler::{QueryProfile, QueryProfiler};
 use std::time::Duration;
 
 let mut profile = QueryProfile::start("SELECT * FROM events WHERE type = 'payment'");
@@ -64,7 +64,7 @@ Recommendations:
 ## Tracking slow queries over time
 
 ```rust
-use soroban_pulse::query_profiler::ProfilingMetrics;
+use stellarclassic_pulse::query_profiler::ProfilingMetrics;
 
 let mut metrics = ProfilingMetrics::new();
 metrics.record("payments_query", plan.total_duration());

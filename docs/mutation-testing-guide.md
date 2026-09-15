@@ -1,6 +1,6 @@
 # Mutation Testing Guide
 
-> **Issue #922** — Comprehensive mutation testing for SorobanPulse.
+> **Issue #922** — Comprehensive mutation testing for StellarClassicPulse.
 >
 > This guide tells you everything you need to know: what mutation testing is,
 > how to run it locally, how to read the results, and how CI enforces quality gates.
@@ -70,7 +70,7 @@ Standard code coverage tells you which lines were executed. It does **not** tell
 whether the tests would catch a bug on those lines. You can have 100 % line coverage
 and still have mutations survive.
 
-For SorobanPulse, the critical paths are:
+For StellarClassicPulse, the critical paths are:
 
 - Pagination boundary logic (`handlers.rs`, `models.rs`)
 - Event deduplication (`dedup.rs`, `event_dedup_replicas.rs`)

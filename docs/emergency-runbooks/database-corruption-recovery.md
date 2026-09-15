@@ -13,7 +13,7 @@
 - `FATAL: database file appears to be corrupted`
 - Unexpected NULL values or truncated rows in the `events` table
 - Failed health check (`GET /healthz/ready` returns 503)
-- `soroban_pulse_rpc_errors_total` spiking without RPC issues
+- `stellarclassic_pulse_rpc_errors_total` spiking without RPC issues
 
 ---
 

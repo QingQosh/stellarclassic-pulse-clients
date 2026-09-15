@@ -1,10 +1,10 @@
 # API Response Time SLA
 
-This document defines SorobanPulse's latency targets, SLA guarantees, measurement methodology, and the monitoring dashboard used to track compliance.
+This document defines StellarClassicPulse's latency targets, SLA guarantees, measurement methodology, and the monitoring dashboard used to track compliance.
 
 ## Latency Targets
 
-The following targets apply to the **SorobanPulse managed deployment**. Self-hosted deployments should adjust targets to reflect their own infrastructure.
+The following targets apply to the **StellarClassicPulse managed deployment**. Self-hosted deployments should adjust targets to reflect their own infrastructure.
 
 ### REST API Endpoints
 
@@ -45,7 +45,7 @@ Latency is measured **at the server** from the moment the first byte of the requ
 
 ## SLA Guarantees
 
-The following monthly SLA commitments apply to the managed SorobanPulse service.
+The following monthly SLA commitments apply to the managed StellarClassicPulse service.
 
 | Tier | Monthly uptime | Max downtime / month |
 |---|---|---|
@@ -101,7 +101,7 @@ Lag is sampled every 30 seconds. An alert fires when `indexer_lag_ledgers > INDE
 
 ## SLA Monitoring Dashboard
 
-### Prometheus metrics exposed by SorobanPulse
+### Prometheus metrics exposed by StellarClassicPulse
 
 | Metric name | Type | Description |
 |---|---|---|
@@ -204,11 +204,11 @@ Requests that return `429 Too Many Requests` are not counted against the SLA err
 
 ### Self-hosted deployments
 
-SLA guarantees apply only to the **managed SorobanPulse service**. Operators running self-hosted deployments are responsible for defining and monitoring their own SLAs.
+SLA guarantees apply only to the **managed StellarClassicPulse service**. Operators running self-hosted deployments are responsible for defining and monitoring their own SLAs.
 
 ## Reporting and Incident Response
 
-- **Status page**: Real-time uptime and incident history are published at `https://status.sorobanpulse.io` (managed deployment).
+- **Status page**: Real-time uptime and incident history are published at `https://status.stellarclassicpulse.io` (managed deployment).
 - **Incident response**: P1 (full outage) SLA target is acknowledgement within 15 minutes and mitigation within 1 hour.
 - **Post-mortems**: All P1 and P2 incidents receive a public post-mortem within 5 business days.
 - **Monthly SLA report**: Available in the operator dashboard under **Settings → SLA Reports**.

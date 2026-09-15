@@ -1,16 +1,16 @@
-# SorobanPulse Architecture
+# StellarClassicPulse Architecture
 
-This document provides a comprehensive overview of the SorobanPulse system architecture, including component interactions, data flow, and integration patterns.
+This document provides a comprehensive overview of the StellarClassicPulse system architecture, including component interactions, data flow, and integration patterns.
 
 ## Architecture Diagram
 
-![SorobanPulse System Architecture](architecture.svg)
+![StellarClassicPulse System Architecture](architecture.svg)
 
 > The diagram above shows all major components, data flow paths, the multi-replica advisory lock mechanism, and the notification/webhook delivery flow. An SVG copy is available at [`docs/architecture.svg`](architecture.svg) for embedding in external tooling.
 
 ## System Architecture Overview
 
-SorobanPulse is a high-performance event indexing and notification system for the Stellar blockchain. It monitors smart contract events through the Stellar RPC, indexes them into a PostgreSQL database, and delivers real-time notifications to subscribers via multiple channels.
+StellarClassicPulse is a high-performance event indexing and notification system for the Stellar blockchain. It monitors smart contract events through the Stellar RPC, indexes them into a PostgreSQL database, and delivers real-time notifications to subscribers via multiple channels.
 
 ```mermaid
 graph TB
@@ -19,7 +19,7 @@ graph TB
         SC["Smart Contracts<br/>(Soroban)"]
     end
 
-    subgraph Core["SorobanPulse Core"]
+    subgraph Core["StellarClassicPulse Core"]
         IDX["Indexer Service<br/>(Event Processor)"]
         API["REST API<br/>(Axum)"]
         SSE["Server-Sent Events<br/>(Real-time Stream)"]
@@ -87,7 +87,7 @@ graph TB
 
 ### Indexer Service
 
-The Indexer is the heart of SorobanPulse, responsible for:
+The Indexer is the heart of StellarClassicPulse, responsible for:
 
 1. **Event Polling**: Continuously polls Stellar RPC for new blocks
 2. **XDR Parsing**: Parses XDR-encoded contract invocation data
@@ -182,7 +182,7 @@ sequenceDiagram
 
 ## Multi-Replica Advisory Lock Mechanism
 
-For systems with multiple SorobanPulse instances, advisory locks prevent duplicate event processing:
+For systems with multiple StellarClassicPulse instances, advisory locks prevent duplicate event processing:
 
 ```mermaid
 graph LR
@@ -259,9 +259,9 @@ graph TB
 graph TB
     subgraph K8s["Kubernetes Cluster"]
         INGRESS["Ingress Controller<br/>(TLS/HTTP)"]
-        POD1["SorobanPulse Pod 1"]
-        POD2["SorobanPulse Pod 2"]
-        POD3["SorobanPulse Pod 3"]
+        POD1["StellarClassicPulse Pod 1"]
+        POD2["StellarClassicPulse Pod 2"]
+        POD3["StellarClassicPulse Pod 3"]
     end
 
     subgraph External["External Services"]

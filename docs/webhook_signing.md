@@ -2,7 +2,7 @@
 
 ## Overview
 
-Soroban Pulse supports HMAC-SHA256 request signing for webhook delivery. When you configure a webhook secret, all webhook requests to your endpoint will be signed, allowing you to verify their authenticity and ensure they come from Soroban Pulse.
+StellarClassic Pulse supports HMAC-SHA256 request signing for webhook delivery. When you configure a webhook secret, all webhook requests to your endpoint will be signed, allowing you to verify their authenticity and ensure they come from StellarClassic Pulse.
 
 ## Signature Header
 
@@ -70,10 +70,10 @@ fn verify_webhook_signature(
 }
 ```
 
-You can also use the built-in verification in Soroban Pulse:
+You can also use the built-in verification in StellarClassic Pulse:
 
 ```rust
-use soroban_pulse::webhook_verification;
+use stellarclassic_pulse::webhook_verification;
 
 let result = webhook_verification::verify_signature(
     &header_value,
@@ -219,7 +219,7 @@ if hmac.compare_digest(provided_sig, computed_sig):
 
 ## Configuration
 
-To enable webhook signing in Soroban Pulse:
+To enable webhook signing in StellarClassic Pulse:
 
 1. Configure your webhook URL:
    ```
@@ -238,7 +238,7 @@ When both are configured, all webhook deliveries will include the `X-Signature-2
 ### Signature Verification Failing
 
 **Common causes:**
-- Secret mismatch: Ensure you're using the exact secret configured in Soroban Pulse
+- Secret mismatch: Ensure you're using the exact secret configured in StellarClassic Pulse
 - Body parsing: Make sure you're verifying against the raw request body, not parsed/modified JSON
 - Header case: Header names are case-insensitive in HTTP, but the signature value is case-sensitive
 - Character encoding: Ensure consistent UTF-8 encoding for both secret and body
@@ -247,7 +247,7 @@ When both are configured, all webhook deliveries will include the `X-Signature-2
 1. Log both the received signature and computed signature (in development only)
 2. Verify the header is being received correctly
 3. Check that you're using the raw request body bytes
-4. Ensure the secret matches what's configured in Soroban Pulse
+4. Ensure the secret matches what's configured in StellarClassic Pulse
 
 ## Examples of Common Mistakes
 
@@ -283,7 +283,7 @@ verify_signature(header, secret, body)
 When you need to update your webhook secret:
 
 1. Generate a new secret
-2. Configure Soroban Pulse to use the new secret
+2. Configure StellarClassic Pulse to use the new secret
 3. Update your webhook handler to accept both old and new secrets temporarily
 4. After verifying all webhooks are using the new secret, remove the old one
 

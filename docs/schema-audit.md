@@ -1,4 +1,4 @@
-# Schema Audit — SorobanPulse (#804)
+# Schema Audit — StellarClassicPulse (#804)
 
 **Date:** 2026-07-28  
 **Scope:** All migration files in `migrations/`, current index strategy, GIN index overlap, partition strategy.

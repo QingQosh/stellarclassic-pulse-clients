@@ -112,7 +112,7 @@ let config = GraphQLSubscriptionConfig {
 
 ```
 ws://localhost:8000/graphql
-wss://api.sorobanpulse.com/graphql (Production with TLS)
+wss://api.stellarclassicpulse.com/graphql (Production with TLS)
 ```
 
 ## Message Format

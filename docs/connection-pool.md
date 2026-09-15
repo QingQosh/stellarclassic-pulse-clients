@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse implements adaptive connection pooling that dynamically adjusts pool parameters based on runtime utilization patterns. The pool includes health checks, stale connection detection, and ML-based demand forecasting.
+StellarClassicPulse implements adaptive connection pooling that dynamically adjusts pool parameters based on runtime utilization patterns. The pool includes health checks, stale connection detection, and ML-based demand forecasting.
 
 ## Architecture
 
@@ -37,7 +37,7 @@ STALE_CONNECTION_AGE_SECS=600      # Connection age threshold
 ### Runtime Configuration
 
 ```rust
-use soroban_pulse::adaptive_pool::{spawn_adaptive_monitor, AdaptivePoolConfig};
+use stellarclassic_pulse::adaptive_pool::{spawn_adaptive_monitor, AdaptivePoolConfig};
 
 let config = AdaptivePoolConfig {
     max_connections_ceiling: 200,
@@ -60,7 +60,7 @@ let tuner_state = spawn_adaptive_monitor(pool, config, 100, 5);
 ### Pool Utilization
 
 ```
-soroban_pulse_pool_utilization{variant="default"}
+stellarclassic_pulse_pool_utilization{variant="default"}
 - Current connection usage as percentage of max
 - Updated every sample interval
 ```
@@ -68,7 +68,7 @@ soroban_pulse_pool_utilization{variant="default"}
 ### Queue Depth
 
 ```
-soroban_pulse_pool_queue_depth{variant="default"}
+stellarclassic_pulse_pool_queue_depth{variant="default"}
 - Number of pending acquisition requests
 - Indicates connection starvation
 ```
@@ -76,7 +76,7 @@ soroban_pulse_pool_queue_depth{variant="default"}
 ### Acquisition Latency
 
 ```
-soroban_pulse_pool_acquire_latency_ms{variant="default"}
+stellarclassic_pulse_pool_acquire_latency_ms{variant="default"}
 - Time to acquire a connection
 - Histogram with buckets (1ms, 5ms, 10ms, 50ms, 100ms)
 ```
@@ -84,7 +84,7 @@ soroban_pulse_pool_acquire_latency_ms{variant="default"}
 ### Health Checks
 
 ```
-soroban_pulse_pool_health_check_failures_total{variant="default"}
+stellarclassic_pulse_pool_health_check_failures_total{variant="default"}
 - Count of failed keepalive pings
 - Indicates connection quality issues
 ```
@@ -92,15 +92,15 @@ soroban_pulse_pool_health_check_failures_total{variant="default"}
 ### Stale Connection Tracking
 
 ```
-soroban_pulse_pool_stale_cleaned_total{variant="default"}
+stellarclassic_pulse_pool_stale_cleaned_total{variant="default"}
 - Count of idle connections exceeding age threshold
 ```
 
 ### Adaptive Recommendations
 
 ```
-soroban_pulse_pool_adaptive_target_min{variant="default"}
-soroban_pulse_pool_adaptive_target_max{variant="default"}
+stellarclassic_pulse_pool_adaptive_target_min{variant="default"}
+stellarclassic_pulse_pool_adaptive_target_max{variant="default"}
 - Recommended min/max connections based on patterns
 ```
 
@@ -280,7 +280,7 @@ Typical performance with optimal pool sizing:
 
 ### High Acquisition Latency
 
-**Symptom**: `soroban_pulse_pool_acquire_latency_ms` > 100ms
+**Symptom**: `stellarclassic_pulse_pool_acquire_latency_ms` > 100ms
 
 **Cause**: Insufficient connections or slow queries
 
@@ -291,7 +291,7 @@ Typical performance with optimal pool sizing:
 
 ### Queue Depth Growing
 
-**Symptom**: `soroban_pulse_pool_queue_depth` continuously increasing
+**Symptom**: `stellarclassic_pulse_pool_queue_depth` continuously increasing
 
 **Cause**: More requests than available connections
 
@@ -302,7 +302,7 @@ Typical performance with optimal pool sizing:
 
 ### Health Check Failures
 
-**Symptom**: `soroban_pulse_pool_health_check_failures_total` increasing
+**Symptom**: `stellarclassic_pulse_pool_health_check_failures_total` increasing
 
 **Cause**: Database connectivity or network issues
 

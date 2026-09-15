@@ -1,6 +1,6 @@
 # Database Schema
 
-This document describes the PostgreSQL schema used by Soroban Pulse. All tables are created and evolved through the migration files in [`migrations/`](../migrations/).
+This document describes the PostgreSQL schema used by StellarClassic Pulse. All tables are created and evolved through the migration files in [`migrations/`](../migrations/).
 
 ## Entity-Relationship Diagram
 
@@ -214,8 +214,8 @@ It issues `REFRESH MATERIALIZED VIEW CONCURRENTLY` for each view in sequence. Fa
 Each materialized view refresh acquires a dedicated pool connection, sets `lock_timeout = '5s'`, and resets it before returning the connection. If a concurrent long-running query holds a conflicting lock, the refresh is skipped (a `WARN` is logged) and retried on the next scheduled interval. This prevents a stuck refresh from blocking the connection pool or cascading into API failures.
 
 Metrics emitted per refresh cycle:
-- `soroban_pulse_matview_refresh_duration_seconds{view}` — histogram of successful refresh latency.
-- `soroban_pulse_matview_refresh_timeout_total{view}` — counter incremented each time a lock timeout causes a skip.
+- `stellarclassic_pulse_matview_refresh_duration_seconds{view}` — histogram of successful refresh latency.
+- `stellarclassic_pulse_matview_refresh_timeout_total{view}` — counter incremented each time a lock timeout causes a skip.
 
 ---
 
@@ -226,10 +226,10 @@ The background task in `src/index_monitor.rs` runs on every cycle (`INDEX_CHECK_
 1. **EXPLAIN-based checks** — runs `EXPLAIN (FORMAT JSON)` on representative queries and warns if the query planner falls back to a sequential scan instead of the expected index.
 
 2. **pg_stat_user_indexes scan counts** — queries `pg_stat_user_indexes` and emits per-index scan counts as Prometheus metrics:
-   - `soroban_pulse_unused_indexes_total` — gauge reporting how many public-schema indexes have `idx_scan = 0` since the last statistics reset.
-   - `soroban_pulse_index_scan_count{table, index}` — gauge reporting `idx_scan` for each monitored index.
+   - `stellarclassic_pulse_unused_indexes_total` — gauge reporting how many public-schema indexes have `idx_scan = 0` since the last statistics reset.
+   - `stellarclassic_pulse_index_scan_count{table, index}` — gauge reporting `idx_scan` for each monitored index.
 
-A Prometheus alert (`UnusedIndexesDetected`) fires when `soroban_pulse_unused_indexes_total > 0` for more than 24 hours. Unused indexes waste write throughput and storage; the alert prompts operators to review and drop obsolete indexes.
+A Prometheus alert (`UnusedIndexesDetected`) fires when `stellarclassic_pulse_unused_indexes_total > 0` for more than 24 hours. Unused indexes waste write throughput and storage; the alert prompts operators to review and drop obsolete indexes.
 
 > **Note:** `idx_scan` resets when `pg_stat_reset()` is called or the PostgreSQL instance is restarted. A newly created index will show `idx_scan = 0` until it is first used; allow one full monitoring cycle before treating it as unused.
 
@@ -270,7 +270,7 @@ SELECT create_future_partitions(3);
 
 The schema health check (`src/index_monitor.rs::run_schema_health_check`)
 emits a `WARN` log and increments
-`soroban_pulse_schema_missing_future_partitions` if fewer than 2 future months
+`stellarclassic_pulse_schema_missing_future_partitions` if fewer than 2 future months
 are pre-created. Alert on this gauge being `> 0` for more than 48 hours.
 
 ### Verifying partition pruning

@@ -1,6 +1,6 @@
 # Feature Flag Rollback Automation
 
-Soroban Pulse automatically rolls back enabled feature flags when the HTTP error rate spikes above a configurable threshold.
+StellarClassic Pulse automatically rolls back enabled feature flags when the HTTP error rate spikes above a configurable threshold.
 
 ## How It Works
 
@@ -25,7 +25,7 @@ See `migrations/20260627000001_feature_flags.sql`.
 
 | Metric | Description |
 |--------|-------------|
-| `soroban_pulse_feature_flag_error_rate` | Current 5-minute error rate (0.0–1.0) |
+| `stellarclassic_pulse_feature_flag_error_rate` | Current 5-minute error rate (0.0–1.0) |
 
 ## Audit Trail
 

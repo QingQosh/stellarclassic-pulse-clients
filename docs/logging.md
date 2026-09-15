@@ -1,6 +1,6 @@
 # Structured Logging Convention
 
-This document defines the canonical field names and patterns for structured logging across Soroban Pulse.
+This document defines the canonical field names and patterns for structured logging across StellarClassic Pulse.
 
 ## Field Naming
 
@@ -74,7 +74,7 @@ When `RUST_LOG_FORMAT=json`, all structured fields appear in the JSON object:
   "message": "Database error",
   "error": "connection timeout",
   "correlation_id": "abc123",
-  "target": "soroban_pulse::handlers"
+  "target": "stellarclassic_pulse::handlers"
 }
 ```
 

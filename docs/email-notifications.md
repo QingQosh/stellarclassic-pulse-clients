@@ -1,6 +1,6 @@
 # Email Notifications
 
-The email notification feature allows operators to receive email alerts when specific events are indexed by Soroban Pulse. This is useful for monitoring critical contracts or receiving alerts for important blockchain events.
+The email notification feature allows operators to receive email alerts when specific events are indexed by StellarClassic Pulse. This is useful for monitoring critical contracts or receiving alerts for important blockchain events.
 
 ## Features
 
@@ -20,7 +20,7 @@ Email notifications are configured via environment variables:
 ### Required Variables
 
 - `EMAIL_SMTP_HOST`: SMTP server hostname (e.g., `smtp.gmail.com`, `smtp.sendgrid.net`)
-- `EMAIL_FROM`: Sender email address (e.g., `soroban-pulse@example.com`)
+- `EMAIL_FROM`: Sender email address (e.g., `stellarclassic-pulse@example.com`)
 - `EMAIL_TO`: Comma-separated list of recipient email addresses
 
 ### Optional Variables
@@ -50,7 +50,7 @@ EMAIL_SMTP_HOST=smtp.gmail.com
 EMAIL_SMTP_PORT=587
 EMAIL_SMTP_USER=your-email@gmail.com
 EMAIL_SMTP_PASSWORD=your-app-password
-EMAIL_FROM=soroban-pulse@gmail.com
+EMAIL_FROM=stellarclassic-pulse@gmail.com
 EMAIL_TO=admin@example.com,alerts@example.com
 ```
 
@@ -102,9 +102,9 @@ Each email contains:
 ### Example Email
 
 ```
-Subject: Soroban Pulse: 15 new events indexed
+Subject: StellarClassic Pulse: 15 new events indexed
 
-Soroban Pulse indexed 15 new events in the last minute.
+StellarClassic Pulse indexed 15 new events in the last minute.
 
 Contract: CABC123...
   Events: 10
@@ -163,7 +163,7 @@ EMAIL_QUIET_HOURS_END=07:00
 The window may wrap past midnight (as above). The start time is inclusive and the end time is exclusive. Setting both bounds equal (or omitting either) disables quiet hours.
 ## HTML Emails
 
-Issue #482: By default emails are sent as plain text. For non-technical stakeholders, Soroban Pulse can also render a formatted HTML email using a [Handlebars](https://handlebarsjs.com/) template.
+Issue #482: By default emails are sent as plain text. For non-technical stakeholders, StellarClassic Pulse can also render a formatted HTML email using a [Handlebars](https://handlebarsjs.com/) template.
 
 ### Configuration
 
@@ -204,7 +204,7 @@ The template uses table-based layout and inline styles for broad compatibility w
 
 The email notification system exposes the following Prometheus metric:
 
-- `soroban_pulse_email_failures_total`: Counter of failed email deliveries
+- `stellarclassic_pulse_email_failures_total`: Counter of failed email deliveries
 
 Monitor this metric to detect SMTP configuration issues or delivery failures.
 
@@ -326,5 +326,5 @@ otherwise the default priority is used.
 The digest subject line includes the highest priority present in the batch:
 
 ```
-[CRITICAL] Soroban Pulse: 42 events across 5 contracts
+[CRITICAL] StellarClassic Pulse: 42 events across 5 contracts
 ```

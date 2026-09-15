@@ -3,7 +3,7 @@
 //! Sends a synthetic event payload — shaped exactly like a real delivery
 //! from `/subscriptions/{id}` — directly to a callback URL, so a user can
 //! verify their receiver before wiring up a live subscription. This talks
-//! straight to the target URL; it does not go through the Soroban Pulse API.
+//! straight to the target URL; it does not go through the StellarClassic Pulse API.
 
 use anyhow::{Context, Result};
 use colored::Colorize;
@@ -44,7 +44,7 @@ pub fn send(url: &str, contract_id: &str, timeout_secs: u64) -> Result<TestResul
     let resp = client
         .post(url)
         .header("content-type", "application/json")
-        .header("x-soroban-pulse-test", "true")
+        .header("x-stellarclassic-pulse-test", "true")
         .json(&payload)
         .send()
         .with_context(|| format!("sending test webhook to {url}"))?;
@@ -74,7 +74,7 @@ mod tests {
         let mut server = mockito::Server::new();
         let mock = server
             .mock("POST", "/hook")
-            .match_header("x-soroban-pulse-test", "true")
+            .match_header("x-stellarclassic-pulse-test", "true")
             .with_status(200)
             .with_body("ok")
             .create();

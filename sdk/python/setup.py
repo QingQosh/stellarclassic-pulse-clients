@@ -1,5 +1,5 @@
 """
-    Soroban Pulse API
+    StellarClassic Pulse API
 
     Indexes Soroban smart contract events on the Stellar network.
 
@@ -31,11 +31,11 @@ REQUIRES = [
 setup(
     name=NAME,
     version=VERSION,
-    description="Soroban Pulse API",
+    description="StellarClassic Pulse API",
     author="OpenAPI Generator community",
     author_email="team@openapitools.org",
     url="",
-    keywords=["OpenAPI", "OpenAPI-Generator", "Soroban Pulse API"],
+    keywords=["OpenAPI", "OpenAPI-Generator", "StellarClassic Pulse API"],
     install_requires=REQUIRES,
     packages=find_packages(exclude=["test", "tests"]),
     include_package_data=True,

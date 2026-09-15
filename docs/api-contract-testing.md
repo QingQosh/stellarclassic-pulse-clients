@@ -1,6 +1,6 @@
 # API Contract Testing Guide
 
-API contract testing ensures that client and server agree on the API interface. This document describes SorobanPulse's API contract testing strategy using Pact.
+API contract testing ensures that client and server agree on the API interface. This document describes StellarClassicPulse's API contract testing strategy using Pact.
 
 ## What is Contract Testing?
 
@@ -203,7 +203,7 @@ Consumers use pacts to verify the server meets their expectations:
 ```bash
 # Verify server against published consumer contracts
 pact_verifier \
-  --provider SorobanPulse \
+  --provider StellarClassicPulse \
   --provider-base-url http://localhost:3000 \
   --broker-url https://pact-broker.example.com \
   --broker-token=$PACT_BROKER_TOKEN

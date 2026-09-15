@@ -10,7 +10,7 @@ against production before cutover.
 
 ## Count reconciliation
 
-Compare event counts between the old system and Soroban Pulse for the same
+Compare event counts between the old system and StellarClassic Pulse for the same
 ledger range, grouped by contract and day:
 
 ```sql
@@ -69,13 +69,13 @@ For each migrated subscription (see
 
 ## Operational validation
 
-- [ ] `soroban_pulse_indexer_lag_ledgers` is within the same tolerance the
+- [ ] `stellarclassic_pulse_indexer_lag_ledgers` is within the same tolerance the
       old system offered (or better) — see
       [metrics-reference.md](../metrics-reference.md).
-- [ ] No unexpected spike in `soroban_pulse_events_validation_failed_total`
-      or `soroban_pulse_events_xdr_invalid_total` for the migrated
+- [ ] No unexpected spike in `stellarclassic_pulse_events_validation_failed_total`
+      or `stellarclassic_pulse_events_xdr_invalid_total` for the migrated
       contracts.
-- [ ] No unexpected spike in `soroban_pulse_notification_delivery_failure_total`
+- [ ] No unexpected spike in `stellarclassic_pulse_notification_delivery_failure_total`
       for the migrated subscriptions' channels.
 - [ ] Load-test the migrated subscription set at expected production volume
       before full cutover — see

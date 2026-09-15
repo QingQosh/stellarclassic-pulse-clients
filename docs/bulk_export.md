@@ -271,7 +271,7 @@ curl http://localhost:8000/v1/admin/events/export/$JOB_ID/download \
 
 ### File Storage
 
-Exported files are stored in `/tmp/soroban-pulse-exports` by default.
+Exported files are stored in `/tmp/stellarclassic-pulse-exports` by default.
 
 Configure via environment:
 ```bash
@@ -386,23 +386,23 @@ cargo test --lib bulk_export
 ## Monitoring
 
 ### Key Metrics
-- `soroban_pulse_export_jobs_created_total`: Total export jobs created
-- `soroban_pulse_export_jobs_completed_total`: Successful exports
-- `soroban_pulse_export_jobs_failed_total`: Failed exports
-- `soroban_pulse_export_bytes_total`: Total bytes exported
-- `soroban_pulse_export_duration_seconds`: Time to complete export
-- `soroban_pulse_export_files_cleaned_total`: Files removed by cleanup
+- `stellarclassic_pulse_export_jobs_created_total`: Total export jobs created
+- `stellarclassic_pulse_export_jobs_completed_total`: Successful exports
+- `stellarclassic_pulse_export_jobs_failed_total`: Failed exports
+- `stellarclassic_pulse_export_bytes_total`: Total bytes exported
+- `stellarclassic_pulse_export_duration_seconds`: Time to complete export
+- `stellarclassic_pulse_export_files_cleaned_total`: Files removed by cleanup
 
 ### Dashboard Queries
 ```promql
 # Export success rate
-soroban_pulse_export_jobs_completed_total / soroban_pulse_export_jobs_created_total
+stellarclassic_pulse_export_jobs_completed_total / stellarclassic_pulse_export_jobs_created_total
 
 # Average export time
-avg(soroban_pulse_export_duration_seconds)
+avg(stellarclassic_pulse_export_duration_seconds)
 
 # Export throughput
-increase(soroban_pulse_export_bytes_total[1h]) / 3600
+increase(stellarclassic_pulse_export_bytes_total[1h]) / 3600
 ```
 
 ## Future Enhancements

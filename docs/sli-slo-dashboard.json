@@ -42,7 +42,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_tracked_count",
+          "expr": "stellarclassic_pulse_slo_tracked_count",
           "refId": "A"
         }
       ],
@@ -75,7 +75,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_met_count",
+          "expr": "stellarclassic_pulse_slo_met_count",
           "refId": "A"
         }
       ],
@@ -111,7 +111,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_at_risk_count",
+          "expr": "stellarclassic_pulse_slo_at_risk_count",
           "refId": "A"
         }
       ],
@@ -148,7 +148,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_breached_count",
+          "expr": "stellarclassic_pulse_slo_breached_count",
           "refId": "A"
         }
       ],
@@ -184,7 +184,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_completion_ratio",
+          "expr": "stellarclassic_pulse_slo_completion_ratio",
           "legendFormat": "{{slo}}",
           "refId": "A"
         }
@@ -221,7 +221,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_error_budget_remaining",
+          "expr": "stellarclassic_pulse_slo_error_budget_remaining",
           "legendFormat": "{{slo}}",
           "refId": "A"
         }
@@ -257,7 +257,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_slo_burn_rate",
+          "expr": "stellarclassic_pulse_slo_burn_rate",
           "legendFormat": "{{slo}}",
           "refId": "A"
         }
@@ -285,7 +285,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "soroban_pulse_sli_current_value",
+          "expr": "stellarclassic_pulse_sli_current_value",
           "legendFormat": "{{slo}}",
           "refId": "A"
         }
@@ -313,7 +313,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "increase(soroban_pulse_slo_evaluation_total[5m])",
+          "expr": "increase(stellarclassic_pulse_slo_evaluation_total[5m])",
           "legendFormat": "{{slo}} ({{status}})",
           "refId": "A"
         }
@@ -340,19 +340,19 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "histogram_quantile(0.50, rate(soroban_pulse_http_request_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.50, rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m]))",
           "legendFormat": "p50",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "histogram_quantile(0.95, rate(soroban_pulse_http_request_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.95, rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m]))",
           "legendFormat": "p95",
           "refId": "B"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "histogram_quantile(0.99, rate(soroban_pulse_http_request_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.99, rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m]))",
           "legendFormat": "p99",
           "refId": "C"
         }
@@ -379,7 +379,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "rate(soroban_pulse_http_request_duration_seconds_count{status_code=~\"5..\"}[5m]) / rate(soroban_pulse_http_request_duration_seconds_count[5m])",
+          "expr": "rate(stellarclassic_pulse_http_request_duration_seconds_count{status_code=~\"5..\"}[5m]) / rate(stellarclassic_pulse_http_request_duration_seconds_count[5m])",
           "legendFormat": "5xx Error Rate",
           "refId": "A"
         }
@@ -415,7 +415,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "(1 - (rate(soroban_pulse_http_request_duration_seconds_count{status_code=~\"5..\"}[5m]) / rate(soroban_pulse_http_request_duration_seconds_count[5m])))",
+          "expr": "(1 - (rate(stellarclassic_pulse_http_request_duration_seconds_count{status_code=~\"5..\"}[5m]) / rate(stellarclassic_pulse_http_request_duration_seconds_count[5m])))",
           "legendFormat": "Availability",
           "refId": "A"
         }
@@ -444,7 +444,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "1 - soroban_pulse_slo_error_budget_remaining",
+          "expr": "1 - stellarclassic_pulse_slo_error_budget_remaining",
           "legendFormat": "{{slo}} budget consumed",
           "refId": "A"
         }
@@ -471,7 +471,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "sum(rate(soroban_pulse_http_request_duration_seconds_count[5m])) by (method, path)",
+          "expr": "sum(rate(stellarclassic_pulse_http_request_duration_seconds_count[5m])) by (method, path)",
           "legendFormat": "{{method}} {{path}}",
           "refId": "A"
         }
@@ -483,7 +483,7 @@
   "refresh": "30s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": ["soroban-pulse", "slo", "sloslo"],
+  "tags": ["stellarclassic-pulse", "slo", "sloslo"],
   "templating": {
     "list": [
       {
@@ -505,8 +505,8 @@
   "time": { "from": "now-6h", "to": "now" },
   "timepicker": {},
   "timezone": "",
-  "title": "Soroban Pulse SLI / SLO Dashboard",
-  "uid": "soroban-pulse-slo",
+  "title": "StellarClassic Pulse SLI / SLO Dashboard",
+  "uid": "stellarclassic-pulse-slo",
   "version": 1,
   "weekStart": ""
 }

@@ -1,6 +1,6 @@
 # Multi-Region Deployment (Issue #909)
 
-Infrastructure and operational guidance for running SorobanPulse across multiple AWS regions for latency reduction and geo-redundancy.
+Infrastructure and operational guidance for running StellarClassicPulse across multiple AWS regions for latency reduction and geo-redundancy.
 
 This document covers the **infrastructure layer** (Terraform, Global Accelerator, cross-region metrics). For the **application-layer** replication model — single-writer indexing, advisory locks, PostgreSQL streaming replication, and manual/automated failover procedures — see [multi-deployment-architecture.md](multi-deployment-architecture.md), which this design builds on.
 
@@ -33,9 +33,9 @@ Multi-region infrastructure is defined in [`terraform/multi-region.tf`](../terra
 | `eu-west-1` | Secondary | `t3.large` | 2–8 | `db.r6g.xlarge`, Multi-AZ | 1 |
 | `ap-southeast-1` | Tertiary | `t3.large` | 2–8 | `db.r6g.xlarge`, Multi-AZ | 1 |
 
-Each region is instantiated via `module "soroban_pulse_<region>" { source = "./modules/soroban-pulse" ... }`.
+Each region is instantiated via `module "stellarclassic_pulse_<region>" { source = "./modules/stellarclassic-pulse" ... }`.
 
-> **Known gap:** `terraform/multi-region.tf` references a `modules/soroban-pulse` module that does not yet exist under `terraform/modules/` (only `vpc`, `rds`, `alb`, `ecs`, `monitoring`, and `backup` are implemented today). Building that composite module — wiring the existing `vpc`/`rds`/`alb`/`ecs` modules together per-region — is a prerequisite for `terraform plan` to succeed against this file. Track this before running `terraform apply` on multi-region infrastructure.
+> **Known gap:** `terraform/multi-region.tf` references a `modules/stellarclassic-pulse` module that does not yet exist under `terraform/modules/` (only `vpc`, `rds`, `alb`, `ecs`, `monitoring`, and `backup` are implemented today). Building that composite module — wiring the existing `vpc`/`rds`/`alb`/`ecs` modules together per-region — is a prerequisite for `terraform plan` to succeed against this file. Track this before running `terraform apply` on multi-region infrastructure.
 
 ## Load Balancing and Failover Routing
 
@@ -62,7 +62,7 @@ See [multi-deployment-architecture.md § Cross-Region Sync](multi-deployment-arc
 
 ## Conflict Resolution for Writes
 
-SorobanPulse uses a **single-writer model**, not multi-master — this sidesteps write-write conflict resolution entirely:
+StellarClassicPulse uses a **single-writer model**, not multi-master — this sidesteps write-write conflict resolution entirely:
 
 - Exactly one region holds the indexer advisory lock at a time and is the only writer for indexed event data.
 - All admin operations, subscription/webhook registration, and replay/backfill jobs are routed to the primary region (see the routing table in [multi-deployment-architecture.md § Data Consistency](multi-deployment-architecture.md#data-consistency)).
@@ -75,10 +75,10 @@ Recommended metrics to add to `docs/alerts.yml` / Grafana alongside the existing
 
 | Metric | Source | Purpose |
 |---|---|---|
-| `soroban_pulse_indexer_lag` | App | Existing — indexer distance from chain tip (per region) |
+| `stellarclassic_pulse_indexer_lag` | App | Existing — indexer distance from chain tip (per region) |
 | `pg_replication_lag_seconds` | Postgres exporter | Existing — used in the `ReplicationLagHigh` alert |
 | Global Accelerator flow logs (S3) | AWS | Per-connection latency and endpoint selection, queryable via Athena |
-| `soroban_pulse_cross_region_rtt_seconds` (proposed) | Synthetic probe hitting `/healthz/ready` in each region from each region | Measures inter-region network latency directly, independent of client location |
+| `stellarclassic_pulse_cross_region_rtt_seconds` (proposed) | Synthetic probe hitting `/healthz/ready` in each region from each region | Measures inter-region network latency directly, independent of client location |
 | ALB `TargetResponseTime` p50/p99 per region | CloudWatch (`modules/monitoring`) | Per-region API latency for comparison |
 
 Cross-region latency between `us-east-1` ↔ `eu-west-1` typically runs ~70–90ms, and `us-east-1` ↔ `ap-southeast-1` ~170–200ms; budget these into any synchronous cross-region health checks or admin tooling.
@@ -92,7 +92,7 @@ Cross-region latency between `us-east-1` ↔ `eu-west-1` typically runs ~70–90
 
 ## Testing
 
-- `terraform validate` / `terraform plan` against `terraform/multi-region.tf` (blocked until `modules/soroban-pulse` exists — see gap above).
+- `terraform validate` / `terraform plan` against `terraform/multi-region.tf` (blocked until `modules/stellarclassic-pulse` exists — see gap above).
 - Global Accelerator health-check behavior: simulate a regional outage by scaling an ASG to 0 and confirming the endpoint group is marked unhealthy and traffic shifts within ~90s (3 × 30s health-check interval).
 - Failover drills should follow the manual failover procedure in [multi-deployment-architecture.md § Manual Failover Procedure](multi-deployment-architecture.md#manual-failover-procedure) and the DR game-day process in [disaster-recovery.md](disaster-recovery.md).
 

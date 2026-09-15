@@ -1,6 +1,6 @@
 # Data Retention Policy
 
-This document explains how SorobanPulse stores, retains, archives, and deletes data, and what operators and end-users can expect under GDPR and similar privacy regulations.
+This document explains how StellarClassicPulse stores, retains, archives, and deletes data, and what operators and end-users can expect under GDPR and similar privacy regulations.
 
 ## Default Retention Periods
 
@@ -49,10 +49,10 @@ Upload the dump to your object store of choice:
 
 ```bash
 # AWS S3
-aws s3 cp events_archive_$(date +%Y%m).pgdump s3://your-bucket/soroban-pulse/archives/
+aws s3 cp events_archive_$(date +%Y%m).pgdump s3://your-bucket/stellarclassic-pulse/archives/
 
 # GCP Cloud Storage
-gsutil cp events_archive_$(date +%Y%m).pgdump gs://your-bucket/soroban-pulse/archives/
+gsutil cp events_archive_$(date +%Y%m).pgdump gs://your-bucket/stellarclassic-pulse/archives/
 ```
 
 ### Archiving delivery logs
@@ -72,7 +72,7 @@ Add a cron job or Kubernetes `CronJob` that runs the archive script before the p
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: soroban-pulse-archive
+  name: stellarclassic-pulse-archive
 spec:
   schedule: "0 2 1 * *"   # 02:00 on the 1st of every month
   jobTemplate:
@@ -81,18 +81,18 @@ spec:
         spec:
           containers:
             - name: archiver
-              image: your-registry/soroban-pulse-archiver:latest
+              image: your-registry/stellarclassic-pulse-archiver:latest
               envFrom:
                 - secretRef:
-                    name: soroban-pulse-secrets
+                    name: stellarclassic-pulse-secrets
           restartPolicy: OnFailure
 ```
 
 ## GDPR Compliance Guide
 
-SorobanPulse indexes **on-chain public data** from the Stellar network. Because ledger transactions are inherently public and immutable, the indexed events themselves do not normally constitute personal data under GDPR. However, **subscription metadata and delivery logs may contain personal data** (e.g., email addresses or webhook URLs that could identify a natural person).
+StellarClassicPulse indexes **on-chain public data** from the Stellar network. Because ledger transactions are inherently public and immutable, the indexed events themselves do not normally constitute personal data under GDPR. However, **subscription metadata and delivery logs may contain personal data** (e.g., email addresses or webhook URLs that could identify a natural person).
 
-### What personal data SorobanPulse holds
+### What personal data StellarClassicPulse holds
 
 | Data | Location | Personally identifiable? |
 |---|---|---|
@@ -161,11 +161,11 @@ SELECT row_to_json(w) FROM webhooks w WHERE owner_email = $1;
 
 ### Data Processing Agreement (DPA)
 
-If you are a SaaS operator running SorobanPulse on behalf of customers, you act as a **data processor** for any personal data your customers supply. Ensure you have a signed DPA with each customer and that your infrastructure providers (cloud, SMTP) also have DPAs in place.
+If you are a SaaS operator running StellarClassicPulse on behalf of customers, you act as a **data processor** for any personal data your customers supply. Ensure you have a signed DPA with each customer and that your infrastructure providers (cloud, SMTP) also have DPAs in place.
 
 ### Data residency
 
-SorobanPulse itself does not enforce data residency. To constrain where personal data is stored:
+StellarClassicPulse itself does not enforce data residency. To constrain where personal data is stored:
 - Deploy PostgreSQL in the required region.
 - Use region-specific SMTP relays for email delivery.
 - Configure Kinesis / Pub/Sub / Kafka topics in the compliant region.
@@ -174,7 +174,7 @@ SorobanPulse itself does not enforce data residency. To constrain where personal
 
 ### Automated purge via cron
 
-Enable automatic event purging by setting `EVENT_RETENTION_DAYS`. SorobanPulse runs a background worker that deletes expired rows in configurable batch sizes to avoid long-running locks:
+Enable automatic event purging by setting `EVENT_RETENTION_DAYS`. StellarClassicPulse runs a background worker that deletes expired rows in configurable batch sizes to avoid long-running locks:
 
 ```env
 EVENT_RETENTION_DAYS=365
@@ -185,7 +185,7 @@ PURGE_INTERVAL_HOURS=6         # how often the purge worker runs (default: 6)
 The purge worker logs each batch:
 
 ```
-INFO soroban_pulse::purge: deleted 5000 expired events, next_run=2026-07-01T02:00:00Z
+INFO stellarclassic_pulse::purge: deleted 5000 expired events, next_run=2026-07-01T02:00:00Z
 ```
 
 ### Manual one-time deletion
@@ -225,7 +225,7 @@ Run this during low-traffic windows; add `VACUUM ANALYZE delivery_logs;` afterwa
 
 ### Full data wipe (decommission)
 
-To completely remove all SorobanPulse data (e.g., when decommissioning an instance):
+To completely remove all StellarClassicPulse data (e.g., when decommissioning an instance):
 
 ```bash
 # Drop the entire schema — irreversible

@@ -11,7 +11,7 @@ import { getApiKey, getAdminApiKey } from './apiKeyManager';
 
 export class RequestTesterPanel {
     static currentPanel: RequestTesterPanel | undefined;
-    private static readonly viewType = 'sorobanpulse.requestTester';
+    private static readonly viewType = 'stellarclassicpulse.requestTester';
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
@@ -32,7 +32,7 @@ export class RequestTesterPanel {
 
         const panel = vscode.window.createWebviewPanel(
             RequestTesterPanel.viewType,
-            'Soroban Pulse — Request Tester',
+            'StellarClassic Pulse — Request Tester',
             column,
             {
                 enableScripts: true,
@@ -72,9 +72,9 @@ export class RequestTesterPanel {
     }
 
     private async _loadEndpoint(endpoint: ApiEndpoint): Promise<void> {
-        const config = vscode.workspace.getConfiguration('sorobanpulse');
+        const config = vscode.workspace.getConfiguration('stellarclassicpulse');
         const baseUrl = config.get<string>('baseUrl', 'http://localhost:3000');
-        // Issue #963: prefer keys saved via "Soroban Pulse: Set API Key"
+        // Issue #963: prefer keys saved via "StellarClassic Pulse: Set API Key"
         // (SecretStorage) over the plaintext setting.
         const [apiKey, adminApiKey] = await Promise.all([
             getApiKey(this._context),
@@ -100,7 +100,7 @@ export class RequestTesterPanel {
                 vscode.window.showInformationMessage('Copied to clipboard.');
                 break;
             case 'openSettings':
-                await vscode.commands.executeCommand('workbench.action.openSettings', 'sorobanpulse');
+                await vscode.commands.executeCommand('workbench.action.openSettings', 'stellarclassicpulse');
                 break;
         }
     }
@@ -108,7 +108,7 @@ export class RequestTesterPanel {
     private async _executeRequest(config: RequestConfig): Promise<void> {
         this._panel.webview.postMessage({ type: 'loading' });
 
-        const timeoutMs = vscode.workspace.getConfiguration('sorobanpulse').get<number>('timeoutMs', 10000);
+        const timeoutMs = vscode.workspace.getConfiguration('stellarclassicpulse').get<number>('timeoutMs', 10000);
         const start = Date.now();
 
         try {
@@ -142,12 +142,12 @@ export class RequestTesterPanel {
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'none'; style-src 'nonce-${nonce}'; script-src 'nonce-${nonce}';">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Soroban Pulse — Request Tester</title>
+  <title>StellarClassic Pulse — Request Tester</title>
   <style nonce="${nonce}">${STYLES}</style>
 </head>
 <body>
   <div class="toolbar">
-    <span class="app-title">⚡ Soroban Pulse</span>
+    <span class="app-title">⚡ StellarClassic Pulse</span>
     <button class="btn-ghost" id="btnSettings" title="Open Settings">⚙</button>
   </div>
 

@@ -6,8 +6,8 @@ app.use(express.raw({ type: "application/json" }));
 
 const WEBHOOK_SECRET = process.env.SOROBAN_PULSE_WEBHOOK_SECRET!;
 
-app.post("/webhooks/soroban-pulse", (req, res) => {
-  const signature = req.header("X-SorobanPulse-Signature") ?? "";
+app.post("/webhooks/stellarclassic-pulse", (req, res) => {
+  const signature = req.header("X-StellarClassicPulse-Signature") ?? "";
 
   try {
     verifyWebhookSignature(req.body, signature, WEBHOOK_SECRET);

@@ -1,7 +1,7 @@
 """Webhook signature verification utilities.
 
-SorobanPulse signs outgoing webhook payloads with HMAC-SHA256 over
-`{timestamp}.{body}`, sent as the `X-SorobanPulse-Signature` header in the
+StellarClassicPulse signs outgoing webhook payloads with HMAC-SHA256 over
+`{timestamp}.{body}`, sent as the `X-StellarClassicPulse-Signature` header in the
 form `t=<unix_ts>,v1=<hex_hmac>`.
 """
 

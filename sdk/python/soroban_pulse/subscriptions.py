@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Callable, Iterator, Optional
 from urllib import request as urllib_request
 
-from .client import SorobanPulseClient
+from .client import StellarClassicPulseClient
 
 
 @dataclass
@@ -20,7 +20,7 @@ class SorobanEvent:
 
 
 class EventSubscription:
-    """Consumes SorobanPulse's Server-Sent Events (SSE) stream and dispatches
+    """Consumes StellarClassicPulse's Server-Sent Events (SSE) stream and dispatches
     parsed events to a callback, with automatic reconnection.
 
     Example:
@@ -29,7 +29,7 @@ class EventSubscription:
         sub.run()
     """
 
-    def __init__(self, client: SorobanPulseClient, contract_id: Optional[str] = None,
+    def __init__(self, client: StellarClassicPulseClient, contract_id: Optional[str] = None,
                  event_types: Optional[list] = None) -> None:
         self.client = client
         self.contract_id = contract_id

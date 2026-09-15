@@ -7,7 +7,7 @@
 > real — a rollback procedure you've never run is not a rollback procedure
 > you can trust under pressure.
 
-How to revert a Soroban Pulse migration if validation fails, or if a
+How to revert a StellarClassic Pulse migration if validation fails, or if a
 problem surfaces after cutover. Keep this document open (not just linked)
 during any cutover window.
 

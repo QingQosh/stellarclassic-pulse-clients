@@ -1,7 +1,7 @@
 # Webhook Failures Runbook
 
 ## Symptom
-Webhook delivery failures are occurring. The `soroban_pulse_webhook_failures_total` metric is increasing, indicating that webhooks are not being successfully delivered to subscribers after all retry attempts are exhausted.
+Webhook delivery failures are occurring. The `stellarclassic_pulse_webhook_failures_total` metric is increasing, indicating that webhooks are not being successfully delivered to subscribers after all retry attempts are exhausted.
 
 ## Likely Causes
 1. **Subscriber endpoint is down**: The webhook subscriber's endpoint is unreachable or returning errors
@@ -15,12 +15,12 @@ Webhook delivery failures are occurring. The `soroban_pulse_webhook_failures_tot
 
 ### 1. Check webhook failure rate
 ```bash
-promtool query instant 'rate(soroban_pulse_webhook_failures_total[5m])'
+promtool query instant 'rate(stellarclassic_pulse_webhook_failures_total[5m])'
 ```
 
 ### 2. Review indexer logs for webhook errors
 ```bash
-kubectl logs -l app=soroban-pulse -c soroban-pulse --tail=200 | grep -i "webhook\|delivery\|subscriber"
+kubectl logs -l app=stellarclassic-pulse -c stellarclassic-pulse --tail=200 | grep -i "webhook\|delivery\|subscriber"
 ```
 
 ### 3. Check subscriber endpoint health

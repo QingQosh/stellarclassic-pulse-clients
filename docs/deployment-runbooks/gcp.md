@@ -1,6 +1,6 @@
 # GCP Deployment Runbook (Compute Engine + Cloud SQL + Load Balancing)
 
-Deploys SorobanPulse as a Docker container on a self-managed **Compute
+Deploys StellarClassicPulse as a Docker container on a self-managed **Compute
 Engine** VM, backed by **Cloud SQL for PostgreSQL** over a private IP, and
 fronted by a **Cloud Load Balancing** HTTPS load balancer with a
 Google-managed TLS certificate. This is the infrastructure-level alternative
@@ -24,7 +24,7 @@ GCP Terraform here, so every step below uses the `gcloud` CLI directly.
 - **DNS** — a domain/subdomain you control, to point an `A` record at the load
   balancer's static IP and to issue the Google-managed certificate against.
 - **Repository assets used by this runbook**:
-  - Root [`Dockerfile`](../../Dockerfile) — builds the `soroban-pulse` image.
+  - Root [`Dockerfile`](../../Dockerfile) — builds the `stellarclassic-pulse` image.
   - [`.env.example`](../../.env.example) — full environment variable reference.
 
 ## Architecture
@@ -41,7 +41,7 @@ GCP Terraform here, so every step below uses the `gcloud` CLI directly.
                                  │ HTTP:3000 (health check GET /healthz/ready)
                      ┌───────────▼────────────┐
                      │  Compute Engine VM      │   no public IP
-                     │  docker run soroban-pulse│
+                     │  docker run stellarclassic-pulse│
                      │  + cloud-sql-proxy      │
                      └───────────┬────────────┘
                                  │ Auth Proxy (127.0.0.1:5432 → private IP)
@@ -78,9 +78,9 @@ gcloud services enable compute.googleapis.com sqladmin.googleapis.com \
 ### 2. Build and push the image to Artifact Registry
 
 ```bash
-IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/soroban-pulse/app"
+IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/stellarclassic-pulse/app"
 
-gcloud artifacts repositories create soroban-pulse \
+gcloud artifacts repositories create stellarclassic-pulse \
   --repository-format=docker --location="$REGION" || true
 
 docker build -t "$IMAGE:latest" .
@@ -99,7 +99,7 @@ gcloud services vpc-peerings connect \
   --ranges=google-managed-services-default \
   --network=default
 
-gcloud sql instances create soroban-pulse-db \
+gcloud sql instances create stellarclassic-pulse-db \
   --database-version=POSTGRES_16 \
   --tier=db-custom-2-4096 \
   --region="$REGION" \
@@ -109,8 +109,8 @@ gcloud sql instances create soroban-pulse-db \
   --storage-type=SSD \
   --backup-start-time=03:00
 
-gcloud sql databases create soroban_pulse --instance=soroban-pulse-db
-gcloud sql users set-password postgres --instance=soroban-pulse-db \
+gcloud sql databases create stellarclassic_pulse --instance=stellarclassic-pulse-db
+gcloud sql users set-password postgres --instance=stellarclassic-pulse-db \
   --password="CHANGE_ME"
 ```
 
@@ -120,13 +120,13 @@ production; `db-f1-micro` is sufficient for staging/dev only.
 ### 4. Create the firewall rule
 
 ```bash
-gcloud compute firewall-rules create allow-lb-to-soroban-pulse \
+gcloud compute firewall-rules create allow-lb-to-stellarclassic-pulse \
   --network=default \
   --direction=INGRESS \
   --action=ALLOW \
   --rules=tcp:3000 \
   --source-ranges=130.211.0.0/22,35.191.0.0/16 \
-  --target-tags=soroban-pulse
+  --target-tags=stellarclassic-pulse
 ```
 
 `130.211.0.0/22` and `35.191.0.0/16` are Google's documented health-check and
@@ -138,7 +138,7 @@ load-balancer source ranges — do **not** open 3000 to `0.0.0.0/0`.
 Cloud SQL Auth Proxy; use `e2-small` for light/staging workloads.
 
 ```bash
-CONNECTION_NAME=$(gcloud sql instances describe soroban-pulse-db \
+CONNECTION_NAME=$(gcloud sql instances describe stellarclassic-pulse-db \
   --format="value(connectionName)")
 
 cat > startup-script.sh <<EOF
@@ -154,8 +154,8 @@ nohup /usr/local/bin/cloud-sql-proxy --private-ip ${CONNECTION_NAME} --port 5432
 
 docker pull ${IMAGE}:latest
 
-cat > /etc/soroban-pulse.env <<ENV
-DATABASE_URL=postgres://postgres:CHANGE_ME@127.0.0.1:5432/soroban_pulse
+cat > /etc/stellarclassic-pulse.env <<ENV
+DATABASE_URL=postgres://postgres:CHANGE_ME@127.0.0.1:5432/stellarclassic_pulse
 STELLAR_RPC_URL=https://soroban-testnet.stellar.org
 PORT=3000
 RUST_LOG=info
@@ -165,65 +165,65 @@ RATE_LIMIT_PER_MINUTE=60
 START_LEDGER=0
 ENV
 
-docker run -d --name soroban-pulse --restart unless-stopped \
-  --network host --env-file /etc/soroban-pulse.env \
+docker run -d --name stellarclassic-pulse --restart unless-stopped \
+  --network host --env-file /etc/stellarclassic-pulse.env \
   ${IMAGE}:latest
 EOF
 
-gcloud compute instances create soroban-pulse-app \
+gcloud compute instances create stellarclassic-pulse-app \
   --zone="$ZONE" \
   --machine-type=e2-medium \
   --image-family=debian-12 \
   --image-project=debian-cloud \
   --no-address \
-  --tags=soroban-pulse \
+  --tags=stellarclassic-pulse \
   --scopes=cloud-platform \
   --metadata-from-file=startup-script=startup-script.sh
 ```
 
 > Prefer the Cloud SQL secret in Secret Manager over the inline password
-> above for production: `gcloud secrets create soroban-pulse-db-password
+> above for production: `gcloud secrets create stellarclassic-pulse-db-password
 > --data-file=- <<< "$PASSWORD"`, then fetch it in the startup script with
-> `gcloud secrets versions access latest --secret=soroban-pulse-db-password`.
+> `gcloud secrets versions access latest --secret=stellarclassic-pulse-db-password`.
 
 ### 6. Create an unmanaged instance group and HTTPS load balancer
 
 ```bash
-gcloud compute instance-groups unmanaged create soroban-pulse-ig --zone="$ZONE"
-gcloud compute instance-groups unmanaged add-instances soroban-pulse-ig \
-  --zone="$ZONE" --instances=soroban-pulse-app
+gcloud compute instance-groups unmanaged create stellarclassic-pulse-ig --zone="$ZONE"
+gcloud compute instance-groups unmanaged add-instances stellarclassic-pulse-ig \
+  --zone="$ZONE" --instances=stellarclassic-pulse-app
 
-gcloud compute health-checks create http soroban-pulse-hc \
+gcloud compute health-checks create http stellarclassic-pulse-hc \
   --port=3000 --request-path=/healthz/ready \
   --check-interval=10s --timeout=5s --healthy-threshold=2 --unhealthy-threshold=3
 
-gcloud compute backend-services create soroban-pulse-backend \
+gcloud compute backend-services create stellarclassic-pulse-backend \
   --global --protocol=HTTP --port-name=http \
-  --health-checks=soroban-pulse-hc
+  --health-checks=stellarclassic-pulse-hc
 
-gcloud compute backend-services add-backend soroban-pulse-backend \
-  --global --instance-group=soroban-pulse-ig --instance-group-zone="$ZONE"
+gcloud compute backend-services add-backend stellarclassic-pulse-backend \
+  --global --instance-group=stellarclassic-pulse-ig --instance-group-zone="$ZONE"
 
-gcloud compute url-maps create soroban-pulse-lb \
-  --default-service=soroban-pulse-backend
+gcloud compute url-maps create stellarclassic-pulse-lb \
+  --default-service=stellarclassic-pulse-backend
 
-gcloud compute addresses create soroban-pulse-ip --global
+gcloud compute addresses create stellarclassic-pulse-ip --global
 
-gcloud compute managed-ssl-certificates create soroban-pulse-cert \
+gcloud compute managed-ssl-certificates create stellarclassic-pulse-cert \
   --domains=pulse.example.com
 
-gcloud compute target-https-proxies create soroban-pulse-https-proxy \
-  --url-map=soroban-pulse-lb --ssl-certificates=soroban-pulse-cert
+gcloud compute target-https-proxies create stellarclassic-pulse-https-proxy \
+  --url-map=stellarclassic-pulse-lb --ssl-certificates=stellarclassic-pulse-cert
 
-gcloud compute forwarding-rules create soroban-pulse-https-rule \
-  --global --target-https-proxy=soroban-pulse-https-proxy \
-  --address=soroban-pulse-ip --ports=443
+gcloud compute forwarding-rules create stellarclassic-pulse-https-rule \
+  --global --target-https-proxy=stellarclassic-pulse-https-proxy \
+  --address=stellarclassic-pulse-ip --ports=443
 ```
 
 Point your DNS `A` record for `pulse.example.com` at the address printed by:
 
 ```bash
-gcloud compute addresses describe soroban-pulse-ip --global --format="value(address)"
+gcloud compute addresses describe stellarclassic-pulse-ip --global --format="value(address)"
 ```
 
 The managed certificate stays `PROVISIONING` until DNS resolves and Google
@@ -232,14 +232,14 @@ validates it (can take up to ~60 minutes).
 ## Verification
 
 ```bash
-LB_IP=$(gcloud compute addresses describe soroban-pulse-ip --global --format="value(address)")
+LB_IP=$(gcloud compute addresses describe stellarclassic-pulse-ip --global --format="value(address)")
 
 # 1. Certificate is ACTIVE
-gcloud compute managed-ssl-certificates describe soroban-pulse-cert \
+gcloud compute managed-ssl-certificates describe stellarclassic-pulse-cert \
   --format="value(managed.status)"
 
 # 2. Backend is healthy
-gcloud compute backend-services get-health soroban-pulse-backend --global
+gcloud compute backend-services get-health stellarclassic-pulse-backend --global
 
 # 3. Health endpoint through the load balancer
 curl -sf "https://pulse.example.com/healthz/ready" | jq .
@@ -249,25 +249,25 @@ curl -sf "https://pulse.example.com/healthz/live"
 curl -sf "https://pulse.example.com/v1/events?limit=1" | jq .
 
 # 5. Cloud SQL Auth Proxy connectivity (from the VM)
-gcloud compute ssh soroban-pulse-app --zone="$ZONE" \
-  --command 'psql "postgres://postgres:CHANGE_ME@127.0.0.1:5432/soroban_pulse" -c "SELECT 1;"'
+gcloud compute ssh stellarclassic-pulse-app --zone="$ZONE" \
+  --command 'psql "postgres://postgres:CHANGE_ME@127.0.0.1:5432/stellarclassic_pulse" -c "SELECT 1;"'
 
 # 6. Indexer progress
-curl -sf "https://pulse.example.com/metrics" | grep soroban_pulse_indexer_current_ledger
+curl -sf "https://pulse.example.com/metrics" | grep stellarclassic_pulse_indexer_current_ledger
 ```
 
 ## Rollback
 
 - **Bad app deploy**: SSH to the VM, pull the previous tag, and restart:
   ```bash
-  gcloud compute ssh soroban-pulse-app --zone="$ZONE" --command \
-    "docker pull ${IMAGE}:<previous-tag> && docker stop soroban-pulse && docker rm soroban-pulse && \
-     docker run -d --name soroban-pulse --restart unless-stopped --network host \
-     --env-file /etc/soroban-pulse.env ${IMAGE}:<previous-tag>"
+  gcloud compute ssh stellarclassic-pulse-app --zone="$ZONE" --command \
+    "docker pull ${IMAGE}:<previous-tag> && docker stop stellarclassic-pulse && docker rm stellarclassic-pulse && \
+     docker run -d --name stellarclassic-pulse --restart unless-stopped --network host \
+     --env-file /etc/stellarclassic-pulse.env ${IMAGE}:<previous-tag>"
   ```
   For zero-downtime, create a second instance from the previous image, add it
-  to `soroban-pulse-ig`, confirm it's healthy, then remove the bad one.
-- **Bad DB migration**: SorobanPulse applies migrations automatically on
+  to `stellarclassic-pulse-ig`, confirm it's healthy, then remove the bad one.
+- **Bad DB migration**: StellarClassicPulse applies migrations automatically on
   startup — follow
   [docs/deployment.md § Migration Strategy](../deployment.md#migration-strategy)
   before rolling the app back so the old binary isn't pointed at a newer
@@ -282,11 +282,11 @@ curl -sf "https://pulse.example.com/metrics" | grep soroban_pulse_indexer_curren
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Backend service shows `UNHEALTHY` | Firewall doesn't allow the health-check ranges on 3000, or app not listening | `gcloud compute backend-services get-health soroban-pulse-backend --global`; verify the firewall rule's `--source-ranges` are exactly `130.211.0.0/22,35.191.0.0/16` |
-| `502`/`503` from the load balancer | App container crashed or startup script failed | `gcloud compute ssh soroban-pulse-app --command "docker logs soroban-pulse --tail 100"`; check `journalctl -u google-startup-scripts` for startup-script errors |
-| App logs `connection refused` to `127.0.0.1:5432` | `cloud-sql-proxy` isn't running or crashed | `gcloud compute ssh soroban-pulse-app --command "pgrep -fa cloud-sql-proxy"`; check its stdout in `journalctl` — a common cause is the VM's service account missing `roles/cloudsql.client` |
-| `cloud-sql-proxy` exits with an auth/IAM error | VM's attached service account lacks Cloud SQL permissions | `gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$(gcloud compute instances describe soroban-pulse-app --zone=$ZONE --format='value(serviceAccounts[0].email)')" --role="roles/cloudsql.client"` |
-| Managed certificate stuck in `PROVISIONING` | DNS `A` record doesn't point at the LB IP yet, or hasn't propagated | `dig +short pulse.example.com`; confirm it matches `gcloud compute addresses describe soroban-pulse-ip --global` |
+| Backend service shows `UNHEALTHY` | Firewall doesn't allow the health-check ranges on 3000, or app not listening | `gcloud compute backend-services get-health stellarclassic-pulse-backend --global`; verify the firewall rule's `--source-ranges` are exactly `130.211.0.0/22,35.191.0.0/16` |
+| `502`/`503` from the load balancer | App container crashed or startup script failed | `gcloud compute ssh stellarclassic-pulse-app --command "docker logs stellarclassic-pulse --tail 100"`; check `journalctl -u google-startup-scripts` for startup-script errors |
+| App logs `connection refused` to `127.0.0.1:5432` | `cloud-sql-proxy` isn't running or crashed | `gcloud compute ssh stellarclassic-pulse-app --command "pgrep -fa cloud-sql-proxy"`; check its stdout in `journalctl` — a common cause is the VM's service account missing `roles/cloudsql.client` |
+| `cloud-sql-proxy` exits with an auth/IAM error | VM's attached service account lacks Cloud SQL permissions | `gcloud projects add-iam-policy-binding $PROJECT_ID --member="serviceAccount:$(gcloud compute instances describe stellarclassic-pulse-app --zone=$ZONE --format='value(serviceAccounts[0].email)')" --role="roles/cloudsql.client"` |
+| Managed certificate stuck in `PROVISIONING` | DNS `A` record doesn't point at the LB IP yet, or hasn't propagated | `dig +short pulse.example.com`; confirm it matches `gcloud compute addresses describe stellarclassic-pulse-ip --global` |
 | High connection count on Cloud SQL | `DB_MAX_CONNECTIONS` too high for the tier, or a leak | See [docs/runbooks/db-pool-exhaustion.md](../runbooks/db-pool-exhaustion.md); `db-custom-2-4096` allows ~100 connections by default (`max_connections` flag) |
 
 For anything beyond the deployment itself (indexer lag, RPC errors, webhook

@@ -1,6 +1,6 @@
 # Client Libraries
 
-Soroban Pulse ships generated/maintained client SDKs for three languages,
+StellarClassic Pulse ships generated/maintained client SDKs for three languages,
 checked into the repo under `sdk/`:
 
 | Language | Path | Source |
@@ -23,7 +23,7 @@ Each SDK has its own README with full installation and usage instructions —
 this doc does not duplicate them:
 
 - **Go**: see [`sdk/go/README.md`](../sdk/go/README.md#installation) —
-  `go get github.com/soroban-pulse/client-go`
+  `go get github.com/stellarclassic-pulse/client-go`
 - **Python**: see [`sdk/python/README.md`](../sdk/python/README.md#installation--usage) —
   `pip install` from the package directory or a git URL (it is not currently
   published to PyPI)

@@ -42,7 +42,7 @@ describe('SSEStream', () => {
 
     it('should load last event ID from localStorage', () => {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(`soroban-pulse-sse-last-id-${testUrl}`, 'event-123');
+        localStorage.setItem(`stellarclassic-pulse-sse-last-id-${testUrl}`, 'event-123');
         stream = new SSEStream(testUrl);
         expect(stream.getLastEventId()).toBe('event-123');
       }

@@ -1,6 +1,6 @@
 # Video Tutorials and Demonstrations
 
-This page is the canonical index for the SorobanPulse video series. The recordings are designed to complement the written guides: each episode follows a complete workflow, shows the expected output, and links to the source commands so viewers can reproduce it locally.
+This page is the canonical index for the StellarClassicPulse video series. The recordings are designed to complement the written guides: each episode follows a complete workflow, shows the expected output, and links to the source commands so viewers can reproduce it locally.
 
 > Video URLs are intentionally kept in one index so they can be published or replaced without changing the technical documentation. Maintainers should replace each `TBD` value with the approved recording URL after publication.
 

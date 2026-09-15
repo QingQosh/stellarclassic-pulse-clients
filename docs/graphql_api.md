@@ -4,7 +4,7 @@ Issue #683: Add GraphQL API layer for more flexible event querying
 
 ## Overview
 
-Soroban Pulse provides a GraphQL API endpoint for flexible querying of Soroban contract events. GraphQL offers several advantages over REST:
+StellarClassic Pulse provides a GraphQL API endpoint for flexible querying of Soroban contract events. GraphQL offers several advantages over REST:
 
 - **Flexible querying**: Request only the fields you need
 - **Single request**: Get related data in one query instead of multiple REST calls

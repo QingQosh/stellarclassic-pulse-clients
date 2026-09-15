@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse supports comprehensive multi-tenant support with row-level security (RLS) policies and strong tenant isolation guarantees. Each tenant has isolated access to their event data through both application-level and database-level controls.
+StellarClassicPulse supports comprehensive multi-tenant support with row-level security (RLS) policies and strong tenant isolation guarantees. Each tenant has isolated access to their event data through both application-level and database-level controls.
 
 ## Architecture
 
@@ -68,7 +68,7 @@ use axum::{
     middleware,
     Router,
 };
-use soroban_pulse::middleware::tenant_context_middleware;
+use stellarclassic_pulse::middleware::tenant_context_middleware;
 
 let app = Router::new()
     .layer(middleware::from_fn(tenant_context_middleware));
@@ -115,7 +115,7 @@ ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 ### Creating a New Tenant
 
 ```rust
-use soroban_pulse::multi_tenancy::TenantProvisioning;
+use stellarclassic_pulse::multi_tenancy::TenantProvisioning;
 
 let provisioning = TenantProvisioning::new(
     "acme-corp".to_string(),

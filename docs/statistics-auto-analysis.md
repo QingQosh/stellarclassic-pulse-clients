@@ -114,7 +114,7 @@ All endpoints require admin authentication (ADMIN_API_KEY header).
 Get comprehensive statistics report for all tables:
 ```bash
 curl -H "X-API-Key: $ADMIN_API_KEY" \
-  https://api.soroban-pulse.com/v1/admin/statistics/report
+  https://api.stellarclassic-pulse.com/v1/admin/statistics/report
 ```
 
 Response:
@@ -136,7 +136,7 @@ Response:
 Detect tables with stale statistics:
 ```bash
 curl -H "X-API-Key: $ADMIN_API_KEY" \
-  https://api.soroban-pulse.com/v1/admin/statistics/stale
+  https://api.stellarclassic-pulse.com/v1/admin/statistics/stale
 ```
 
 Response:
@@ -155,7 +155,7 @@ Response:
 Get overall statistics health score:
 ```bash
 curl -H "X-API-Key: $ADMIN_API_KEY" \
-  https://api.soroban-pulse.com/v1/admin/statistics/health
+  https://api.stellarclassic-pulse.com/v1/admin/statistics/health
 ```
 
 Response:
@@ -179,11 +179,11 @@ Refresh statistics for all tables or a specific table:
 ```bash
 # Refresh all tables
 curl -X POST -H "X-API-Key: $ADMIN_API_KEY" \
-  https://api.soroban-pulse.com/v1/admin/statistics/refresh
+  https://api.stellarclassic-pulse.com/v1/admin/statistics/refresh
 
 # Refresh specific table
 curl -X POST -H "X-API-Key: $ADMIN_API_KEY" \
-  "https://api.soroban-pulse.com/v1/admin/statistics/refresh?table_name=events"
+  "https://api.stellarclassic-pulse.com/v1/admin/statistics/refresh?table_name=events"
 ```
 
 Response:
@@ -200,11 +200,11 @@ Get recent statistics analysis jobs:
 ```bash
 # Get last 50 jobs (default)
 curl -H "X-API-Key: $ADMIN_API_KEY" \
-  https://api.soroban-pulse.com/v1/admin/statistics/jobs
+  https://api.stellarclassic-pulse.com/v1/admin/statistics/jobs
 
 # Get last 100 jobs
 curl -H "X-API-Key: $ADMIN_API_KEY" \
-  "https://api.soroban-pulse.com/v1/admin/statistics/jobs?limit=100"
+  "https://api.stellarclassic-pulse.com/v1/admin/statistics/jobs?limit=100"
 ```
 
 Response:

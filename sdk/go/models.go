@@ -1,4 +1,4 @@
-package soroban_pulse
+package stellarclassic_pulse
 
 import "time"
 

@@ -12,22 +12,22 @@ The schema health check runs inside the `index_monitor` background task every
 
 | Metric | Type | Meaning |
 |--------|------|---------|
-| `soroban_pulse_schema_unused_indexes_total` | gauge | Count of public-schema indexes with `idx_scan = 0` (excluding partition child indexes) |
-| `soroban_pulse_schema_missing_future_partitions` | gauge | Count of next-2-month partitions not yet pre-created |
+| `stellarclassic_pulse_schema_unused_indexes_total` | gauge | Count of public-schema indexes with `idx_scan = 0` (excluding partition child indexes) |
+| `stellarclassic_pulse_schema_missing_future_partitions` | gauge | Count of next-2-month partitions not yet pre-created |
 
 ### Recommended alerts
 
 ```yaml
 # Alert when unused indexes persist for more than 24 h
 - alert: UnusedSchemaIndexes
-  expr: soroban_pulse_schema_unused_indexes_total > 0
+  expr: stellarclassic_pulse_schema_unused_indexes_total > 0
   for: 24h
   annotations:
     summary: "Unused indexes detected — review and drop to reduce write overhead"
 
 # Alert when future partition pre-creation is lagging
 - alert: MissingFuturePartitions
-  expr: soroban_pulse_schema_missing_future_partitions > 0
+  expr: stellarclassic_pulse_schema_missing_future_partitions > 0
   for: 48h
   annotations:
     summary: "Future month partitions not pre-created — run create_future_partitions(3)"
@@ -37,17 +37,17 @@ The schema health check runs inside the `index_monitor` background task every
 
 ```promql
 # Current unused index count
-soroban_pulse_schema_unused_indexes_total
+stellarclassic_pulse_schema_unused_indexes_total
 
 # Missing future partitions
-soroban_pulse_schema_missing_future_partitions
+stellarclassic_pulse_schema_missing_future_partitions
 ```
 
 The check also emits `WARN` log lines naming each unused index and each missing
 partition.  Search for `"schema health"` in logs:
 
 ```bash
-grep "schema health" /var/log/soroban-pulse.log | tail -50
+grep "schema health" /var/log/stellarclassic-pulse.log | tail -50
 ```
 
 ---
@@ -58,7 +58,7 @@ Run when the automated check fires `MissingFuturePartitions`:
 
 ```sql
 -- Connect to the database
-\c soroban_pulse
+\c stellarclassic_pulse
 
 -- Create the next 3 months of partitions
 SELECT create_future_partitions(3);
@@ -116,8 +116,8 @@ CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_to_drop
     ON events(contract_id, ledger DESC);
 ```
 
-Monitor `soroban_pulse_query_duration_seconds` and
-`soroban_pulse_http_request_duration_seconds` for 15 minutes after any index
+Monitor `stellarclassic_pulse_query_duration_seconds` and
+`stellarclassic_pulse_http_request_duration_seconds` for 15 minutes after any index
 change.
 
 ---
@@ -164,7 +164,7 @@ stale data is served in the meantime.
    REFRESH MATERIALIZED VIEW CONCURRENTLY events_hourly_volume;
    ```
 
-4. Confirm the `soroban_pulse_matview_refresh_duration_seconds` histogram
+4. Confirm the `stellarclassic_pulse_matview_refresh_duration_seconds` histogram
    shows a successful refresh.
 
 ---

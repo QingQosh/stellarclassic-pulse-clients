@@ -1,8 +1,8 @@
 /**
- * Webhook signature verification utilities for Soroban Pulse webhooks.
+ * Webhook signature verification utilities for StellarClassic Pulse webhooks.
  *
  * This module provides helpers to verify HMAC-SHA256 signatures on webhook payloads
- * from Soroban Pulse, ensuring authenticity and integrity.
+ * from StellarClassic Pulse, ensuring authenticity and integrity.
  */
 
 import crypto from "crypto";
@@ -13,7 +13,7 @@ export interface VerificationResult {
 }
 
 /**
- * Verify a webhook signature from Soroban Pulse.
+ * Verify a webhook signature from StellarClassic Pulse.
  *
  * @param body - Raw request body (Buffer or string)
  * @param signatureHeader - Value of X-Signature-256 header
@@ -76,7 +76,7 @@ export function verifyWebhookSignature(
 }
 
 /**
- * Verify a webhook signature from Soroban Pulse (safe version).
+ * Verify a webhook signature from StellarClassic Pulse (safe version).
  *
  * This version returns a simple boolean and handles errors gracefully.
  * Use this if you prefer not to handle exceptions.

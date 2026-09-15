@@ -1,8 +1,8 @@
 """
-Webhook signature verification utilities for Soroban Pulse webhooks.
+Webhook signature verification utilities for StellarClassic Pulse webhooks.
 
 This module provides helpers to verify HMAC-SHA256 signatures on webhook payloads
-from Soroban Pulse, ensuring authenticity and integrity.
+from StellarClassic Pulse, ensuring authenticity and integrity.
 """
 
 import hmac
@@ -16,7 +16,7 @@ def verify_webhook_signature(
     webhook_secret: str
 ) -> Tuple[bool, str]:
     """
-    Verify a webhook signature from Soroban Pulse.
+    Verify a webhook signature from StellarClassic Pulse.
     
     Args:
         body: Raw request body (bytes)
@@ -67,7 +67,7 @@ def verify_webhook_signature_safe(
     webhook_secret: str
 ) -> bool:
     """
-    Verify a webhook signature from Soroban Pulse (safe version).
+    Verify a webhook signature from StellarClassic Pulse (safe version).
     
     This version returns a simple boolean and handles errors gracefully.
     Use this if you prefer not to handle exceptions.

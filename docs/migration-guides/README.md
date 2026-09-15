@@ -23,10 +23,10 @@ Pulse from another system.
    guidance for indexers not covered by a dedicated guide (custom RPC
    pollers, other third-party Soroban indexers).
 3. [Subscription mapping](subscription-mapping.md) — how filters,
-   callback/webhook config, and delivery channels map onto Soroban Pulse's
+   callback/webhook config, and delivery channels map onto StellarClassic Pulse's
    subscription model.
 4. [Data migration procedures](data-migration-procedures.md) — how to
-   backfill historical events into Soroban Pulse's PostgreSQL schema.
+   backfill historical events into StellarClassic Pulse's PostgreSQL schema.
 5. [Migration validation](validation.md) — how to confirm a migration is
    complete and correct before decommissioning the old system.
 6. [Rollback procedures](rollback-procedures.md) — how to revert a

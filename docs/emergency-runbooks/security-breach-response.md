@@ -15,7 +15,7 @@
 - Unusual spike in `/v1/admin/*` calls
 - Webhook payloads with forged HMAC signatures being accepted
 - Database credentials appearing in logs, public repositories, or third-party systems
-- Anomaly detection alerts: `soroban_pulse_anomaly_*` firing unexpectedly
+- Anomaly detection alerts: `stellarclassic_pulse_anomaly_*` firing unexpectedly
 - Audit log (`audit_logs` table) showing unexpected admin actions
 - PagerDuty incident from an unknown actor
 - Git history showing committed secrets
@@ -93,14 +93,14 @@ NEW_API_KEY=$(openssl rand -base64 48 | tr -d '/+=' | head -c 64)
 NEW_ADMIN_API_KEY=$(openssl rand -base64 48 | tr -d '/+=' | head -c 64)
 
 # Update environment (Kubernetes)
-kubectl create secret generic soroban-pulse-secrets \
+kubectl create secret generic stellarclassic-pulse-secrets \
     --from-literal=API_KEY="$NEW_API_KEY" \
     --from-literal=ADMIN_API_KEY="$NEW_ADMIN_API_KEY" \
     --dry-run=client -o yaml | kubectl apply -f -
 
 # Rolling restart to pick up new keys
-kubectl rollout restart deployment/soroban-pulse -n production
-kubectl rollout status deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
+kubectl rollout status deployment/stellarclassic-pulse -n production
 
 # Immediately verify old key is rejected
 curl https://your-service/v1/events \
@@ -119,10 +119,10 @@ aws secretsmanager rotate-secret \
 psql -h $DB_HOST -U postgres -c "ALTER USER $DB_USER PASSWORD '$NEW_DB_PASSWORD';"
 
 # Update DATABASE_URL in the service
-kubectl set env deployment/soroban-pulse \
+kubectl set env deployment/stellarclassic-pulse \
     DATABASE_URL="postgres://$DB_USER:$NEW_DB_PASSWORD@$DB_HOST/$DB_NAME" \
     -n production
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 ```
 
 ### Step 6 — Rotate webhook secret
@@ -130,10 +130,10 @@ kubectl rollout restart deployment/soroban-pulse -n production
 ```bash
 NEW_WEBHOOK_SECRET=$(openssl rand -base64 48 | tr -d '/+=' | head -c 64)
 
-kubectl set env deployment/soroban-pulse \
+kubectl set env deployment/stellarclassic-pulse \
     WEBHOOK_SECRET="$NEW_WEBHOOK_SECRET" \
     -n production
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 
 # Notify webhook consumers of the new signing secret
 echo "New webhook secret: $NEW_WEBHOOK_SECRET"
@@ -149,7 +149,7 @@ If `EVENT_DATA_ENCRYPTION_KEY` was exposed:
 NEW_ENC_KEY=$(openssl rand -hex 32)
 
 # Set old key as the rotation key (so existing data can still be decrypted)
-kubectl set env deployment/soroban-pulse \
+kubectl set env deployment/stellarclassic-pulse \
     EVENT_DATA_ENCRYPTION_KEY="$NEW_ENC_KEY" \
     EVENT_DATA_ENCRYPTION_KEY_OLD="$COMPROMISED_KEY" \
     -n production
@@ -159,7 +159,7 @@ curl -X POST https://your-service/v1/admin/reencrypt \
      -H "Authorization: Bearer $NEW_ADMIN_API_KEY"
 
 # Monitor re-encryption progress in logs
-kubectl logs -f deployment/soroban-pulse -n production | grep reencrypt
+kubectl logs -f deployment/stellarclassic-pulse -n production | grep reencrypt
 ```
 
 ---
@@ -177,7 +177,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: soroban-pulse
+      app: stellarclassic-pulse
   ingress:
   - from:
     - ipBlock:
@@ -232,7 +232,7 @@ Updates: every 15 minutes in #sec-incident-YYYY-MM-DD
 ### Customer notification (after legal review, if data was accessed)
 
 ```
-[SECURITY NOTICE] Unauthorized access to Soroban Pulse
+[SECURITY NOTICE] Unauthorized access to StellarClassic Pulse
 
 We are writing to inform you that on [date], we detected unauthorized
 access to our systems.

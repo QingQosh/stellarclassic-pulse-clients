@@ -156,7 +156,7 @@ pub fn print_stats(stats: &EventStats, format: Format) -> Result<()> {
     match format {
         Format::Json | Format::Csv => print_json(stats),
         Format::Table => {
-            println!("{}", "── Soroban Pulse Stats ──────────────".bold());
+            println!("{}", "── StellarClassic Pulse Stats ──────────────".bold());
             println!("  Total events    : {}", stats.total_events.to_string().yellow());
             println!("  Total contracts : {}", stats.total_contracts.to_string().yellow());
             if let Some(l) = stats.latest_ledger {

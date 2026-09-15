@@ -13,7 +13,7 @@
 - `GET /healthz/live` returning non-200 (process crash)
 - All replicas in crash loop (`kubectl get pods` shows `CrashLoopBackOff`)
 - Multi-region: one or more regions completely unreachable
-- Prometheus alerts firing: `SorobanPulseDown`, `SorobanPulseHighErrorRate`,
+- Prometheus alerts firing: `StellarClassicPulseDown`, `StellarClassicPulseHighErrorRate`,
   `IndexerStalled`
 
 ---
@@ -54,8 +54,8 @@ Channel: #incidents-[date]
 
 ```bash
 # Kubernetes
-kubectl get pods -n production -l app=soroban-pulse
-kubectl describe pod -n production -l app=soroban-pulse | tail -30
+kubectl get pods -n production -l app=stellarclassic-pulse
+kubectl describe pod -n production -l app=stellarclassic-pulse | tail -30
 
 # Docker Compose
 docker-compose ps
@@ -74,10 +74,10 @@ curl -v https://your-service/healthz/ready
 
 ```bash
 # Get crash reason
-kubectl logs -n production -l app=soroban-pulse --previous | tail -100
+kubectl logs -n production -l app=stellarclassic-pulse --previous | tail -100
 
 # Check for OOM kills
-kubectl describe pod -n production -l app=soroban-pulse | grep -A5 "OOMKilled\|Reason\|Exit Code"
+kubectl describe pod -n production -l app=stellarclassic-pulse | grep -A5 "OOMKilled\|Reason\|Exit Code"
 
 # Check recent events
 kubectl get events -n production --sort-by='.lastTimestamp' | tail -20
@@ -98,21 +98,21 @@ kubectl get events -n production --sort-by='.lastTimestamp' | tail -20
 
 ```bash
 # Kubernetes
-kubectl rollout undo deployment/soroban-pulse -n production
-kubectl rollout status deployment/soroban-pulse -n production
+kubectl rollout undo deployment/stellarclassic-pulse -n production
+kubectl rollout status deployment/stellarclassic-pulse -n production
 
 # Verify
-kubectl get pods -n production -l app=soroban-pulse
+kubectl get pods -n production -l app=stellarclassic-pulse
 curl https://your-service/healthz/ready
 ```
 
 ### Increase memory limit (if OOM)
 
 ```bash
-kubectl set resources deployment/soroban-pulse \
+kubectl set resources deployment/stellarclassic-pulse \
     --limits=memory=2Gi \
     -n production
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 ```
 
 ---
@@ -146,7 +146,7 @@ aws rds wait db-instance-available --db-instance-identifier $DB_INSTANCE
 # If using a static IP, update DATABASE_URL to the new primary.
 
 # Restart the service pods to clear connection pool
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 
 # Verify recovery
 curl https://your-service/healthz/ready | jq .db
@@ -157,10 +157,10 @@ curl https://your-service/healthz/ready | jq .db
 If DB is alive but the pool is exhausted after a failover:
 
 ```bash
-kubectl set env deployment/soroban-pulse \
+kubectl set env deployment/stellarclassic-pulse \
     DB_MAX_CONNECTIONS=20 \
     -n production
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 ```
 
 ---
@@ -173,7 +173,7 @@ curl https://your-service/healthz/ready | jq .
 curl https://your-service/metrics | grep indexer
 
 # Check indexer logs
-kubectl logs -n production -l app=soroban-pulse | grep -i "indexer\|stall\|rpc"
+kubectl logs -n production -l app=stellarclassic-pulse | grep -i "indexer\|stall\|rpc"
 ```
 
 ### Common causes
@@ -181,8 +181,8 @@ kubectl logs -n production -l app=soroban-pulse | grep -i "indexer\|stall\|rpc"
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | No RPC response | RPC endpoint down | Check `STELLAR_RPC_URL`; try fallback URL |
-| `soroban_pulse_indexer_is_leader = 0` on all pods | Advisory lock lost | Restart one pod |
-| `soroban_pulse_indexer_lag_ledgers` growing fast | RPC falling behind | Nothing to do; wait for RPC to catch up |
+| `stellarclassic_pulse_indexer_is_leader = 0` on all pods | Advisory lock lost | Restart one pod |
+| `stellarclassic_pulse_indexer_lag_ledgers` growing fast | RPC falling behind | Nothing to do; wait for RPC to catch up |
 | Indexer paused | Admin paused it | Resume via admin API |
 
 ```bash
@@ -195,7 +195,7 @@ curl -X POST https://your-service/v1/admin/indexer/resume \
      -H "Authorization: Bearer $ADMIN_API_KEY"
 
 # Force leader election by restarting all pods (advisory lock will be re-acquired)
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 ```
 
 ---
@@ -208,12 +208,12 @@ aws elbv2 describe-target-health \
     --target-group-arn $TARGET_GROUP_ARN
 
 # Check if pods are reachable directly (bypass LB)
-POD_IP=$(kubectl get pods -n production -l app=soroban-pulse -o jsonpath='{.items[0].status.podIP}')
+POD_IP=$(kubectl get pods -n production -l app=stellarclassic-pulse -o jsonpath='{.items[0].status.podIP}')
 kubectl run tmp-curl --rm -it --image=curlimages/curl -- curl http://$POD_IP:3000/healthz/live
 
 # Check ingress / service
 kubectl get ingress -n production
-kubectl describe service soroban-pulse -n production
+kubectl describe service stellarclassic-pulse -n production
 ```
 
 ---
@@ -265,11 +265,11 @@ Before declaring the incident resolved:
 
 - [ ] `GET /healthz/ready` returns `{"status":"ok","db":"ok","indexer":"ok"}`
 - [ ] `GET /v1/events` returns 200 with data
-- [ ] `soroban_pulse_indexer_lag_ledgers` is decreasing or < 100
-- [ ] `soroban_pulse_http_request_duration_seconds` p99 is below SLO (200 ms)
+- [ ] `stellarclassic_pulse_indexer_lag_ledgers` is decreasing or < 100
+- [ ] `stellarclassic_pulse_http_request_duration_seconds` p99 is below SLO (200 ms)
 - [ ] Error rate (`5xx / total`) is below 1%
 - [ ] SSE stream (`GET /v1/events/stream`) delivers events
-- [ ] Webhooks are being delivered (`soroban_pulse_webhook_failures_total` not growing)
+- [ ] Webhooks are being delivered (`stellarclassic_pulse_webhook_failures_total` not growing)
 
 ---
 
@@ -322,10 +322,10 @@ Test quarterly via chaos engineering:
 
 ```bash
 # Kill all pods simultaneously
-kubectl delete pods -n production -l app=soroban-pulse
+kubectl delete pods -n production -l app=stellarclassic-pulse
 
 # Verify automatic recovery
-kubectl rollout status deployment/soroban-pulse -n production
+kubectl rollout status deployment/stellarclassic-pulse -n production
 curl https://your-service/healthz/ready
 ```
 

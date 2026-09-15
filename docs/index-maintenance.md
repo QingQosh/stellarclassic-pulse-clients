@@ -2,7 +2,7 @@
 
 ## Overview
 
-Soroban Pulse automatically monitors index health and fragmentation, providing
+StellarClassic Pulse automatically monitors index health and fragmentation, providing
 visibility into index bloat and scheduling opportunities for `REINDEX`
 operations. When indexes become bloated (accumulate too many dead tuples
 relative to live tuples), query performance degrades due to increased disk I/O
@@ -31,29 +31,29 @@ The index monitor periodically queries PostgreSQL system catalogs to detect:
 - **WARN** (bloat ≥ 20%): Non-blocking; logged for visibility. Consider
   scheduling a manual `REINDEX` during a maintenance window.
 - **CRITICAL** (bloat ≥ 50%): Raised as an ERROR-level log entry. The
-  `soroban_pulse_fragmented_indexes_total` Prometheus gauge is incremented so
+  `stellarclassic_pulse_fragmented_indexes_total` Prometheus gauge is incremented so
   you can configure Alertmanager rules.
 
 ### 3. Prometheus Metrics
 
 | Metric | Labels | Description |
 |---|---|---|
-| `soroban_pulse_index_bloat_ratio` | `table`, `index` | Current bloat ratio per index |
-| `soroban_pulse_index_size_bytes` | `table`, `index` | Index size in bytes |
-| `soroban_pulse_index_dead_tuples` | `table`, `index` | Estimated dead tuple count |
-| `soroban_pulse_fragmented_indexes_total` | — | Number of indexes exceeding warn threshold |
-| `soroban_pulse_fragmentation_checks_total` | — | Counter incremented on each check run |
-| `soroban_pulse_reindex_operations_total` | `index` | Counter incremented on each REINDEX |
-| `soroban_pulse_reindex_failures_total` | `index` | Counter incremented on REINDEX failures |
+| `stellarclassic_pulse_index_bloat_ratio` | `table`, `index` | Current bloat ratio per index |
+| `stellarclassic_pulse_index_size_bytes` | `table`, `index` | Index size in bytes |
+| `stellarclassic_pulse_index_dead_tuples` | `table`, `index` | Estimated dead tuple count |
+| `stellarclassic_pulse_fragmented_indexes_total` | — | Number of indexes exceeding warn threshold |
+| `stellarclassic_pulse_fragmentation_checks_total` | — | Counter incremented on each check run |
+| `stellarclassic_pulse_reindex_operations_total` | `index` | Counter incremented on each REINDEX |
+| `stellarclassic_pulse_reindex_failures_total` | `index` | Counter incremented on REINDEX failures |
 
 #### Example Alertmanager Rule
 
 ```yaml
 groups:
-  - name: soroban_pulse_indexes
+  - name: stellarclassic_pulse_indexes
     rules:
       - alert: IndexFragmentationCritical
-        expr: soroban_pulse_index_bloat_ratio >= 0.5
+        expr: stellarclassic_pulse_index_bloat_ratio >= 0.5
         for: 1h
         labels:
           severity: warning
@@ -125,7 +125,7 @@ the critical threshold.
 - The operation runs in the background task's tick, which defaults to every
   24 hours (configurable via `INDEX_CHECK_INTERVAL_HOURS`).
 - Failed REINDEX operations are logged at ERROR level and tracked in the
-  `soroban_pulse_reindex_failures_total` metric.
+  `stellarclassic_pulse_reindex_failures_total` metric.
 - For large tables, REINDEX may take several minutes or longer. Monitor the
   PostgreSQL logs during this time.
 

@@ -17,10 +17,10 @@ on them:
 1. **What triggers an event to be captured?** (Polling interval? RPC
    subscription? Another indexer's webhook?)
 2. **What's the unit of identity for an event?** You'll need this to
-   reconcile old vs. new during validation — Soroban Pulse identifies events
+   reconcile old vs. new during validation — StellarClassic Pulse identifies events
    by `(contract_id, ledger, tx_hash)` plus an internal UUID.
 3. **How far back does your current system's history go, and do downstream
-   consumers need that full history in Soroban Pulse, or only events going
+   consumers need that full history in StellarClassic Pulse, or only events going
    forward?**
 4. **How is delivery currently done** (webhook, queue, database polling by
    consumers, email/SMS/push)? See
@@ -28,11 +28,11 @@ on them:
 
 ## Migration steps
 
-1. **Stand up Soroban Pulse alongside your existing indexer** — see
+1. **Stand up StellarClassic Pulse alongside your existing indexer** — see
    [development-setup.md](../development-setup.md) /
    [deployment.md](../deployment.md). Do not touch the existing system yet.
 2. **Recreate subscriptions.** For each downstream consumer of your current
-   indexer, create an equivalent Soroban Pulse subscription — see
+   indexer, create an equivalent StellarClassic Pulse subscription — see
    [subscription-mapping.md](subscription-mapping.md).
 3. **Backfill if needed** — see
    [data-migration-procedures.md](data-migration-procedures.md). If your
@@ -54,7 +54,7 @@ on them:
 
 Use this table while planning; fill in one row per existing consumer.
 
-| Existing consumer | Contracts watched | Filter logic | Current delivery target | Soroban Pulse subscription filter | Soroban Pulse delivery channel |
+| Existing consumer | Contracts watched | Filter logic | Current delivery target | StellarClassic Pulse subscription filter | StellarClassic Pulse delivery channel |
 |---|---|---|---|---|---|
 | _(example)_ ops-alerts-bot | CABCDEF... | event_type = mint | internal webhook | `contract_filter: ["CABCDEF..."]`, event type filter per [filter-dsl.md](../filter-dsl.md) | webhook, see [webhook-signing.md](../webhook-signing.md) |
 
@@ -66,8 +66,8 @@ Use this table while planning; fill in one row per existing consumer.
   on subscription-side filtering rather than trying to replicate complex
   post-processing that belongs downstream.
 - **At-least-once vs. at-most-once assumptions.** Confirm whether your
-  current consumers assume exactly-once delivery; Soroban Pulse's retry
+  current consumers assume exactly-once delivery; StellarClassic Pulse's retry
   behavior is at-least-once (idempotency keys are available — see
   [idempotency.md](../idempotency.md)).
 - **Timezone/format mismatches** in timestamps when reconciling event
-  counts — Soroban Pulse stores/reports in UTC throughout.
+  counts — StellarClassic Pulse stores/reports in UTC throughout.

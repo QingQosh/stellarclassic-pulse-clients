@@ -2,7 +2,7 @@
 
 ## Overview
 
-Chaos tests verify that Soroban Pulse degrades gracefully — and recovers — when
+Chaos tests verify that StellarClassic Pulse degrades gracefully — and recovers — when
 its dependencies misbehave: the Stellar RPC endpoint returns errors or hangs,
 the database is under lock contention, or the indexer stalls entirely. The
 goal is not to find new bugs on every run (that's what fuzzing and property
@@ -102,7 +102,7 @@ success response is a separate code path from a populated one.
 `pg_try_advisory_lock` / `pg_advisory_unlock` directly: only one session can
 hold the leader lock at a time, and a crashed replica's lock is reclaimable
 once its session drops. This is the mechanism behind
-`soroban_pulse_indexer_is_leader` (see [metrics-reference.md](metrics-reference.md))
+`stellarclassic_pulse_indexer_is_leader` (see [metrics-reference.md](metrics-reference.md))
 and the multi-replica deployment model described in
 [connection-pool.md](connection-pool.md) and
 [multi-deployment-architecture.md](multi-deployment-architecture.md).
@@ -191,7 +191,7 @@ flakier than the mocked-transport suite.
 
 `chaos_http_available_during_indexer_failure` and the corresponding
 resilience tests already construct a real `PrometheusHandle` via
-`soroban_pulse::metrics::init_metrics()` and pass it into
+`stellarclassic_pulse::metrics::init_metrics()` and pass it into
 `routes::create_router`, so the metrics pipeline is live during the test —
 but today none of the chaos tests scrape and assert on the rendered output.
 Relevant counters that *should* move during a chaos run (see
@@ -199,17 +199,17 @@ Relevant counters that *should* move during a chaos run (see
 
 | Metric | Expected during... |
 |---|---|
-| `soroban_pulse_rpc_errors_total` | any RPC-failure scenario |
-| `soroban_pulse_events_indexed_total` | recovery scenarios, after the failing calls |
-| `soroban_pulse_indexer_lag_ledgers` | latency / intermittent-fault scenarios |
-| `soroban_pulse_indexer_is_leader` | advisory-lock contention tests |
+| `stellarclassic_pulse_rpc_errors_total` | any RPC-failure scenario |
+| `stellarclassic_pulse_events_indexed_total` | recovery scenarios, after the failing calls |
+| `stellarclassic_pulse_indexer_lag_ledgers` | latency / intermittent-fault scenarios |
+| `stellarclassic_pulse_indexer_is_leader` | advisory-lock contention tests |
 
 To assert on these in a test, render the handle and grep the Prometheus text
 exposition format:
 
 ```rust
 let rendered = prometheus_handle.render();
-assert!(rendered.contains("soroban_pulse_rpc_errors_total 1"));
+assert!(rendered.contains("stellarclassic_pulse_rpc_errors_total 1"));
 ```
 
 This is a known gap relative to the issue #921 checklist (see below) — it's
@@ -222,7 +222,7 @@ rendered metrics text is settled, but no chaos test does it yet.
 |---|---|
 | Chaos test framework for network partitions | ✅ `tests/resilience/mod.rs`, `tests/chaos_tests.rs` |
 | Database failure simulations | ⚠️ Partial — duplicate/idempotency and large-batch behavior are covered; a true connection-loss-mid-query simulation is not |
-| Connection pool exhaustion tests | ❌ Not yet a chaos scenario. `src/connection_pool.rs` tracks exhaustion (`soroban_pulse_db_pool_exhaustion_alerts_total`, `DBPoolExhaustion` alert in `docs/alerts.yml`) but there's no test that drives the pool to exhaustion and asserts on recovery |
+| Connection pool exhaustion tests | ❌ Not yet a chaos scenario. `src/connection_pool.rs` tracks exhaustion (`stellarclassic_pulse_db_pool_exhaustion_alerts_total`, `DBPoolExhaustion` alert in `docs/alerts.yml`) but there's no test that drives the pool to exhaustion and asserts on recovery |
 | Delayed response scenarios | ✅ `chaos_network_latency_*` |
 | Partial failure injection | ✅ `chaos_rpc_intermittent_faults`, `chaos_error_then_empty_success_no_data_loss` |
 | Metrics collection during chaos tests | ⚠️ Metrics pipeline is live in the relevant tests but not yet asserted on — see above |

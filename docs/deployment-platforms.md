@@ -1,6 +1,6 @@
 # Deployment Guide: Common Platforms
 
-Step-by-step guides for deploying SorobanPulse on major cloud providers and
+Step-by-step guides for deploying StellarClassicPulse on major cloud providers and
 platforms, with environment configuration, cost estimates, and platform-specific
 notes.
 
@@ -29,7 +29,7 @@ notes.
 
 ## 1. AWS ECS (Fargate)
 
-Run SorobanPulse as a serverless container on AWS Fargate with RDS PostgreSQL.
+Run StellarClassicPulse as a serverless container on AWS Fargate with RDS PostgreSQL.
 
 ### Prerequisites
 
@@ -43,18 +43,18 @@ Run SorobanPulse as a serverless container on AWS Fargate with RDS PostgreSQL.
 ```bash
 REGION=us-east-1
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-ECR_REPO="${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/soroban-pulse"
+ECR_REPO="${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/stellarclassic-pulse"
 
 # Create ECR repo (once)
-aws ecr create-repository --repository-name soroban-pulse --region "$REGION"
+aws ecr create-repository --repository-name stellarclassic-pulse --region "$REGION"
 
 # Authenticate Docker
 aws ecr get-login-password --region "$REGION" \
   | docker login --username AWS --password-stdin "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
 
 # Build and push
-docker build -t soroban-pulse .
-docker tag soroban-pulse:latest "${ECR_REPO}:latest"
+docker build -t stellarclassic-pulse .
+docker tag stellarclassic-pulse:latest "${ECR_REPO}:latest"
 docker push "${ECR_REPO}:latest"
 ```
 
@@ -62,10 +62,10 @@ docker push "${ECR_REPO}:latest"
 
 ```bash
 aws secretsmanager create-secret \
-  --name soroban-pulse/prod \
+  --name stellarclassic-pulse/prod \
   --region "$REGION" \
   --secret-string '{
-    "DATABASE_URL":    "postgres://user:pass@rds-endpoint:5432/soroban_pulse",
+    "DATABASE_URL":    "postgres://user:pass@rds-endpoint:5432/stellarclassic_pulse",
     "API_KEY":         "your-api-key",
     "ADMIN_API_KEY":   "your-admin-key"
   }'
@@ -77,7 +77,7 @@ Save as `ecs-task-definition.json`:
 
 ```json
 {
-  "family": "soroban-pulse",
+  "family": "stellarclassic-pulse",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "512",
@@ -85,8 +85,8 @@ Save as `ecs-task-definition.json`:
   "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "soroban-pulse",
-      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/soroban-pulse:latest",
+      "name": "stellarclassic-pulse",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/stellarclassic-pulse:latest",
       "portMappings": [{ "containerPort": 3000, "protocol": "tcp" }],
       "environment": [
         { "name": "PORT",                         "value": "3000" },
@@ -102,21 +102,21 @@ Save as `ecs-task-definition.json`:
       "secrets": [
         {
           "name": "DATABASE_URL",
-          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:soroban-pulse/prod:DATABASE_URL::"
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:stellarclassic-pulse/prod:DATABASE_URL::"
         },
         {
           "name": "API_KEY",
-          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:soroban-pulse/prod:API_KEY::"
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:stellarclassic-pulse/prod:API_KEY::"
         },
         {
           "name": "ADMIN_API_KEY",
-          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:soroban-pulse/prod:ADMIN_API_KEY::"
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:stellarclassic-pulse/prod:ADMIN_API_KEY::"
         }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group":         "/ecs/soroban-pulse",
+          "awslogs-group":         "/ecs/stellarclassic-pulse",
           "awslogs-region":        "REGION",
           "awslogs-stream-prefix": "ecs"
         }
@@ -145,13 +145,13 @@ aws ecs register-task-definition \
 
 ```bash
 # Create an ECS cluster
-aws ecs create-cluster --cluster-name soroban-pulse --region "$REGION"
+aws ecs create-cluster --cluster-name stellarclassic-pulse --region "$REGION"
 
 # Create the service (assumes VPC, subnets, ALB target group already configured)
 aws ecs create-service \
-  --cluster soroban-pulse \
-  --service-name soroban-pulse-svc \
-  --task-definition soroban-pulse \
+  --cluster stellarclassic-pulse \
+  --service-name stellarclassic-pulse-svc \
+  --task-definition stellarclassic-pulse \
   --desired-count 2 \
   --launch-type FARGATE \
   --network-configuration "awsvpcConfiguration={
@@ -159,7 +159,7 @@ aws ecs create-service \
     securityGroups=[sg-xxxx],
     assignPublicIp=DISABLED}" \
   --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:...,
-    containerName=soroban-pulse,containerPort=3000" \
+    containerName=stellarclassic-pulse,containerPort=3000" \
   --region "$REGION"
 ```
 
@@ -178,16 +178,16 @@ With `--desired-count 2`, both replicas start an indexer.  The advisory lock in
 ```bash
 aws application-autoscaling register-scalable-target \
   --service-namespace ecs \
-  --resource-id service/soroban-pulse/soroban-pulse-svc \
+  --resource-id service/stellarclassic-pulse/stellarclassic-pulse-svc \
   --scalable-dimension ecs:service:DesiredCount \
   --min-capacity 1 \
   --max-capacity 10
 
 aws application-autoscaling put-scaling-policy \
   --service-namespace ecs \
-  --resource-id service/soroban-pulse/soroban-pulse-svc \
+  --resource-id service/stellarclassic-pulse/stellarclassic-pulse-svc \
   --scalable-dimension ecs:service:DesiredCount \
-  --policy-name soroban-pulse-cpu-scaling \
+  --policy-name stellarclassic-pulse-cpu-scaling \
   --policy-type TargetTrackingScaling \
   --target-tracking-scaling-policy-configuration '{
     "TargetValue": 70.0,
@@ -200,7 +200,7 @@ aws application-autoscaling put-scaling-policy \
 ### ECS environment variables
 
 ```
-DATABASE_URL          = postgres://user:pass@rds-host:5432/soroban_pulse
+DATABASE_URL          = postgres://user:pass@rds-host:5432/stellarclassic_pulse
 STELLAR_RPC_URL       = https://soroban-testnet.stellar.org
 PORT                  = 3000
 RUST_LOG              = info
@@ -241,10 +241,10 @@ Fully managed serverless containers with automatic scaling to zero.
 ```bash
 PROJECT_ID=$(gcloud config get-value project)
 REGION=us-central1
-IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/soroban-pulse/app"
+IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/stellarclassic-pulse/app"
 
 # Create repository (once)
-gcloud artifacts repositories create soroban-pulse \
+gcloud artifacts repositories create stellarclassic-pulse \
   --repository-format=docker \
   --location="$REGION"
 
@@ -256,7 +256,7 @@ docker push "$IMAGE:latest"
 ### Step 2 — Store secrets in Secret Manager
 
 ```bash
-echo -n "postgres://user:pass@/soroban_pulse?host=/cloudsql/PROJECT:REGION:INSTANCE" \
+echo -n "postgres://user:pass@/stellarclassic_pulse?host=/cloudsql/PROJECT:REGION:INSTANCE" \
   | gcloud secrets create DATABASE_URL --data-file=-
 
 echo -n "your-api-key" | gcloud secrets create SOROBAN_API_KEY --data-file=-
@@ -266,7 +266,7 @@ echo -n "your-admin-key" | gcloud secrets create SOROBAN_ADMIN_KEY --data-file=-
 ### Step 3 — Deploy to Cloud Run
 
 ```bash
-gcloud run deploy soroban-pulse \
+gcloud run deploy stellarclassic-pulse \
   --image "$IMAGE:latest" \
   --region "$REGION" \
   --platform managed \
@@ -277,7 +277,7 @@ gcloud run deploy soroban-pulse \
   --timeout 300 \
   --concurrency 80 \
   --port 3000 \
-  --add-cloudsql-instances "$PROJECT_ID:$REGION:soroban-pulse-db" \
+  --add-cloudsql-instances "$PROJECT_ID:$REGION:stellarclassic-pulse-db" \
   --set-env-vars "PORT=3000,RUST_LOG=info,RUST_LOG_FORMAT=json,DB_MAX_CONNECTIONS=10,RATE_LIMIT_PER_MINUTE=60,STELLAR_RPC_URL=https://soroban-testnet.stellar.org,INDEXER_LOCK_RETRY_SECS=30" \
   --set-secrets "DATABASE_URL=DATABASE_URL:latest,API_KEY=SOROBAN_API_KEY:latest,ADMIN_API_KEY=SOROBAN_ADMIN_KEY:latest" \
   --allow-unauthenticated
@@ -289,7 +289,7 @@ Cloud Run uses the HTTP health check automatically.  Ensure your service
 account has `roles/cloudsql.client`.
 
 ```bash
-gcloud run services describe soroban-pulse --region "$REGION" \
+gcloud run services describe stellarclassic-pulse --region "$REGION" \
   --format "value(status.url)"
 ```
 
@@ -297,7 +297,7 @@ gcloud run services describe soroban-pulse --region "$REGION" \
 
 ```bash
 gcloud beta run domain-mappings create \
-  --service soroban-pulse \
+  --service stellarclassic-pulse \
   --domain api.yourproject.com \
   --region "$REGION"
 ```
@@ -305,7 +305,7 @@ gcloud beta run domain-mappings create \
 ### Cloud Run environment variables
 
 ```
-DATABASE_URL          = postgres://user:pass@/soroban_pulse?host=/cloudsql/...
+DATABASE_URL          = postgres://user:pass@/stellarclassic_pulse?host=/cloudsql/...
 STELLAR_RPC_URL       = https://soroban-testnet.stellar.org
 PORT                  = 3000
 RUST_LOG              = info
@@ -352,17 +352,17 @@ Managed PaaS with automatic deploys from Docker images or a GitHub repository.
 ### Step 1 — Push image to DigitalOcean Container Registry
 
 ```bash
-doctl registry create soroban-pulse-registry
+doctl registry create stellarclassic-pulse-registry
 
-docker tag soroban-pulse:latest registry.digitalocean.com/soroban-pulse-registry/soroban-pulse:latest
+docker tag stellarclassic-pulse:latest registry.digitalocean.com/stellarclassic-pulse-registry/stellarclassic-pulse:latest
 doctl registry login
-docker push registry.digitalocean.com/soroban-pulse-registry/soroban-pulse:latest
+docker push registry.digitalocean.com/stellarclassic-pulse-registry/stellarclassic-pulse:latest
 ```
 
 ### Step 2 — Create a managed PostgreSQL database
 
 ```bash
-doctl databases create soroban-pulse-db \
+doctl databases create stellarclassic-pulse-db \
   --engine pg \
   --version 16 \
   --size db-s-1vcpu-1gb \
@@ -373,7 +373,7 @@ doctl databases create soroban-pulse-db \
 Wait for the cluster to be ready, then retrieve the connection string:
 
 ```bash
-doctl databases connection soroban-pulse-db --format URI
+doctl databases connection stellarclassic-pulse-db --format URI
 ```
 
 ### Step 3 — Create the App Spec
@@ -381,15 +381,15 @@ doctl databases connection soroban-pulse-db --format URI
 Save as `do-app-spec.yaml`:
 
 ```yaml
-name: soroban-pulse
+name: stellarclassic-pulse
 region: nyc1
 
 services:
-  - name: soroban-pulse
+  - name: stellarclassic-pulse
     image:
       registry_type: DOCR
-      registry: soroban-pulse-registry
-      repository: soroban-pulse
+      registry: stellarclassic-pulse-registry
+      repository: stellarclassic-pulse
       tag: latest
     http_port: 3000
     instance_count: 2
@@ -417,7 +417,7 @@ services:
       - key: INDEXER_LOCK_RETRY_SECS
         value: "30"
       - key: DATABASE_URL
-        value: "${soroban-pulse-db.DATABASE_URL}"
+        value: "${stellarclassic-pulse-db.DATABASE_URL}"
         type: SECRET
       - key: API_KEY
         value: "your-api-key"
@@ -427,7 +427,7 @@ services:
         type: SECRET
 
 databases:
-  - name: soroban-pulse-db
+  - name: stellarclassic-pulse-db
     engine: PG
     version: "16"
     size: db-s-1vcpu-1gb
@@ -485,13 +485,13 @@ Container-based deployment on Heroku using Docker images.
 
 ```bash
 heroku login
-heroku create soroban-pulse-app
+heroku create stellarclassic-pulse-app
 ```
 
 ### Step 2 — Configure the container stack
 
 ```bash
-heroku stack:set container -a soroban-pulse-app
+heroku stack:set container -a stellarclassic-pulse-app
 ```
 
 ### Step 3 — Create `heroku.yml`
@@ -504,13 +504,13 @@ build:
     web: Dockerfile
 
 run:
-  web: ./soroban-pulse
+  web: ./stellarclassic-pulse
 ```
 
 ### Step 4 — Add PostgreSQL
 
 ```bash
-heroku addons:create heroku-postgresql:essential-0 -a soroban-pulse-app
+heroku addons:create heroku-postgresql:essential-0 -a stellarclassic-pulse-app
 ```
 
 Heroku automatically sets `DATABASE_URL`.  The existing `DATABASE_URL` variable
@@ -519,7 +519,7 @@ will be populated by the add-on.
 ### Step 5 — Set environment variables
 
 ```bash
-APP=soroban-pulse-app
+APP=stellarclassic-pulse-app
 
 heroku config:set \
   PORT=3000 \

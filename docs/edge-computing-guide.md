@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide covers deploying SorobanPulse with edge computing and CDN solutions to reduce latency, improve performance, and enhance global availability.
+This guide covers deploying StellarClassicPulse with edge computing and CDN solutions to reduce latency, improve performance, and enhance global availability.
 
 ## Architecture
 
@@ -106,9 +106,9 @@ async function warmCache() {
 ```javascript
 // Route based on geography
 const REGIONAL_ORIGINS = {
-  'US': 'https://us-api.soroban-pulse.example.com',
-  'EU': 'https://eu-api.soroban-pulse.example.com',
-  'AS': 'https://as-api.soroban-pulse.example.com',
+  'US': 'https://us-api.stellarclassic-pulse.example.com',
+  'EU': 'https://eu-api.stellarclassic-pulse.example.com',
+  'AS': 'https://as-api.stellarclassic-pulse.example.com',
 };
 
 function getRegionalOrigin(country) {
@@ -153,7 +153,7 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/purge_cache"
 curl -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/purge_cache" \
   -H "Authorization: Bearer ${CF_API_TOKEN}" \
   -H "Content-Type: application/json" \
-  --data '{"files":["https://api.soroban-pulse.example.com/api/v1/ledgers/12345"]}'
+  --data '{"files":["https://api.stellarclassic-pulse.example.com/api/v1/ledgers/12345"]}'
 ```
 
 ## AWS CloudFront Integration
@@ -231,7 +231,7 @@ function handler(event) {
     
     // Route API versions
     if (request.uri.startsWith('/api/v2/')) {
-        request.origin.custom.domainName = 'v2-api.soroban-pulse.example.com';
+        request.origin.custom.domainName = 'v2-api.stellarclassic-pulse.example.com';
     }
     
     return request;
@@ -301,12 +301,12 @@ aws cloudfront get-distribution-config \
 ```bash
 # Deploy multi-region infrastructure
 cd terraform/
-terraform apply -target=module.soroban_pulse_us_east
-terraform apply -target=module.soroban_pulse_eu_west
-terraform apply -target=module.soroban_pulse_ap_southeast
+terraform apply -target=module.stellarclassic_pulse_us_east
+terraform apply -target=module.stellarclassic_pulse_eu_west
+terraform apply -target=module.stellarclassic_pulse_ap_southeast
 
 # Deploy Global Accelerator
-terraform apply -target=aws_globalaccelerator_accelerator.soroban_pulse
+terraform apply -target=aws_globalaccelerator_accelerator.stellarclassic_pulse
 ```
 
 #### Traffic Distribution
@@ -421,7 +421,7 @@ origin_shield {
 ```bash
 # Create WAF rules
 aws wafv2 create-web-acl \
-  --name soroban-pulse-waf \
+  --name stellarclassic-pulse-waf \
   --scope CLOUDFRONT \
   --default-action Allow={} \
   --rules file://waf-rules.json
@@ -550,6 +550,6 @@ export default {
 ## Support
 
 For edge computing and CDN support:
-- GitHub Issues: https://github.com/Soroban-Pulse/SorobanPulse/issues
+- GitHub Issues: https://github.com/Soroban-Pulse/StellarClassicPulse/issues
 - Community Slack: #edge-computing
-- Email: support@soroban-pulse.example.com
+- Email: support@stellarclassic-pulse.example.com

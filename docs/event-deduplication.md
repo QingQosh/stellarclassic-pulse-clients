@@ -1,6 +1,6 @@
 # Event Deduplication
 
-SorobanPulse uses a layered deduplication strategy so that an event is stored **at most once**, even when the indexer retries the same ledger range or when the same event is re-submitted with a different transaction hash.
+StellarClassicPulse uses a layered deduplication strategy so that an event is stored **at most once**, even when the indexer retries the same ledger range or when the same event is re-submitted with a different transaction hash.
 
 ## Deduplication Layers
 
@@ -12,7 +12,7 @@ An in-memory probabilistic set keyed on `(tx_hash, contract_id, event_type)`. Ev
 
 - False positives → a new event is incorrectly skipped (rare, bounded by the configured FP rate).
 - False negatives → impossible by design; the DB constraint catches anything the bloom filter misses.
-- **Metric:** `soroban_pulse_bloom_filter_hits_total`
+- **Metric:** `stellarclassic_pulse_bloom_filter_hits_total`
 
 ### 2. Content Fingerprint (Issue #582)
 
@@ -20,7 +20,7 @@ A SHA-256 hex digest of `(tx_hash, contract_id, event_type, event_data)` stored 
 
 - The check is bounded by `DEDUP_WINDOW_SECS` (default: 3 600 seconds / 1 hour) to limit scan cost.
 - Non-fatal: if the fingerprint query fails the insert proceeds and the DB constraint acts as a backstop.
-- **Metric:** `soroban_pulse_content_dedup_hits_total`
+- **Metric:** `stellarclassic_pulse_content_dedup_hits_total`
 
 ### 3. Database Unique Constraint
 
@@ -75,7 +75,7 @@ lookback boundary.
 
 | Metric | Description |
 |--------|-------------|
-| `soroban_pulse_bloom_filter_hits_total` | Events skipped by bloom filter |
-| `soroban_pulse_content_dedup_hits_total` | Events skipped by fingerprint check |
-| `soroban_pulse_fingerprints_stored_total` | Fingerprints written on successful insert |
-| `soroban_pulse_events_duplicate_total` | General duplicate counter (DB constraint) |
+| `stellarclassic_pulse_bloom_filter_hits_total` | Events skipped by bloom filter |
+| `stellarclassic_pulse_content_dedup_hits_total` | Events skipped by fingerprint check |
+| `stellarclassic_pulse_fingerprints_stored_total` | Fingerprints written on successful insert |
+| `stellarclassic_pulse_events_duplicate_total` | General duplicate counter (DB constraint) |

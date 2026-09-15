@@ -1,6 +1,6 @@
 # Development Environment Setup
 
-A reference for configuring a full local development environment for Soroban Pulse: OS-specific toolchain installation, editor/IDE configuration, pre-commit hooks, database setup, debugging tools, test environments, and performance profiling.
+A reference for configuring a full local development environment for StellarClassic Pulse: OS-specific toolchain installation, editor/IDE configuration, pre-commit hooks, database setup, debugging tools, test environments, and performance profiling.
 
 New to the project? Start with [docs/onboarding.md](onboarding.md) for the day-1 checklist (clone, build, run, first test pass). This guide is the deeper reference for configuring the environment behind each of those steps and for tooling that onboarding doesn't cover — IDE setup, debuggers, profilers.
 
@@ -122,8 +122,8 @@ A minimal `.vscode/launch.json` for debugging the server (requires the [CodeLLDB
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug soroban-pulse",
-      "cargo": { "args": ["build", "--bin=soroban-pulse"] },
+      "name": "Debug stellarclassic-pulse",
+      "cargo": { "args": ["build", "--bin=stellarclassic-pulse"] },
       "env": { "RUST_LOG": "debug" },
       "envFile": "${workspaceFolder}/.env",
       "cwd": "${workspaceFolder}"
@@ -190,7 +190,7 @@ Two supported paths: Docker (recommended for day-to-day development) or a native
 
 ```bash
 docker compose up -d postgres
-export DATABASE_URL=postgres://postgres:postgres@localhost:5432/soroban_pulse
+export DATABASE_URL=postgres://postgres:postgres@localhost:5432/stellarclassic_pulse
 cargo sqlx migrate run --source migrations
 ```
 
@@ -201,8 +201,8 @@ cargo sqlx migrate run --source migrations
 Install Postgres 14+ for your OS (`brew install postgresql@14`, `apt-get install postgresql`, or the Windows installer from postgresql.org), then:
 
 ```bash
-createdb soroban_pulse
-export DATABASE_URL=postgres://<user>:<password>@localhost:5432/soroban_pulse
+createdb stellarclassic_pulse
+export DATABASE_URL=postgres://<user>:<password>@localhost:5432/stellarclassic_pulse
 cargo sqlx migrate run --source migrations
 ```
 
@@ -232,13 +232,13 @@ See [docs/schema.md](schema.md) for the full table structure, indexes, and an ER
 | Platform | Debugger | Notes |
 |----------|----------|-------|
 | macOS / Linux | [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) (VS Code) or raw `lldb` | Works with the `launch.json` in [IDE Configuration](#vs-code) above |
-| Linux | `gdb` | `rust-gdb target/debug/soroban-pulse` gives Rust-aware pretty-printing |
+| Linux | `gdb` | `rust-gdb target/debug/stellarclassic-pulse` gives Rust-aware pretty-printing |
 | Windows (MSVC toolchain) | Visual Studio debugger or CodeLLDB | `cargo build` then attach, or use the VS Code launch config |
 
 Command-line session with `rust-gdb`:
 ```bash
 cargo build
-rust-gdb target/debug/soroban-pulse
+rust-gdb target/debug/stellarclassic-pulse
 (gdb) break src/indexer.rs:120
 (gdb) run
 ```
@@ -249,10 +249,10 @@ Most day-to-day debugging in this codebase happens through `tracing`, not a step
 
 ```bash
 # Trace one module in isolation
-RUST_LOG=soroban_pulse::indexer=debug,info cargo run
+RUST_LOG=stellarclassic_pulse::indexer=debug,info cargo run
 
 # Structured JSON output for piping into jq or an aggregator
-RUST_LOG_FORMAT=json RUST_LOG=debug cargo run 2>&1 | jq 'select(.target | startswith("soroban_pulse"))'
+RUST_LOG_FORMAT=json RUST_LOG=debug cargo run 2>&1 | jq 'select(.target | startswith("stellarclassic_pulse"))'
 ```
 
 See [docs/troubleshooting.md § Logging Configuration](troubleshooting.md#logging-configuration) and [docs/logging.md](logging.md) for the full field conventions.
@@ -271,7 +271,7 @@ psql $DATABASE_URL -c "SELECT query, mean_exec_time, calls FROM pg_stat_statemen
 
 ```bash
 curl http://localhost:3000/healthz/ready | jq .
-curl http://localhost:3000/metrics | grep soroban_pulse_indexer
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_indexer
 ```
 
 ### Tracing distributed requests
@@ -332,7 +332,7 @@ Results land in `target/criterion/`; open `target/criterion/report/index.html` i
 **Linux:**
 ```bash
 cargo install flamegraph
-sudo cargo flamegraph --bin soroban-pulse
+sudo cargo flamegraph --bin stellarclassic-pulse
 # open flamegraph.svg
 ```
 `sudo` is required because flamegraph uses `perf` under the hood, which needs elevated privileges to read kernel performance counters on most distros. If you'd rather not run `cargo` as root, lower `/proc/sys/kernel/perf_event_paranoid` to `1` instead.
@@ -346,15 +346,15 @@ sudo cargo flamegraph --bin soroban-pulse
 ```bash
 # Linux: heaptrack gives a full allocation timeline
 sudo apt-get install heaptrack heaptrack-gui
-heaptrack target/debug/soroban-pulse
-heaptrack_gui heaptrack.soroban-pulse.<pid>.zst
+heaptrack target/debug/stellarclassic-pulse
+heaptrack_gui heaptrack.stellarclassic-pulse.<pid>.zst
 
 # Cross-platform: valgrind/massif (slower, very detailed)
-valgrind --tool=massif target/debug/soroban-pulse
+valgrind --tool=massif target/debug/stellarclassic-pulse
 ms_print massif.out.<pid>
 ```
 
-For a quick live signal without a dedicated profiler, watch `soroban_pulse_process_memory_bytes` on `/metrics` over time — see [docs/troubleshooting.md § Diagnose memory growth](troubleshooting.md#diagnose-memory-growth).
+For a quick live signal without a dedicated profiler, watch `stellarclassic_pulse_process_memory_bytes` on `/metrics` over time — see [docs/troubleshooting.md § Diagnose memory growth](troubleshooting.md#diagnose-memory-growth).
 
 ### Load testing
 

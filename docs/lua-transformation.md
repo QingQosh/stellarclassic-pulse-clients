@@ -1,6 +1,6 @@
 # Lua Event Transformation
 
-Soroban Pulse supports optional Lua scripting for transforming or filtering events before they are stored in the database. This feature allows deployments to customize event processing without forking the codebase.
+StellarClassic Pulse supports optional Lua scripting for transforming or filtering events before they are stored in the database. This feature allows deployments to customize event processing without forking the codebase.
 
 ## Overview
 

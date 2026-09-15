@@ -4,7 +4,7 @@ Issue #954: Create integration with AWS EventBridge for event routing.
 
 ## Overview
 
-The AWS EventBridge integration enables SorobanPulse to route Soroban events through AWS EventBridge for sophisticated event processing and routing. Key features include:
+The AWS EventBridge integration enables StellarClassicPulse to route Soroban events through AWS EventBridge for sophisticated event processing and routing. Key features include:
 
 - **Event submission to EventBridge** with automatic batching
 - **Event filtering** with custom patterns
@@ -17,7 +17,7 @@ The AWS EventBridge integration enables SorobanPulse to route Soroban events thr
 Events flow through EventBridge as follows:
 
 ```
-SorobanPulse Events
+StellarClassicPulse Events
         ↓
    EventBridge
         ↓
@@ -60,7 +60,7 @@ AWS_SESSION_TOKEN=...
 ### Programmatic Configuration
 
 ```rust
-use soroban_pulse::eventbridge::{
+use stellarclassic_pulse::eventbridge::{
     EventBridgeConfig, AwsEventBridgePublisher, EventPattern
 };
 use std::collections::HashMap;
@@ -68,7 +68,7 @@ use std::collections::HashMap;
 let config = EventBridgeConfig {
     event_bus_name: "soroban-events".to_string(),
     region: "us-east-1".to_string(),
-    source: "soroban-pulse".to_string(),
+    source: "stellarclassic-pulse".to_string(),
     detail_type: "SorobanEvent".to_string(),
     event_pattern: Some(EventPattern {
         contract_id: Some(vec![
@@ -95,7 +95,7 @@ let publisher = AwsEventBridgePublisher::new(config);
 Events can be filtered before sending to EventBridge:
 
 ```rust
-use soroban_pulse::eventbridge::EventPattern;
+use stellarclassic_pulse::eventbridge::EventPattern;
 
 let pattern = EventPattern {
     // Match specific contracts
@@ -121,13 +121,13 @@ assert!(pattern.matches(&soroban_event));
 Define rules within EventBridge for complex event routing:
 
 ```rust
-use soroban_pulse::eventbridge::{EventBridgeRule, RuleState};
+use stellarclassic_pulse::eventbridge::{EventBridgeRule, RuleState};
 
 let rule = EventBridgeRule {
     name: "high-value-transfers".to_string(),
     description: Some("Route high-value transfer events to analytics".to_string()),
     event_pattern: r#"{
-        "source": ["soroban-pulse"],
+        "source": ["stellarclassic-pulse"],
         "detail-type": ["SorobanEvent"],
         "detail": {
             "event_type": ["Transfer"],
@@ -146,7 +146,7 @@ publisher.put_rule(rule).await?;
 ### Submitting Events
 
 ```rust
-use soroban_pulse::eventbridge::EventBridgePublisher;
+use stellarclassic_pulse::eventbridge::EventBridgePublisher;
 
 let events = vec![soroban_event1, soroban_event2];
 
@@ -180,11 +180,11 @@ publisher.delete_rule("high-value-transfers").await?;
 
 The integration tracks EventBridge operations via metrics:
 
-- `soroban_pulse_eventbridge_put_events_success_total` - Counter of successfully submitted events
-- `soroban_pulse_eventbridge_put_events_failures_total` - Counter of failed submission attempts
-- `soroban_pulse_eventbridge_rules_created_total` - Counter of created rules
-- `soroban_pulse_eventbridge_rules_deleted_total` - Counter of deleted rules
-- `soroban_pulse_eventbridge_active_rules` - Gauge of active rules
+- `stellarclassic_pulse_eventbridge_put_events_success_total` - Counter of successfully submitted events
+- `stellarclassic_pulse_eventbridge_put_events_failures_total` - Counter of failed submission attempts
+- `stellarclassic_pulse_eventbridge_rules_created_total` - Counter of created rules
+- `stellarclassic_pulse_eventbridge_rules_deleted_total` - Counter of deleted rules
+- `stellarclassic_pulse_eventbridge_active_rules` - Gauge of active rules
 
 ## Cross-Account Support
 
@@ -207,7 +207,7 @@ Events sent to EventBridge follow this structure:
 
 ```json
 {
-  "Source": "soroban-pulse",
+  "Source": "stellarclassic-pulse",
   "DetailType": "SorobanEvent",
   "Detail": {
     "id": "event-123",
@@ -233,7 +233,7 @@ Process events with custom logic:
 {
   "Name": "process-transfers",
   "EventPattern": {
-    "source": ["soroban-pulse"],
+    "source": ["stellarclassic-pulse"],
     "detail-type": ["SorobanEvent"],
     "detail": {"event_type": ["Transfer"]}
   }
@@ -250,7 +250,7 @@ Send notifications for critical events:
 {
   "Name": "critical-events-alert",
   "EventPattern": {
-    "source": ["soroban-pulse"],
+    "source": ["stellarclassic-pulse"],
     "detail": {"severity": ["critical"]}
   }
 }
@@ -266,7 +266,7 @@ Queue events for batch processing:
 {
   "Name": "events-to-queue",
   "EventPattern": {
-    "source": ["soroban-pulse"]
+    "source": ["stellarclassic-pulse"]
   }
 }
 ```
@@ -281,7 +281,7 @@ Stream events to real-time analytics:
 {
   "Name": "events-to-kinesis",
   "EventPattern": {
-    "source": ["soroban-pulse"]
+    "source": ["stellarclassic-pulse"]
   }
 }
 ```
@@ -326,7 +326,7 @@ For cross-account access, add to the trusted account:
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::SOURCE_ACCOUNT:role/SorobanPulseRole"
+        "AWS": "arn:aws:iam::SOURCE_ACCOUNT:role/StellarClassicPulseRole"
       },
       "Action": "sts:AssumeRole"
     }
@@ -368,7 +368,7 @@ cargo test eventbridge
 Use the mock publisher in tests:
 
 ```rust
-use soroban_pulse::eventbridge::mock::MockEventBridgePublisher;
+use stellarclassic_pulse::eventbridge::mock::MockEventBridgePublisher;
 
 let publisher = MockEventBridgePublisher::new();
 // Use in tests without AWS access

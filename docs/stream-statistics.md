@@ -192,9 +192,9 @@ The following Prometheus alert rules are provided in
 
 | Alert | Condition | Severity |
 |-------|-----------|----------|
-| `SorobanPulseStreamStatsStale` | `sse_active_connections` not updated in > 60 s | warning |
-| `SorobanPulseEpsSpikeDetected` | anomaly kind = `spike` present in last snapshot | warning |
-| `SorobanPulseEpsDropDetected` | anomaly kind = `drop` present in last snapshot | critical |
-| `SorobanPulseBroadcastLatencyHigh` | p99 broadcast latency > 500 ms | warning |
+| `StellarClassicPulseStreamStatsStale` | `sse_active_connections` not updated in > 60 s | warning |
+| `StellarClassicPulseEpsSpikeDetected` | anomaly kind = `spike` present in last snapshot | warning |
+| `StellarClassicPulseEpsDropDetected` | anomaly kind = `drop` present in last snapshot | critical |
+| `StellarClassicPulseBroadcastLatencyHigh` | p99 broadcast latency > 500 ms | warning |
 
 Adjust thresholds in `alerts.yml` to match your traffic patterns.

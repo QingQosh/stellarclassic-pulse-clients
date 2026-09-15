@@ -1,6 +1,6 @@
 # Data Warehouse Export
 
-SorobanPulse can export event data to external analytics warehouses
+StellarClassicPulse can export event data to external analytics warehouses
 (BigQuery and Snowflake) in addition to local/S3 Parquet files produced by
 `src/parquet_export.rs`.
 
@@ -21,11 +21,11 @@ The `src/warehouse/` module provides:
 ## Configuration
 
 ```rust
-use soroban_pulse::warehouse::{WarehouseExportConfig, WarehouseKind};
+use stellarclassic_pulse::warehouse::{WarehouseExportConfig, WarehouseKind};
 
 let config = WarehouseExportConfig {
     kind: WarehouseKind::BigQuery,
-    dataset_or_schema: "soroban_pulse".into(),
+    dataset_or_schema: "stellarclassic_pulse".into(),
     table: "events".into(),
     incremental: true,
     watermark_column: "ingested_at".into(),
@@ -46,7 +46,7 @@ Environment variables:
 ## Usage
 
 ```rust
-use soroban_pulse::warehouse::{export_to_warehouse, bigquery::BigQueryClient};
+use stellarclassic_pulse::warehouse::{export_to_warehouse, bigquery::BigQueryClient};
 
 let client = BigQueryClient::new(project_id, access_token);
 let result = export_to_warehouse(&client, &config, &rows)?;

@@ -189,7 +189,7 @@ let engine = CorrelationEngine::new()
 ### Trace a Cross-Chain Transaction
 
 ```rust
-use soroban_pulse::cross_chain_correlation::*;
+use stellarclassic_pulse::cross_chain_correlation::*;
 
 // Create root transaction
 let root_tx = TransactionId::new("soroban-mainnet", "abc123");
@@ -321,7 +321,7 @@ curl http://localhost:8000/v1/cross-chain/causality?event1=e1
 Enable debug logging for correlation detection:
 
 ```bash
-RUST_LOG=soroban_pulse::cross_chain_correlation=debug
+RUST_LOG=stellarclassic_pulse::cross_chain_correlation=debug
 ```
 
 ## Related Features

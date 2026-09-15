@@ -1,9 +1,9 @@
 {
-  "name": "soroban-pulse-explorer",
-  "displayName": "Soroban Pulse Explorer",
-  "description": "Browse, test, and inspect Soroban Pulse API endpoints directly from VS Code.",
+  "name": "stellarclassic-pulse-explorer",
+  "displayName": "StellarClassic Pulse Explorer",
+  "description": "Browse, test, and inspect StellarClassic Pulse API endpoints directly from VS Code.",
   "version": "0.1.0",
-  "publisher": "soroban-pulse",
+  "publisher": "stellarclassic-pulse",
   "license": "MIT",
   "engines": {
     "vscode": "^1.85.0"
@@ -13,26 +13,26 @@
   "icon": "media/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/soroban-pulse/soroban-pulse"
+    "url": "https://github.com/stellarclassic-pulse/stellarclassic-pulse"
   },
   "activationEvents": [
-    "onView:sorobanpulse.apiExplorer"
+    "onView:stellarclassicpulse.apiExplorer"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "sorobanpulse",
-          "title": "Soroban Pulse",
+          "id": "stellarclassicpulse",
+          "title": "StellarClassic Pulse",
           "icon": "media/pulse.svg"
         }
       ]
     },
     "views": {
-      "sorobanpulse": [
+      "stellarclassicpulse": [
         {
-          "id": "sorobanpulse.apiExplorer",
+          "id": "stellarclassicpulse.apiExplorer",
           "name": "API Explorer",
           "icon": "media/pulse.svg"
         }
@@ -40,86 +40,86 @@
     },
     "commands": [
       {
-        "command": "sorobanpulse.openRequestTester",
+        "command": "stellarclassicpulse.openRequestTester",
         "title": "Open in Request Tester",
         "icon": "$(play)"
       },
       {
-        "command": "sorobanpulse.refreshExplorer",
+        "command": "stellarclassicpulse.refreshExplorer",
         "title": "Refresh",
         "icon": "$(refresh)"
       },
       {
-        "command": "sorobanpulse.copyUrl",
+        "command": "stellarclassicpulse.copyUrl",
         "title": "Copy URL",
         "icon": "$(copy)"
       },
       {
-        "command": "sorobanpulse.openSettings",
-        "title": "Soroban Pulse: Open Settings"
+        "command": "stellarclassicpulse.openSettings",
+        "title": "StellarClassic Pulse: Open Settings"
       },
       {
-        "command": "sorobanpulse.setApiKey",
-        "title": "Soroban Pulse: Set API Key"
+        "command": "stellarclassicpulse.setApiKey",
+        "title": "StellarClassic Pulse: Set API Key"
       },
       {
-        "command": "sorobanpulse.setAdminApiKey",
-        "title": "Soroban Pulse: Set Admin API Key"
+        "command": "stellarclassicpulse.setAdminApiKey",
+        "title": "StellarClassic Pulse: Set Admin API Key"
       },
       {
-        "command": "sorobanpulse.clearApiKeys",
-        "title": "Soroban Pulse: Clear Stored API Keys"
+        "command": "stellarclassicpulse.clearApiKeys",
+        "title": "StellarClassic Pulse: Clear Stored API Keys"
       },
       {
-        "command": "sorobanpulse.testWebhook",
-        "title": "Soroban Pulse: Test Webhook",
+        "command": "stellarclassicpulse.testWebhook",
+        "title": "StellarClassic Pulse: Test Webhook",
         "icon": "$(radio-tower)"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "sorobanpulse.refreshExplorer",
-          "when": "view == sorobanpulse.apiExplorer",
+          "command": "stellarclassicpulse.refreshExplorer",
+          "when": "view == stellarclassicpulse.apiExplorer",
           "group": "navigation"
         },
         {
-          "command": "sorobanpulse.testWebhook",
-          "when": "view == sorobanpulse.apiExplorer",
+          "command": "stellarclassicpulse.testWebhook",
+          "when": "view == stellarclassicpulse.apiExplorer",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "sorobanpulse.openRequestTester",
-          "when": "view == sorobanpulse.apiExplorer && viewItem == endpoint",
+          "command": "stellarclassicpulse.openRequestTester",
+          "when": "view == stellarclassicpulse.apiExplorer && viewItem == endpoint",
           "group": "inline"
         },
         {
-          "command": "sorobanpulse.copyUrl",
-          "when": "view == sorobanpulse.apiExplorer && viewItem == endpoint"
+          "command": "stellarclassicpulse.copyUrl",
+          "when": "view == stellarclassicpulse.apiExplorer && viewItem == endpoint"
         }
       ]
     },
     "configuration": {
-      "title": "Soroban Pulse",
+      "title": "StellarClassic Pulse",
       "properties": {
-        "sorobanpulse.baseUrl": {
+        "stellarclassicpulse.baseUrl": {
           "type": "string",
           "default": "http://localhost:3000",
-          "description": "Base URL of the Soroban Pulse API server."
+          "description": "Base URL of the StellarClassic Pulse API server."
         },
-        "sorobanpulse.apiKey": {
+        "stellarclassicpulse.apiKey": {
           "type": "string",
           "default": "",
-          "description": "API key sent as the x-api-key header. Prefer 'Soroban Pulse: Set API Key' instead, which stores it in SecretStorage rather than this plaintext setting; this is kept only as a fallback for existing configs."
+          "description": "API key sent as the x-api-key header. Prefer 'StellarClassic Pulse: Set API Key' instead, which stores it in SecretStorage rather than this plaintext setting; this is kept only as a fallback for existing configs."
         },
-        "sorobanpulse.adminApiKey": {
+        "stellarclassicpulse.adminApiKey": {
           "type": "string",
           "default": "",
           "description": "Admin API key for /admin/* endpoints."
         },
-        "sorobanpulse.timeoutMs": {
+        "stellarclassicpulse.timeoutMs": {
           "type": "number",
           "default": 10000,
           "description": "Request timeout in milliseconds."

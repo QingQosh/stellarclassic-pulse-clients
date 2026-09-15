@@ -4,7 +4,7 @@
 
 ```bash
 EMAIL_SMTP_HOST=smtp.example.com
-EMAIL_FROM=soroban-pulse@example.com
+EMAIL_FROM=stellarclassic-pulse@example.com
 EMAIL_TO=admin@example.com
 ```
 
@@ -77,7 +77,7 @@ Email notifications enabled smtp_host=smtp.example.com recipients=2
 
 Watch the Prometheus metric:
 ```
-soroban_pulse_email_failures_total
+stellarclassic_pulse_email_failures_total
 ```
 
 ## Troubleshooting

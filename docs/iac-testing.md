@@ -1,6 +1,6 @@
 # Infrastructure as Code Testing (Issue #906)
 
-Testing strategy for SorobanPulse's Terraform infrastructure (see [terraform.md](terraform.md) for the module reference and directory layout). This document covers what's already enforced in CI today and the additional layers of IaC testing the checklist asks for.
+Testing strategy for StellarClassicPulse's Terraform infrastructure (see [terraform.md](terraform.md) for the module reference and directory layout). This document covers what's already enforced in CI today and the additional layers of IaC testing the checklist asks for.
 
 ## Current State: `terraform-validate` CI Job
 
@@ -37,7 +37,7 @@ Not yet implemented. Two viable approaches for this codebase's module structure 
   ```
 - **Terratest** (Go) — heavier but supports real `apply`-then-assert-then-`destroy` integration tests against a live sandbox account; better suited to validating cross-module wiring (e.g., that the `alb` security group actually permits the `app` module's port).
 
-Start with native `terraform test` for per-module assertions (fast, no extra dependency) and reserve Terratest for the multi-region composite module once it exists (see the `modules/soroban-pulse` gap noted in [multi-region.md](multi-region.md#terraform-layout)).
+Start with native `terraform test` for per-module assertions (fast, no extra dependency) and reserve Terratest for the multi-region composite module once it exists (see the `modules/stellarclassic-pulse` gap noted in [multi-region.md](multi-region.md#terraform-layout)).
 
 ## Terraform-Compliance Rules
 

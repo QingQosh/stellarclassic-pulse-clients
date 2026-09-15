@@ -2,7 +2,7 @@
 
 _Issue #964_
 
-`spulse` is the command-line client for the Soroban Pulse API — see
+`spulse` is the command-line client for the StellarClassic Pulse API — see
 [`cli/README.md`](../cli/README.md) for install/build instructions. This
 page covers the commands added to round it out into a full API client:
 subscription management, a webhook test command, and configuration.
@@ -54,7 +54,7 @@ spulse subscriptions resume <id>
 
 `webhook-test` sends a single synthetic event — shaped like a real
 delivery payload, flagged with `test_delivery: true` and an
-`x-soroban-pulse-test: true` header — directly to a URL, so you can verify
+`x-stellarclassic-pulse-test: true` header — directly to a URL, so you can verify
 your receiver is reachable and returns 2xx *before* pointing a live
 subscription at it:
 
@@ -68,7 +68,7 @@ response body, and exits non-zero if the receiver didn't return 2xx —
 useful as a pre-flight check in a deploy script.
 
 Note this talks straight to the given URL; it does not go through the
-Soroban Pulse API or use your configured `base_url`/`api_key`.
+StellarClassic Pulse API or use your configured `base_url`/`api_key`.
 
 ## Events, contracts, stats, export
 

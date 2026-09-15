@@ -113,36 +113,36 @@ let (pool, cache) = create_pool_with_plan_cache(
 
 1. **Cache Hit Rate**
    ```
-   soroban_pulse_query_plan_cache_hits_total      # counter — cumulative hits
-   soroban_pulse_query_plan_cache_misses_total    # counter — cumulative misses
-   soroban_pulse_query_plan_cache_hit_ratio       # gauge   — hits/(hits+misses), 0–1
+   stellarclassic_pulse_query_plan_cache_hits_total      # counter — cumulative hits
+   stellarclassic_pulse_query_plan_cache_misses_total    # counter — cumulative misses
+   stellarclassic_pulse_query_plan_cache_hit_ratio       # gauge   — hits/(hits+misses), 0–1
    ```
 
 2. **Planning Time**
    ```
-   soroban_pulse_query_planning_time_ms           # histogram — per-query planning time
+   stellarclassic_pulse_query_planning_time_ms           # histogram — per-query planning time
    ```
 
 3. **Plans Cached & Evicted** *(added in #802)*
    ```
-   soroban_pulse_query_plans_cached_total         # counter — cumulative inserts
-   soroban_pulse_query_plan_cache_evictions_total # counter — LRU/TTL evictions
-   soroban_pulse_query_plan_cache_entry_count     # gauge   — live entries right now
+   stellarclassic_pulse_query_plans_cached_total         # counter — cumulative inserts
+   stellarclassic_pulse_query_plan_cache_evictions_total # counter — LRU/TTL evictions
+   stellarclassic_pulse_query_plan_cache_entry_count     # gauge   — live entries right now
    ```
 
 ### Monitoring Queries
 
 ```promql
 # Cache hit ratio
-rate(soroban_pulse_query_plan_cache_hits_total[5m]) / 
-  (rate(soroban_pulse_query_plan_cache_hits_total[5m]) + 
-   rate(soroban_pulse_query_plan_cache_misses_total[5m]))
+rate(stellarclassic_pulse_query_plan_cache_hits_total[5m]) / 
+  (rate(stellarclassic_pulse_query_plan_cache_hits_total[5m]) + 
+   rate(stellarclassic_pulse_query_plan_cache_misses_total[5m]))
 
 # Average planning time
-histogram_quantile(0.95, rate(soroban_pulse_query_planning_time_ms_bucket[5m]))
+histogram_quantile(0.95, rate(stellarclassic_pulse_query_planning_time_ms_bucket[5m]))
 
 # Total time saved by caching (estimate)
-rate(soroban_pulse_query_plan_cache_hits_total[5m]) * 1.5  # avg 1.5ms per query
+rate(stellarclassic_pulse_query_plan_cache_hits_total[5m]) * 1.5  # avg 1.5ms per query
 ```
 
 ## Best Practices
@@ -267,8 +267,8 @@ Benefits of persistent connections:
 ### Memory Usage
 Monitor cache size:
 ```
-soroban_pulse_query_plans_cached_total
-  / soroban_pulse_query_plan_cache_max_capacity
+stellarclassic_pulse_query_plans_cached_total
+  / stellarclassic_pulse_query_plan_cache_max_capacity
 ```
 
 Typical memory per cached plan: ~500 bytes - 2KB
