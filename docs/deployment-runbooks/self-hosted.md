@@ -1,12 +1,12 @@
 # Self-Hosted Deployment Runbook
 
-Deploys SorobanPulse on infrastructure you already control — a bare-metal or
+Deploys StellarClassicPulse on infrastructure you already control — a bare-metal or
 on-prem Linux server, or any VM you manage yourself — with **no cloud
 provider assumed**. This runbook covers three sub-scenarios, from least to
 most containerized:
 
 - **(a) [Bare metal / on-prem, no containers](#a-bare-metal--on-prem-no-containers)**
-  — the compiled `soroban-pulse` binary run directly under systemd.
+  — the compiled `stellarclassic-pulse` binary run directly under systemd.
 - **(b) [Docker Compose](#b-docker-compose)** — the root
   [`docker-compose.yml`](../../docker-compose.yml) as-is, or lightly adapted
   for production.
@@ -27,7 +27,7 @@ Common to all three sub-scenarios:
   RPC endpoint (`STELLAR_RPC_URL`, default
   `https://soroban-testnet.stellar.org`).
 - A reachable PostgreSQL 16 instance — either on the same host, on another
-  host you manage, or a managed database. SorobanPulse applies its own
+  host you manage, or a managed database. StellarClassicPulse applies its own
   schema migrations automatically on startup (`db::run_migrations` in
   `src/main.rs`); no separate migration step is required before first boot.
 - A copy of this repository (or at least `migrations/`, `Dockerfile`, and
@@ -53,7 +53,7 @@ Common to all three sub-scenarios:
                           HTTP :3000
                                  │
                  ┌───────────────────────────────┐
-                 │  soroban-pulse                 │
+                 │  stellarclassic-pulse                 │
                  │  (a) systemd + bare binary      │
                  │  (b) docker compose "app" svc   │
                  │  (c) systemd + docker container │
@@ -80,24 +80,24 @@ runbooks against your own network.
    ```bash
    cargo build --release
    # Binary name comes from Cargo.toml's [[bin]] section:
-   #   name = "soroban-pulse", produced at target/release/soroban-pulse
+   #   name = "stellarclassic-pulse", produced at target/release/stellarclassic-pulse
    ```
 
 2. **Install the binary and migrations.**
    ```bash
-   sudo mkdir -p /opt/soroban-pulse/bin /opt/soroban-pulse/migrations
-   sudo cp target/release/soroban-pulse /opt/soroban-pulse/bin/
-   sudo cp -r migrations/. /opt/soroban-pulse/migrations/
+   sudo mkdir -p /opt/stellarclassic-pulse/bin /opt/stellarclassic-pulse/migrations
+   sudo cp target/release/stellarclassic-pulse /opt/stellarclassic-pulse/bin/
+   sudo cp -r migrations/. /opt/stellarclassic-pulse/migrations/
    sudo useradd --system --no-create-home --shell /usr/sbin/nologin soroban || true
-   sudo chown -R soroban:soroban /opt/soroban-pulse
+   sudo chown -R soroban:soroban /opt/stellarclassic-pulse
    ```
 
 3. **Write the environment file** (mirrors [`.env.example`](../../.env.example);
    keep it root-readable only since it holds `DATABASE_URL`/`API_KEY`):
    ```bash
-   sudo install -m 640 -o root -g soroban /dev/null /etc/soroban-pulse.env
-   sudo tee /etc/soroban-pulse.env >/dev/null <<'EOF'
-   DATABASE_URL=postgres://soroban:CHANGE_ME@localhost:5432/soroban_pulse
+   sudo install -m 640 -o root -g soroban /dev/null /etc/stellarclassic-pulse.env
+   sudo tee /etc/stellarclassic-pulse.env >/dev/null <<'EOF'
+   DATABASE_URL=postgres://soroban:CHANGE_ME@localhost:5432/stellarclassic_pulse
    STELLAR_RPC_URL=https://soroban-testnet.stellar.org
    PORT=3000
    RUST_LOG=info
@@ -108,10 +108,10 @@ runbooks against your own network.
    EOF
    ```
 
-4. **Create the systemd unit** at `/etc/systemd/system/soroban-pulse.service`:
+4. **Create the systemd unit** at `/etc/systemd/system/stellarclassic-pulse.service`:
    ```ini
    [Unit]
-   Description=SorobanPulse indexer/API
+   Description=StellarClassicPulse indexer/API
    After=network-online.target postgresql.service
    Wants=network-online.target
 
@@ -119,15 +119,15 @@ runbooks against your own network.
    Type=simple
    User=soroban
    Group=soroban
-   WorkingDirectory=/opt/soroban-pulse
-   EnvironmentFile=/etc/soroban-pulse.env
-   ExecStart=/opt/soroban-pulse/bin/soroban-pulse
+   WorkingDirectory=/opt/stellarclassic-pulse
+   EnvironmentFile=/etc/stellarclassic-pulse.env
+   ExecStart=/opt/stellarclassic-pulse/bin/stellarclassic-pulse
    Restart=on-failure
    RestartSec=5
    # Same idea as the Dockerfile's non-root soroban:soroban user
    NoNewPrivileges=true
    ProtectSystem=strict
-   ReadWritePaths=/opt/soroban-pulse
+   ReadWritePaths=/opt/stellarclassic-pulse
 
    [Install]
    WantedBy=multi-user.target
@@ -136,8 +136,8 @@ runbooks against your own network.
 5. **Enable and start it:**
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable --now soroban-pulse
-   sudo systemctl status soroban-pulse
+   sudo systemctl enable --now stellarclassic-pulse
+   sudo systemctl status stellarclassic-pulse
    ```
 
 ### (b) Docker Compose
@@ -182,23 +182,23 @@ Use this when you want Docker's image packaging but systemd's supervision
 1. **Build (or pull) the image** on the target host, or push to a registry
    and pull it there:
    ```bash
-   docker build -t soroban-pulse:latest .
+   docker build -t stellarclassic-pulse:latest .
    ```
 
 2. **Write the environment file** — same content as in scenario (a):
    ```bash
-   sudo install -m 640 -o root -g root /dev/null /etc/soroban-pulse.env
+   sudo install -m 640 -o root -g root /dev/null /etc/stellarclassic-pulse.env
    # ... populate as in step 3 of scenario (a), using the db container's
    # hostname/port instead of localhost if Postgres also runs in Docker
    ```
 
 3. **Create the systemd unit** at
-   `/etc/systemd/system/soroban-pulse-container.service`. Docker containers
+   `/etc/systemd/system/stellarclassic-pulse-container.service`. Docker containers
    are foreground-run under `docker run --rm` so systemd can track the
    process; `ExecStartPre`/`ExecStop` clean up any stale container:
    ```ini
    [Unit]
-   Description=SorobanPulse (Docker container, systemd-supervised)
+   Description=StellarClassicPulse (Docker container, systemd-supervised)
    After=network-online.target docker.service
    Requires=docker.service
    Wants=network-online.target
@@ -206,12 +206,12 @@ Use this when you want Docker's image packaging but systemd's supervision
    [Service]
    Type=simple
    TimeoutStartSec=0
-   ExecStartPre=-/usr/bin/docker rm -f soroban-pulse
-   ExecStart=/usr/bin/docker run --rm --name soroban-pulse \
-     --env-file /etc/soroban-pulse.env \
+   ExecStartPre=-/usr/bin/docker rm -f stellarclassic-pulse
+   ExecStart=/usr/bin/docker run --rm --name stellarclassic-pulse \
+     --env-file /etc/stellarclassic-pulse.env \
      -p 3000:3000 \
-     soroban-pulse:latest
-   ExecStop=/usr/bin/docker stop -t 10 soroban-pulse
+     stellarclassic-pulse:latest
+   ExecStop=/usr/bin/docker stop -t 10 stellarclassic-pulse
    Restart=on-failure
    RestartSec=5
 
@@ -222,8 +222,8 @@ Use this when you want Docker's image packaging but systemd's supervision
 4. **Enable and start it:**
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable --now soroban-pulse-container
-   sudo journalctl -u soroban-pulse-container -f
+   sudo systemctl enable --now stellarclassic-pulse-container
+   sudo journalctl -u stellarclassic-pulse-container -f
    ```
 
 ## Verification
@@ -244,26 +244,26 @@ curl -sf http://localhost:3000/v1/events?limit=1 | jq .
 psql "$DATABASE_URL" -c "SELECT 1;"
 
 # 4. Indexer progress
-curl -sf http://localhost:3000/metrics | grep soroban_pulse_indexer_current_ledger
+curl -sf http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_current_ledger
 
 # 5. Process/service status
 # (a) bare metal:
-sudo systemctl status soroban-pulse
+sudo systemctl status stellarclassic-pulse
 # (b) Docker Compose:
 docker compose ps app
 # (c) systemd-managed container:
-sudo systemctl status soroban-pulse-container
+sudo systemctl status stellarclassic-pulse-container
 ```
 
 ## Rollback
 
 - **(a) Bare metal**: keep the previous binary alongside the new one
-  (e.g. `soroban-pulse.previous`) before overwriting it, so you can restore
+  (e.g. `stellarclassic-pulse.previous`) before overwriting it, so you can restore
   it and restart:
   ```bash
-  sudo systemctl stop soroban-pulse
-  sudo cp /opt/soroban-pulse/bin/soroban-pulse.previous /opt/soroban-pulse/bin/soroban-pulse
-  sudo systemctl start soroban-pulse
+  sudo systemctl stop stellarclassic-pulse
+  sudo cp /opt/stellarclassic-pulse/bin/stellarclassic-pulse.previous /opt/stellarclassic-pulse/bin/stellarclassic-pulse
+  sudo systemctl start stellarclassic-pulse
   ```
 - **(b) Docker Compose**: pin the `app` service to the previous image tag
   and redeploy: `docker compose up -d app` after editing the `image:`/`build:`
@@ -272,8 +272,8 @@ sudo systemctl status soroban-pulse-container
 - **(c) systemd-managed container**: retag or re-pull the previous image
   under the same local tag, then restart the unit:
   ```bash
-  docker tag soroban-pulse:<previous-tag> soroban-pulse:latest
-  sudo systemctl restart soroban-pulse-container
+  docker tag stellarclassic-pulse:<previous-tag> stellarclassic-pulse:latest
+  sudo systemctl restart stellarclassic-pulse-container
   ```
 - **All three**: if a database migration shipped with the bad release, follow
   the migration rollback procedure in
@@ -287,8 +287,8 @@ sudo systemctl status soroban-pulse-container
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| `systemctl status` shows `activating (auto-restart)` in a loop | Binary panics on startup — often a missing/invalid env var | `journalctl -u soroban-pulse -n 100 --no-pager`; verify `/etc/soroban-pulse.env` against [`.env.example`](../../.env.example) |
-| `Permission denied` starting the binary | `soroban` user lacks execute permission, or `ProtectSystem=strict` blocks a path the app needs | `ls -l /opt/soroban-pulse/bin/soroban-pulse`; add the path to `ReadWritePaths=` in the unit if genuinely needed |
+| `systemctl status` shows `activating (auto-restart)` in a loop | Binary panics on startup — often a missing/invalid env var | `journalctl -u stellarclassic-pulse -n 100 --no-pager`; verify `/etc/stellarclassic-pulse.env` against [`.env.example`](../../.env.example) |
+| `Permission denied` starting the binary | `soroban` user lacks execute permission, or `ProtectSystem=strict` blocks a path the app needs | `ls -l /opt/stellarclassic-pulse/bin/stellarclassic-pulse`; add the path to `ReadWritePaths=` in the unit if genuinely needed |
 | App starts but can't reach Postgres | `postgresql.service` not actually up yet despite `After=` ordering, or wrong `DATABASE_URL` host | `systemctl status postgresql`; `psql "$DATABASE_URL" -c "SELECT 1;"` as the `soroban` user |
 | Binary fails to build (`error: linking with cc failed`, missing `libssl`) | Missing build dependencies the Dockerfile installs (`pkg-config`, `libssl-dev`) | `sudo apt-get install -y pkg-config libssl-dev` (matches the `builder` stage in the [Dockerfile](../../Dockerfile)) |
 
@@ -306,8 +306,8 @@ sudo systemctl status soroban-pulse-container
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | `systemctl start` fails immediately with `docker: command not found` equivalent | Docker Engine not installed or `docker.service` not running | `systemctl status docker`; `sudo systemctl enable --now docker` |
-| Old container still running after a redeploy | `ExecStartPre=-/usr/bin/docker rm -f soroban-pulse` didn't run (unit not restarted) | `sudo systemctl restart soroban-pulse-container` (not just `start`) so `ExecStartPre` fires |
-| `journalctl -u soroban-pulse-container` shows nothing | Container logs go to Docker's own log driver, not directly to the journal, when run detached — but this unit runs it in the foreground (`docker run` without `-d`), so logs should appear; if not, check the container actually started | `docker ps -a | grep soroban-pulse`; `docker logs soroban-pulse` |
+| Old container still running after a redeploy | `ExecStartPre=-/usr/bin/docker rm -f stellarclassic-pulse` didn't run (unit not restarted) | `sudo systemctl restart stellarclassic-pulse-container` (not just `start`) so `ExecStartPre` fires |
+| `journalctl -u stellarclassic-pulse-container` shows nothing | Container logs go to Docker's own log driver, not directly to the journal, when run detached — but this unit runs it in the foreground (`docker run` without `-d`), so logs should appear; if not, check the container actually started | `docker ps -a | grep stellarclassic-pulse`; `docker logs stellarclassic-pulse` |
 | systemd reports the unit `exited, code=exited, status=125` | `docker run` itself failed (bad flag, image not found) before the app even started | Run the same `ExecStart` command manually to see Docker's own error output |
 
 For anything beyond the deployment itself (indexer lag, RPC errors, webhook

@@ -6,9 +6,17 @@
 
 Closes #<!-- issue number -->
 
-## Changes
+## Affected Component
 
-<!-- List the key changes made. -->
+- [ ] `dashboard/`
+- [ ] `cli/`
+- [ ] `sdk/javascript` or `sdk/typescript`
+- [ ] `sdk/python`
+- [ ] `sdk/go`
+- [ ] `vscode-extension/`
+- [ ] `docs/`
+
+## Changes
 
 - 
 
@@ -16,9 +24,15 @@ Closes #<!-- issue number -->
 
 <!-- Describe how you tested this. -->
 
-- [ ] `cargo test` passes
-- [ ] `cargo clippy` reports no warnings
+- [ ] Existing tests pass
+- [ ] New tests added (or explain why not needed)
 - [ ] Manually tested locally
+
+## Wave Program Checklist (if applicable)
+
+- [ ] This PR resolves the issue I was accepted for on Drips Wave
+- [ ] Acceptance criteria from the issue are all met
+- [ ] No unrelated changes included
 
 ## Notes
 

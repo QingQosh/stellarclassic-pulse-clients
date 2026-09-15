@@ -1,7 +1,7 @@
 # Postman Collection Generator
 
 Generates a Postman Collection v2.1 and three environment files from the
-Soroban Pulse OpenAPI spec.
+StellarClassic Pulse OpenAPI spec.
 
 ## Quick start
 
@@ -29,8 +29,8 @@ postman/
 ├── Soroban_Pulse.postman_collection.json   # Import this into Postman
 └── environments/
     ├── local.postman_environment.json      # http://localhost:3000
-    ├── testnet.postman_environment.json    # https://api.testnet.sorobanpulse.io
-    └── mainnet.postman_environment.json    # https://api.sorobanpulse.io
+    ├── testnet.postman_environment.json    # https://api.testnet.stellarclassicpulse.io
+    └── mainnet.postman_environment.json    # https://api.stellarclassicpulse.io
 ```
 
 ## Importing into Postman

@@ -1,6 +1,6 @@
 # Distributed Tracing Configuration (Issue #895)
 
-Soroban Pulse implements comprehensive OpenTelemetry distributed tracing for all critical operations.
+StellarClassic Pulse implements comprehensive OpenTelemetry distributed tracing for all critical operations.
 
 ## Overview
 
@@ -20,7 +20,7 @@ The distributed tracing system provides:
 | Variable | Type | Default | Description |
 |----------|------|---------|-------------|
 | `TRACE_SAMPLE_RATE` | float (0-1) | `1.0` | Sampling probability for new traces |
-| `TRACE_SERVICE_NAME` | string | `soroban-pulse` | Service name in traces |
+| `TRACE_SERVICE_NAME` | string | `stellarclassic-pulse` | Service name in traces |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | URL | - | OTLP receiver endpoint (e.g., Jaeger) |
 | `OTEL_EXPORTER_OTLP_HEADERS` | string | - | Additional OTLP headers (e.g., auth) |
 | `OTEL_TRACES_EXPORTER` | string | `otlp` | Trace exporter type |
@@ -137,13 +137,13 @@ export TRACE_SAMPLE_RATE=0.1
 ```bash
 export OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io:443/v1/traces
 export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY}"
-export TRACE_SERVICE_NAME=soroban-pulse
+export TRACE_SERVICE_NAME=stellarclassic-pulse
 export TRACE_SAMPLE_RATE=0.1
 ```
 
 ### Querying
 Use Honeycomb's UI to:
-1. Filter by service name: `soroban_pulse`
+1. Filter by service name: `stellarclassic_pulse`
 2. Drill down by span type (e.g., `webhook.deliver`)
 3. Analyze latency distributions
 4. Create alerts on error rates
@@ -179,10 +179,10 @@ Tracing exports the following metrics:
 
 | Metric | Type | Description |
 |--------|------|-------------|
-| `soroban_pulse_trace_spans_created_total` | Counter | Spans created (labeled by span_name) |
-| `soroban_pulse_trace_samples_total` | Counter | Sampling decisions (labeled by sampled) |
-| `soroban_pulse_trace_sample_rate` | Gauge | Current sampling rate (0-1) |
-| `soroban_pulse_trace_injection_latency_ms` | Gauge | Header injection latency |
+| `stellarclassic_pulse_trace_spans_created_total` | Counter | Spans created (labeled by span_name) |
+| `stellarclassic_pulse_trace_samples_total` | Counter | Sampling decisions (labeled by sampled) |
+| `stellarclassic_pulse_trace_sample_rate` | Gauge | Current sampling rate (0-1) |
+| `stellarclassic_pulse_trace_injection_latency_ms` | Gauge | Header injection latency |
 
 ## Best Practices
 
@@ -190,7 +190,7 @@ Tracing exports the following metrics:
 2. **Sample judiciously**: High sampling rates in production can impact performance
 3. **Limit query text**: Query text is sampled; sensitive data is redacted
 4. **Monitor span count**: Watch for N+1 query patterns in distributed traces
-5. **Set meaningful service names**: Use deployment-specific names (e.g., `soroban-pulse-prod`)
+5. **Set meaningful service names**: Use deployment-specific names (e.g., `stellarclassic-pulse-prod`)
 
 ## Troubleshooting
 

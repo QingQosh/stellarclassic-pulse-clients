@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-REST client with enhanced retry and backoff configuration for Soroban Pulse SDK
+REST client with enhanced retry and backoff configuration for StellarClassic Pulse SDK
 
 This module provides retry policy integration for the REST client.
 """

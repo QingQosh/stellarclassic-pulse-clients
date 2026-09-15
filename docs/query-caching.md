@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse implements intelligent caching for frequently accessed queries with smart invalidation strategies. The cache system includes hit/miss tracking, pattern-based invalidation, and tenant-aware cache management.
+StellarClassicPulse implements intelligent caching for frequently accessed queries with smart invalidation strategies. The cache system includes hit/miss tracking, pattern-based invalidation, and tenant-aware cache management.
 
 ## Architecture
 
@@ -16,7 +16,7 @@ SorobanPulse implements intelligent caching for frequently accessed queries with
 ## Enabling Caching
 
 ```rust
-use soroban_pulse::query_cache;
+use stellarclassic_pulse::query_cache;
 
 // Initialize cache at startup
 let cache = query_cache::build(300, 10_000);  // 5-min TTL, 10k entries max
@@ -71,7 +71,7 @@ user_events:user123:contract456
 
 ```rust
 use serde_json::json;
-use soroban_pulse::query_cache;
+use stellarclassic_pulse::query_cache;
 
 let key = "contract_event_counts:0xABC123".to_string();
 let result = json!({
@@ -103,7 +103,7 @@ if let Some(cached_result) = query_cache::get(&cache, key).await {
 The cache supports multiple invalidation strategies:
 
 ```rust
-use soroban_pulse::query_cache::InvalidationTrigger;
+use stellarclassic_pulse::query_cache::InvalidationTrigger;
 
 enum InvalidationTrigger {
     EventIngestion,         // New events arrive
@@ -145,7 +145,7 @@ invalidator.invalidate_by_trigger(
 ### Hit Rate Calculation
 
 ```rust
-use soroban_pulse::query_cache::CacheStats;
+use stellarclassic_pulse::query_cache::CacheStats;
 
 let stats = CacheStats {
     hits: 750,
@@ -159,10 +159,10 @@ println!("Hit rate: {:.1}%", stats.hit_rate() * 100.0);  // 75.0%
 ### Monitoring Metrics
 
 ```
-soroban_pulse_query_cache_hits{query_type="contract_event_counts"}
-soroban_pulse_query_cache_misses{query_type="contract_event_counts"}
-soroban_pulse_query_cache_evictions{query_type="contract_event_counts"}
-soroban_pulse_query_cache_invalidations{trigger="event_ingestion"}
+stellarclassic_pulse_query_cache_hits{query_type="contract_event_counts"}
+stellarclassic_pulse_query_cache_misses{query_type="contract_event_counts"}
+stellarclassic_pulse_query_cache_evictions{query_type="contract_event_counts"}
+stellarclassic_pulse_query_cache_invalidations{trigger="event_ingestion"}
 ```
 
 ## Database Schema

@@ -1,11 +1,11 @@
 # Log Aggregation Setup
 
-Soroban Pulse emits structured JSON logs when `RUST_LOG_FORMAT=json`. This document covers integration with ELK Stack, Datadog, and AWS CloudWatch.
+StellarClassic Pulse emits structured JSON logs when `RUST_LOG_FORMAT=json`. This document covers integration with ELK Stack, Datadog, and AWS CloudWatch.
 
 ## Enabling JSON Logs
 
 ```bash
-RUST_LOG_FORMAT=json RUST_LOG=info ./soroban-pulse
+RUST_LOG_FORMAT=json RUST_LOG=info ./stellarclassic-pulse
 ```
 
 Example log line:
@@ -17,7 +17,7 @@ Example log line:
   "message": "Event indexed",
   "contract_id": "CABC...XYZ",
   "ledger": 54321,
-  "target": "soroban_pulse::indexer"
+  "target": "stellarclassic_pulse::indexer"
 }
 ```
 
@@ -41,11 +41,11 @@ filebeat.inputs:
       - add_fields:
           target: service
           fields:
-            name: soroban-pulse
+            name: stellarclassic-pulse
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
-  index: "soroban-pulse-%{+yyyy.MM.dd}"
+  index: "stellarclassic-pulse-%{+yyyy.MM.dd}"
 
 setup.template.settings:
   index.number_of_shards: 1
@@ -54,13 +54,13 @@ setup.template.settings:
 ### Logstash Pipeline
 
 ```ruby
-# logstash/pipeline/soroban-pulse.conf
+# logstash/pipeline/stellarclassic-pulse.conf
 input {
   beats { port => 5044 }
 }
 
 filter {
-  if [service][name] == "soroban-pulse" {
+  if [service][name] == "stellarclassic-pulse" {
     json { source => "message" }
     date { match => ["timestamp", "ISO8601"] target => "@timestamp" }
     mutate {
@@ -73,7 +73,7 @@ filter {
 output {
   elasticsearch {
     hosts => ["http://elasticsearch:9200"]
-    index => "soroban-pulse-%{+YYYY.MM.dd}"
+    index => "stellarclassic-pulse-%{+YYYY.MM.dd}"
   }
 }
 ```
@@ -95,10 +95,10 @@ output {
 ### datadog-agent.yaml
 
 ```yaml
-# /etc/datadog-agent/conf.d/soroban_pulse.d/conf.yaml
+# /etc/datadog-agent/conf.d/stellarclassic_pulse.d/conf.yaml
 logs:
   - type: docker
-    service: soroban-pulse
+    service: stellarclassic-pulse
     source: rust
     tags:
       - env:production
@@ -121,10 +121,10 @@ Create a pipeline in Datadog with these processors:
 ### Useful Datadog Queries
 
 ```
-service:soroban-pulse level:ERROR                        # All errors
-service:soroban-pulse @contract_id:CABC*                 # Contract-specific logs
-service:soroban-pulse @ledger:[50000 TO 60000]           # Ledger range
-service:soroban-pulse @correlation_id:<id>               # Request trace
+service:stellarclassic-pulse level:ERROR                        # All errors
+service:stellarclassic-pulse @contract_id:CABC*                 # Contract-specific logs
+service:stellarclassic-pulse @ledger:[50000 TO 60000]           # Ledger range
+service:stellarclassic-pulse @correlation_id:<id>               # Request trace
 ```
 
 ---
@@ -140,8 +140,8 @@ service:soroban-pulse @correlation_id:<id>               # Request trace
       "files": {
         "collect_list": [
           {
-            "file_path": "/var/log/soroban-pulse/*.log",
-            "log_group_name": "/soroban-pulse/application",
+            "file_path": "/var/log/stellarclassic-pulse/*.log",
+            "log_group_name": "/stellarclassic-pulse/application",
             "log_stream_name": "{instance_id}",
             "timestamp_format": "%Y-%m-%dT%H:%M:%S",
             "timezone": "UTC",
@@ -170,23 +170,23 @@ data:
 
     [INPUT]
         Name             tail
-        Path             /var/log/containers/soroban-pulse*.log
+        Path             /var/log/containers/stellarclassic-pulse*.log
         Parser           docker
-        Tag              soroban.pulse.*
+        Tag              stellarclassic.pulse.*
         Refresh_Interval 5
 
     [FILTER]
         Name    parser
-        Match   soroban.pulse.*
+        Match   stellarclassic.pulse.*
         Key_Name log
         Parser  json
 
     [OUTPUT]
         Name              cloudwatch_logs
-        Match             soroban.pulse.*
+        Match             stellarclassic.pulse.*
         region            us-east-1
-        log_group_name    /soroban-pulse/application
-        log_stream_prefix soroban-pulse-
+        log_group_name    /stellarclassic-pulse/application
+        log_stream_prefix stellarclassic-pulse-
         auto_create_group true
 ```
 
@@ -216,14 +216,14 @@ fields @timestamp, ledger, message
 
 ## Structured Log Parsing Reference
 
-All Soroban Pulse log fields follow the conventions in `docs/logging.md`.
+All StellarClassic Pulse log fields follow the conventions in `docs/logging.md`.
 
 | Field | Present When | Example |
 |-------|-------------|---------|
 | `timestamp` | Always | `2026-06-27T03:00:00Z` |
 | `level` | Always | `INFO` |
 | `message` | Always | `Event indexed` |
-| `target` | Always | `soroban_pulse::indexer` |
+| `target` | Always | `stellarclassic_pulse::indexer` |
 | `contract_id` | Event context | `CABC...XYZ` |
 | `tx_hash` | Event context | `a1b2c3...` |
 | `ledger` | Event context | `54321` |

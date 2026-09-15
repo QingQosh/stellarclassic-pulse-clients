@@ -69,7 +69,7 @@
       }
     ]
   },
-  "description": "Soroban Pulse operational metrics dashboard with event flow visualization, lag heatmaps, contract popularity, and webhook delivery monitoring",
+  "description": "StellarClassic Pulse operational metrics dashboard with event flow visualization, lag heatmaps, contract popularity, and webhook delivery monitoring",
   "theme": "dark",
   "style": "dark",
   "editable": true,
@@ -153,7 +153,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_indexer_lag_ledgers{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_indexer_lag_ledgers{instance=~\"$instance\"}",
           "legendFormat": "lag (ledgers)",
           "refId": "A"
         }
@@ -204,7 +204,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "rate(soroban_pulse_events_indexed_total{instance=~\"$instance\"}[1m]) * 60",
+          "expr": "rate(stellarclassic_pulse_events_indexed_total{instance=~\"$instance\"}[1m]) * 60",
           "legendFormat": "events/min",
           "refId": "A"
         }
@@ -271,7 +271,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "rate(soroban_pulse_rpc_errors_total{instance=~\"$instance\"}[5m]) / (rate(soroban_pulse_rpc_errors_total{instance=~\"$instance\"}[5m]) + rate(soroban_pulse_events_indexed_total{instance=~\"$instance\"}[5m]) + 0.001)",
+          "expr": "rate(stellarclassic_pulse_rpc_errors_total{instance=~\"$instance\"}[5m]) / (rate(stellarclassic_pulse_rpc_errors_total{instance=~\"$instance\"}[5m]) + rate(stellarclassic_pulse_events_indexed_total{instance=~\"$instance\"}[5m]) + 0.001)",
           "legendFormat": "RPC error rate",
           "refId": "A"
         }
@@ -321,7 +321,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_indexer_current_ledger{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_indexer_current_ledger{instance=~\"$instance\"}",
           "legendFormat": "current ledger",
           "refId": "A"
         },
@@ -330,7 +330,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_indexer_latest_ledger{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_indexer_latest_ledger{instance=~\"$instance\"}",
           "legendFormat": "latest ledger",
           "refId": "B"
         }
@@ -393,7 +393,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum by (route, method) (rate(soroban_pulse_http_request_duration_seconds_count{instance=~\"$instance\"}[1m]))",
+          "expr": "sum by (route, method) (rate(stellarclassic_pulse_http_request_duration_seconds_count{instance=~\"$instance\"}[1m]))",
           "legendFormat": "{{method}} {{route}}",
           "refId": "A"
         }
@@ -464,7 +464,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(soroban_pulse_http_request_duration_seconds_bucket{instance=~\"$instance\"}[5m])))",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(stellarclassic_pulse_http_request_duration_seconds_bucket{instance=~\"$instance\"}[5m])))",
           "legendFormat": "p50",
           "refId": "A"
         },
@@ -473,7 +473,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(soroban_pulse_http_request_duration_seconds_bucket{instance=~\"$instance\"}[5m])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(stellarclassic_pulse_http_request_duration_seconds_bucket{instance=~\"$instance\"}[5m])))",
           "legendFormat": "p95",
           "refId": "B"
         },
@@ -482,7 +482,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "histogram_quantile(0.99, sum by (le) (rate(soroban_pulse_http_request_duration_seconds_bucket{instance=~\"$instance\"}[5m])))",
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(stellarclassic_pulse_http_request_duration_seconds_bucket{instance=~\"$instance\"}[5m])))",
           "legendFormat": "p99",
           "refId": "C"
         }
@@ -549,7 +549,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "rate(soroban_pulse_http_request_duration_seconds_count{instance=~\"$instance\",status=~\"5..\"}[5m]) / rate(soroban_pulse_http_request_duration_seconds_count{instance=~\"$instance\"}[5m])",
+          "expr": "rate(stellarclassic_pulse_http_request_duration_seconds_count{instance=~\"$instance\",status=~\"5..\"}[5m]) / rate(stellarclassic_pulse_http_request_duration_seconds_count{instance=~\"$instance\"}[5m])",
           "legendFormat": "5xx error rate",
           "refId": "A"
         }
@@ -632,7 +632,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_db_pool_size{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_db_pool_size{instance=~\"$instance\"}",
           "legendFormat": "pool size (active)",
           "refId": "A"
         },
@@ -641,7 +641,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_db_pool_idle{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_db_pool_idle{instance=~\"$instance\"}",
           "legendFormat": "pool idle",
           "refId": "B"
         }
@@ -712,7 +712,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_sse_connections_active{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_sse_connections_active{instance=~\"$instance\"}",
           "legendFormat": "active SSE connections",
           "refId": "A"
         }
@@ -777,7 +777,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_unused_indexes_total",
+          "expr": "stellarclassic_pulse_unused_indexes_total",
           "legendFormat": "Unused indexes",
           "refId": "A"
         }
@@ -812,7 +812,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_index_scan_count",
+          "expr": "stellarclassic_pulse_index_scan_count",
           "legendFormat": "{{table}} / {{index}}",
           "refId": "A"
         }
@@ -890,7 +890,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "rate(soroban_pulse_events_indexed_total{instance=~\"$instance\"}[1m]) * 60",
+          "expr": "rate(stellarclassic_pulse_events_indexed_total{instance=~\"$instance\"}[1m]) * 60",
           "legendFormat": "Events/min",
           "refId": "A"
         },
@@ -899,7 +899,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "rate(soroban_pulse_events_indexed_total{instance=~\"$instance\"}[1m] offset 5m) * 60",
+          "expr": "rate(stellarclassic_pulse_events_indexed_total{instance=~\"$instance\"}[1m] offset 5m) * 60",
           "legendFormat": "Events/min (prev)",
           "refId": "B"
         }
@@ -967,7 +967,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_indexer_lag_ledgers{instance=~\"$instance\"}",
+          "expr": "stellarclassic_pulse_indexer_lag_ledgers{instance=~\"$instance\"}",
           "legendFormat": "Current Lag",
           "refId": "A"
         },
@@ -976,7 +976,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "soroban_pulse_indexer_lag_ledgers{instance=~\"$instance\"} offset 5m",
+          "expr": "stellarclassic_pulse_indexer_lag_ledgers{instance=~\"$instance\"} offset 5m",
           "legendFormat": "Lag (5m ago)",
           "refId": "B"
         }
@@ -1044,7 +1044,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "(sum(rate(soroban_pulse_webhook_delivery_success_total{instance=~\"$instance\"}[5m])) / (sum(rate(soroban_pulse_webhook_delivery_success_total{instance=~\"$instance\"}[5m])) + sum(rate(soroban_pulse_webhook_failures_total{instance=~\"$instance\"}[5m])) + 0.001)) * 100",
+          "expr": "(sum(rate(stellarclassic_pulse_webhook_delivery_success_total{instance=~\"$instance\"}[5m])) / (sum(rate(stellarclassic_pulse_webhook_delivery_success_total{instance=~\"$instance\"}[5m])) + sum(rate(stellarclassic_pulse_webhook_failures_total{instance=~\"$instance\"}[5m])) + 0.001)) * 100",
           "legendFormat": "Webhook Success Rate",
           "refId": "A"
         }
@@ -1114,7 +1114,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(rate(soroban_pulse_notification_delivery_success_total{instance=~\"$instance\"}[5m])) * 60",
+          "expr": "sum(rate(stellarclassic_pulse_notification_delivery_success_total{instance=~\"$instance\"}[5m])) * 60",
           "legendFormat": "Deliveries/min",
           "refId": "A"
         },
@@ -1123,7 +1123,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(rate(soroban_pulse_notification_delivery_success_total{instance=~\"$instance\"}[5m] offset 5m)) * 60",
+          "expr": "sum(rate(stellarclassic_pulse_notification_delivery_success_total{instance=~\"$instance\"}[5m] offset 5m)) * 60",
           "legendFormat": "Deliveries/min (prev)",
           "refId": "B"
         }
@@ -1201,7 +1201,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "sum(rate(soroban_pulse_indexer_lag_observation_ledgers_bucket{instance=~\"$instance\"}[5m])) by (le)",
+          "expr": "sum(rate(stellarclassic_pulse_indexer_lag_observation_ledgers_bucket{instance=~\"$instance\"}[5m])) by (le)",
           "format": "heatmap",
           "legendFormat": "{{le}}",
           "refId": "A"
@@ -1263,7 +1263,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "topk(10, soroban_pulse_contract_event_count{instance=~\"$instance\"})",
+          "expr": "topk(10, stellarclassic_pulse_contract_event_count{instance=~\"$instance\"})",
           "legendFormat": "{{contract_id}}",
           "refId": "A"
         }
@@ -1299,7 +1299,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values(soroban_pulse_indexer_lag_ledgers, instance)",
+        "definition": "label_values(stellarclassic_pulse_indexer_lag_ledgers, instance)",
         "hide": 0,
         "includeAll": true,
         "label": "Instance",
@@ -1307,7 +1307,7 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(soroban_pulse_indexer_lag_ledgers, instance)",
+          "query": "label_values(stellarclassic_pulse_indexer_lag_ledgers, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1322,7 +1322,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Soroban Pulse",
-  "uid": "soroban-pulse-v1",
+  "title": "StellarClassic Pulse",
+  "uid": "stellarclassic-pulse-v1",
   "version": 1
 }

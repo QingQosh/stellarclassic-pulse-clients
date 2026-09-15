@@ -36,7 +36,7 @@ Pact is a consumer-driven contract testing framework that:
 
 ## Testing Scope
 
-Our contract tests cover the following SorobanPulse API endpoints:
+Our contract tests cover the following StellarClassicPulse API endpoints:
 
 | Endpoint | Method | Purpose | Tests |
 |----------|--------|---------|-------|

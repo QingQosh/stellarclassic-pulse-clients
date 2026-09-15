@@ -1,5 +1,5 @@
 /**
- * Soroban Pulse TypeScript SDK - Usage Examples
+ * StellarClassic Pulse TypeScript SDK - Usage Examples
  * 
  * This file demonstrates common usage patterns for the SDK including:
  * - Basic event queries
@@ -20,7 +20,7 @@ import {
 
 async function basicEventQuery() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key", // optional
   });
 
@@ -51,7 +51,7 @@ async function basicEventQuery() {
 
 async function withRetryConfiguration() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     
     // Retry configuration
@@ -85,7 +85,7 @@ async function withRetryConfiguration() {
 
 async function aggressiveRetryPolicy() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     
     // For critical operations - retry more aggressively
@@ -124,7 +124,7 @@ async function aggressiveRetryPolicy() {
 
 async function conservativeRetryPolicy() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     
     // For operations that should fail fast
@@ -155,7 +155,7 @@ async function conservativeRetryPolicy() {
 
 async function streamEventsWithRetry() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
     retryInitialDelayMs: 1000,
@@ -208,7 +208,7 @@ async function streamEventsWithRetry() {
 
 async function streamContractEvents() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
   });
@@ -233,7 +233,7 @@ async function streamContractEvents() {
 
 async function streamMultipleContracts() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
   });
@@ -266,7 +266,7 @@ async function streamMultipleContracts() {
 
 async function eventsByTransactionHash() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
   });
@@ -295,7 +295,7 @@ async function eventsByTransactionHash() {
 
 async function eventsByLedgerRange() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
   });
@@ -325,7 +325,7 @@ async function eventsByLedgerRange() {
 
 async function eventsByType() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
   });
@@ -351,7 +351,7 @@ async function eventsByType() {
 
 async function checkServiceHealth() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
   });
 
   const api = new SystemApi(config);
@@ -375,7 +375,7 @@ async function errorHandlingWithMetrics() {
   let totalWaitTime = 0;
 
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",
     maxRetries: 3,
     retryInitialDelayMs: 1000,
@@ -414,7 +414,7 @@ async function errorHandlingWithMetrics() {
 
 async function exportEventsAsNDJSON() {
   const config = new Configuration({
-    basePath: "https://api.sorobanpulse.com",
+    basePath: "https://api.stellarclassicpulse.com",
     apiKey: "your-api-key",  // Required for export endpoint
     maxRetries: 3,
   });

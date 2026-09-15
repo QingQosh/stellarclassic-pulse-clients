@@ -1,6 +1,6 @@
 # Event Encryption at Rest
 
-SorobanPulse supports optional AES-256-GCM encryption of the `event_data` field before it is written to the database (issue #584).
+StellarClassicPulse supports optional AES-256-GCM encryption of the `event_data` field before it is written to the database (issue #584).
 
 ## What is encrypted
 
@@ -73,7 +73,7 @@ curl -X POST https://your-host/v1/admin/reencrypt \
   -H "Authorization: Bearer $ADMIN_API_KEY"
 ```
 
-The job fetches all rows where `event_data->>'encrypted' = 'true'`, decrypts each with the old key, and re-encrypts with the new key in configurable batches. Progress is tracked in the `soroban_pulse_reencrypt_rows_remaining` Prometheus metric.
+The job fetches all rows where `event_data->>'encrypted' = 'true'`, decrypts each with the old key, and re-encrypts with the new key in configurable batches. Progress is tracked in the `stellarclassic_pulse_reencrypt_rows_remaining` Prometheus metric.
 
 ### Step 3 — Remove the old key
 

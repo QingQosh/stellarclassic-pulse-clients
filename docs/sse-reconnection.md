@@ -1,6 +1,6 @@
 # SSE Client Reconnection
 
-Soroban Pulse supports seamless SSE client reconnection via the standard
+StellarClassic Pulse supports seamless SSE client reconnection via the standard
 `Last-Event-ID` header.  Clients that disconnect and reconnect will receive all
 events they missed automatically — no application-level polling or manual cursor
 management is needed.
@@ -87,11 +87,11 @@ connect();
 
 | Metric                                      | Description                                  |
 |---------------------------------------------|----------------------------------------------|
-| `soroban_pulse_sse_replayed_events_total`   | Total events replayed across all reconnects  |
-| `soroban_pulse_sse_ring_buffer_size`        | Current number of events in the ring buffer  |
-| `soroban_pulse_sse_ring_buffer_overflows_total` | Times the buffer evicted an old event    |
-| `soroban_pulse_sse_ring_buffer_misses_total` | Replays that fell back to the database      |
-| `soroban_pulse_sse_lagged_events_total`     | Events missed by a slow consumer (per conn) |
+| `stellarclassic_pulse_sse_replayed_events_total`   | Total events replayed across all reconnects  |
+| `stellarclassic_pulse_sse_ring_buffer_size`        | Current number of events in the ring buffer  |
+| `stellarclassic_pulse_sse_ring_buffer_overflows_total` | Times the buffer evicted an old event    |
+| `stellarclassic_pulse_sse_ring_buffer_misses_total` | Replays that fell back to the database      |
+| `stellarclassic_pulse_sse_lagged_events_total`     | Events missed by a slow consumer (per conn) |
 
 ## Query result cache
 
@@ -108,8 +108,8 @@ QUERY_CACHE_MAX_CAPACITY=2000  # cache up to 2 000 distinct queries
 Materialized views are refreshed on the `STATS_REFRESH_INTERVAL_SECS` schedule
 (default 3 600 s / 1 h).  Each refresh cycle also:
 
-* Emits **staleness metrics** (`soroban_pulse_matview_staleness_seconds`) per
+* Emits **staleness metrics** (`stellarclassic_pulse_matview_staleness_seconds`) per
   view, so you can alert when a view has not been refreshed within the expected
   window.
 * Runs **EXPLAIN** on representative queries and records estimated row counts
-  (`soroban_pulse_query_plan_estimated_rows`) for capacity-planning dashboards.
+  (`stellarclassic_pulse_query_plan_estimated_rows`) for capacity-planning dashboards.

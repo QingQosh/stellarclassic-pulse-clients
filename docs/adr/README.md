@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-Architecture Decision Records (ADRs) capture decisions that affect SorobanPulse’s structure, interfaces, operations, or long-term maintenance. An ADR records the context and trade-offs at the time of a decision; it is not a task specification or an implementation checklist.
+Architecture Decision Records (ADRs) capture decisions that affect StellarClassicPulse’s structure, interfaces, operations, or long-term maintenance. An ADR records the context and trade-offs at the time of a decision; it is not a task specification or an implementation checklist.
 
 ## Index
 

@@ -1,6 +1,6 @@
 # Kafka Event Publishing (Issue #705)
 
-SorobanPulse supports publishing events to Apache Kafka for downstream consumption (issue #705). Events are published asynchronously to a configurable topic with automatic error handling and partition key strategy.
+StellarClassicPulse supports publishing events to Apache Kafka for downstream consumption (issue #705). Events are published asynchronously to a configurable topic with automatic error handling and partition key strategy.
 
 ## Architecture
 
@@ -138,7 +138,7 @@ services:
       - postgres
       - kafka
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres/soroban_pulse
+      DATABASE_URL: postgres://postgres:postgres@postgres/stellarclassic_pulse
       KAFKA_BROKERS: kafka:29092
       KAFKA_TOPIC: soroban-events
 ```
@@ -193,7 +193,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: soroban-pulse-api
+  name: stellarclassic-pulse-api
 spec:
   template:
     spec:
@@ -334,7 +334,7 @@ kafka-console-consumer.sh \
 
 ### Metrics Published
 
-SorobanPulse publishes Kafka metrics:
+StellarClassicPulse publishes Kafka metrics:
 
 - `kafka_publish_success`: Count of successful event publications
 - `kafka_publish_error`: Count of failed publications
@@ -344,7 +344,7 @@ SorobanPulse publishes Kafka metrics:
 
 ```yaml
 scrape_configs:
-  - job_name: soroban-pulse
+  - job_name: stellarclassic-pulse
     static_configs:
       - targets: ['localhost:3000']
     metrics_path: /metrics

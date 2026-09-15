@@ -34,7 +34,7 @@ export, or the correlation log ring buffer from
 ## Example
 
 ```rust
-use soroban_pulse::log_analysis_tool::generate_report;
+use stellarclassic_pulse::log_analysis_tool::generate_report;
 
 let logs = std::fs::read_to_string("app.log").unwrap();
 let report = generate_report(&logs);

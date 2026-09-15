@@ -1,6 +1,6 @@
 # API Compliance Testing
 
-This document describes SorobanPulse's automated API compliance testing
+This document describes StellarClassicPulse's automated API compliance testing
 strategy: what is checked, why it matters, how to run the tests, and how to
 extend them.
 
@@ -26,7 +26,7 @@ extend them.
 ## Overview
 
 The compliance test suite (`tests/api_compliance.rs`) is a dedicated integration
-test harness that verifies the SorobanPulse REST API conforms to:
+test harness that verifies the StellarClassicPulse REST API conforms to:
 
 1. Its own OpenAPI 3.0 specification (served at `/openapi.json`)
 2. REST best-practice conventions (versioning, pagination, input validation)
@@ -55,7 +55,7 @@ and internally consistent.
 | `openapi_content_type_is_json` | Response carries `Content-Type: application/json` |
 | `openapi_spec_has_required_top_level_fields` | `openapi`, `info`, `paths` fields are present |
 | `openapi_version_is_3_dot_0` | Version string starts with `3.0` |
-| `openapi_spec_title_is_soroban_pulse` | `info.title` is non-empty |
+| `openapi_spec_title_is_stellarclassic_pulse` | `info.title` is non-empty |
 | `openapi_paths_include_v1_events` | `/v1/events` is documented in `paths` |
 | `openapi_paths_include_health` | At least one health endpoint is documented |
 | `openapi_event_schema_has_required_fields` | `Event` schema lists `id`, `contract_id`, `event_type`, `tx_hash`, `ledger`, `timestamp`, `event_data`, `created_at` as required |
@@ -456,7 +456,7 @@ To run only compliance tests in CI:
 - name: API compliance tests
   run: cargo test --test api_compliance
   env:
-    DATABASE_URL: postgres://postgres:postgres@localhost/soroban_pulse_test
+    DATABASE_URL: postgres://postgres:postgres@localhost/stellarclassic_pulse_test
 ```
 
 The suite is intentionally separate from the security test suite

@@ -1,6 +1,6 @@
 # Deployment Runbooks
 
-Step-by-step, infrastructure-level runbooks for deploying SorobanPulse
+Step-by-step, infrastructure-level runbooks for deploying StellarClassicPulse
 yourself on a cloud provider's raw compute/network primitives — you
 provision and manage the VM, VPC/VNet, database instance, and load
 balancer/gateway directly, rather than handing that layer to a managed

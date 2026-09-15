@@ -24,7 +24,7 @@
   <rect width="1200" height="700" fill="#f8fafc" rx="10"/>
 
   <!-- Title -->
-  <text x="600" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">SorobanPulse System Architecture</text>
+  <text x="600" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">StellarClassicPulse System Architecture</text>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- TOP FLOW: main event indexing path                             -->
@@ -269,5 +269,5 @@
   <text x="471" y="655" font-size="9" fill="#475569">Clients &amp; Integrations</text>
   <rect x="600" y="645" width="11" height="11" fill="#dcfce7" rx="2" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,2"/>
   <text x="616" y="655" font-size="9" fill="#475569">Advisory Lock (dashed = pg_try_advisory_lock)</text>
-  <text x="870" y="655" font-size="9" fill="#94a3b8">github.com/Soroban-Pulse/SorobanPulse</text>
+  <text x="870" y="655" font-size="9" fill="#94a3b8">github.com/Soroban-Pulse/StellarClassicPulse</text>
 </svg>

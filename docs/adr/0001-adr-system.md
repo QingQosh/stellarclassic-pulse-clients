@@ -2,16 +2,16 @@
 
 - **Status:** Accepted
 - **Date:** 2026-08-27
-- **Owners:** SorobanPulse maintainers
+- **Owners:** StellarClassicPulse maintainers
 - **Related:** [ADR system guide](README.md)
 
 ## Context
 
-SorobanPulse has important architectural decisions distributed across general documentation, issue discussions, and implementation details. Without a consistent record, contributors cannot reliably discover why a public interface, deployment topology, storage behavior, or security boundary was chosen. Future changes may therefore repeat rejected approaches or unintentionally break an operational assumption.
+StellarClassicPulse has important architectural decisions distributed across general documentation, issue discussions, and implementation details. Without a consistent record, contributors cannot reliably discover why a public interface, deployment topology, storage behavior, or security boundary was chosen. Future changes may therefore repeat rejected approaches or unintentionally break an operational assumption.
 
 ## Decision
 
-SorobanPulse will maintain architecture decisions as numbered Markdown files under `docs/adr/`. Every record uses the shared template, appears in the ADR index, and follows the lifecycle `Proposed`, `Accepted`, `Superseded`, or `Deprecated`. Historical records are retained and replacements link back to the decision they supersede.
+StellarClassicPulse will maintain architecture decisions as numbered Markdown files under `docs/adr/`. Every record uses the shared template, appears in the ADR index, and follows the lifecycle `Proposed`, `Accepted`, `Superseded`, or `Deprecated`. Historical records are retained and replacements link back to the decision they supersede.
 
 ADRs are required for decisions that affect public APIs or events, storage or migrations, security boundaries, deployment topology, data retention, or significant operational dependencies. Routine fixes and localized refactors do not require an ADR unless they introduce one of these impacts.
 

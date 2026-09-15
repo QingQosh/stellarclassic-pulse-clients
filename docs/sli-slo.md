@@ -1,6 +1,6 @@
 # SLI / SLO Dashboard (Issue #696)
 
-This document defines SorobanPulse's **Service Level Indicators (SLIs)** and
+This document defines StellarClassicPulse's **Service Level Indicators (SLIs)** and
 **Service Level Objectives (SLOs)** and explains how the in-process tracker,
 Prometheus metrics, Grafana dashboard, and Prometheus alerts fit together.
 
@@ -23,7 +23,7 @@ Prometheus metrics, Grafana dashboard, and Prometheus alerts fit together.
 | Layer | Component | Purpose |
 |---|---|---|
 | In-process | `src/slo_tracker.rs` | Sample collector + report generator |
-| Telemetry | `src/metrics.rs` (`#696` block) | Publishes `soroban_pulse_slo_*` gauges |
+| Telemetry | `src/metrics.rs` (`#696` block) | Publishes `stellarclassic_pulse_slo_*` gauges |
 | HTTP API | `GET /v1/admin/slo/report` | Returns the canonical report as JSON |
 | HTTP API | `POST /v1/admin/slo/sample` | Records a sample (admin/integration) |
 | Visualization | `docs/sli-slo-dashboard.json` | Grafana dashboard panels |
@@ -58,21 +58,21 @@ Operators can register additional SLOs at startup via
 
 | Metric | Type | Labels | Description |
 |---|---|---|---|
-| `soroban_pulse_slo_completion_ratio` | Gauge | `slo`, `component` | Fraction of good samples in the window, in `[0.0, 1.0]`. Drives the **SLO completion gauge**. |
-| `soroban_pulse_slo_error_budget_remaining` | Gauge | `slo`, `component` | Fraction of the error budget still available. `1.0` = full, `0.0` = empty. |
-| `soroban_pulse_slo_error_budget_consumed` | Gauge | `slo`, `component` | Fraction of the error budget already spent. |
-| `soroban_pulse_slo_burn_rate` | Gauge | `slo`, `component` | Budget burn rate. ≈ 1 = on pace, > 2 = critical. |
-| `soroban_pulse_sli_current_value` | Gauge | `slo`, `component` | Most recent SLI observation for an SLO. Drives the **SLI trend line chart**. |
-| `soroban_pulse_slo_evaluation_total` | Counter | `slo`, `status` | Increments on each non-`Met` evaluation; `status` ∈ `at_risk`, `breached`. |
-| `soroban_pulse_slo_tracked_count` | Gauge | — | Total SLOs registered with the tracker. |
-| `soroban_pulse_slo_met_count` | Gauge | — | SLOs currently classified `met`. |
-| `soroban_pulse_slo_at_risk_count` | Gauge | — | SLOs currently classified `at_risk`. |
-| `soroban_pulse_slo_breached_count` | Gauge | — | SLOs currently classified `breached`. |
+| `stellarclassic_pulse_slo_completion_ratio` | Gauge | `slo`, `component` | Fraction of good samples in the window, in `[0.0, 1.0]`. Drives the **SLO completion gauge**. |
+| `stellarclassic_pulse_slo_error_budget_remaining` | Gauge | `slo`, `component` | Fraction of the error budget still available. `1.0` = full, `0.0` = empty. |
+| `stellarclassic_pulse_slo_error_budget_consumed` | Gauge | `slo`, `component` | Fraction of the error budget already spent. |
+| `stellarclassic_pulse_slo_burn_rate` | Gauge | `slo`, `component` | Budget burn rate. ≈ 1 = on pace, > 2 = critical. |
+| `stellarclassic_pulse_sli_current_value` | Gauge | `slo`, `component` | Most recent SLI observation for an SLO. Drives the **SLI trend line chart**. |
+| `stellarclassic_pulse_slo_evaluation_total` | Counter | `slo`, `status` | Increments on each non-`Met` evaluation; `status` ∈ `at_risk`, `breached`. |
+| `stellarclassic_pulse_slo_tracked_count` | Gauge | — | Total SLOs registered with the tracker. |
+| `stellarclassic_pulse_slo_met_count` | Gauge | — | SLOs currently classified `met`. |
+| `stellarclassic_pulse_slo_at_risk_count` | Gauge | — | SLOs currently classified `at_risk`. |
+| `stellarclassic_pulse_slo_breached_count` | Gauge | — | SLOs currently classified `breached`. |
 
 ### Completion-gauge panel (PromQL)
 
 ```promql
-soroban_pulse_slo_completion_ratio
+stellarclassic_pulse_slo_completion_ratio
 ```
 
 The gauge is grouped by `slo` so each `Stat` / `Gauge` panel renders one dial
@@ -87,12 +87,12 @@ per registered SLO. Threshold bands:
 ### SLI trend-line chart (PromQL)
 
 ```promql
-soroban_pulse_sli_current_value
+stellarclassic_pulse_sli_current_value
 ```
 
 Series are grouped by `slo` so each panel renders one trend line per SLO.
 A secondary Y-axis overlay can show the SLO target via
-`on() group_left() soroban_pulse_slo_completion_ratio == 1` (or render the
+`on() group_left() stellarclassic_pulse_slo_completion_ratio == 1` (or render the
 target in the panel legend manually):
 
 ```promql
@@ -100,14 +100,14 @@ target in the panel legend manually):
 # SLO target is overlaid as a constant line per panel (set under "Graph
 # styles → Thresholds" in Grafana, or via a separate target label).
 ```promql
-sum by (slo) (soroban_pulse_sli_current_value)
+sum by (slo) (stellarclassic_pulse_sli_current_value)
 ```
 ```
 
 ### Burn-rate overlay (PromQL)
 
 ```promql
-max_over_time(soroban_pulse_slo_burn_rate[1h])
+max_over_time(stellarclassic_pulse_slo_burn_rate[1h])
 ```
 
 Useful for correlating dashboard dips with budget consumption.
@@ -213,7 +213,7 @@ Shows HTTP request latency at p50, p95, and p99 percentiles calculated from Prom
 
 **PromQL:**
 ```promql
-histogram_quantile(0.95, rate(soroban_pulse_http_request_duration_seconds_bucket[5m]))
+histogram_quantile(0.95, rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m]))
 ```
 
 ### Error Rate by Status Code
@@ -221,9 +221,9 @@ Tracks the percentage of 5xx errors relative to total requests, broken down by H
 
 **PromQL:**
 ```promql
-rate(soroban_pulse_http_request_duration_seconds_count{status_code=~"5.."}[5m]) 
+rate(stellarclassic_pulse_http_request_duration_seconds_count{status_code=~"5.."}[5m]) 
 / 
-rate(soroban_pulse_http_request_duration_seconds_count[5m])
+rate(stellarclassic_pulse_http_request_duration_seconds_count[5m])
 ```
 
 ### API Availability
@@ -231,9 +231,9 @@ Inverse of error rate — percentage of requests that succeeded (non-5xx respons
 
 **PromQL:**
 ```promql
-1 - (rate(soroban_pulse_http_request_duration_seconds_count{status_code=~"5.."}[5m]) 
+1 - (rate(stellarclassic_pulse_http_request_duration_seconds_count{status_code=~"5.."}[5m]) 
 / 
-rate(soroban_pulse_http_request_duration_seconds_count[5m]))
+rate(stellarclassic_pulse_http_request_duration_seconds_count[5m]))
 ```
 
 ### SLO Budget Burndown
@@ -241,7 +241,7 @@ Shows cumulative consumption of error budget over the window, useful for visuali
 
 **PromQL:**
 ```promql
-1 - soroban_pulse_slo_error_budget_remaining
+1 - stellarclassic_pulse_slo_error_budget_remaining
 ```
 
 ### Request Distribution by Endpoint
@@ -249,7 +249,7 @@ Histogram of request rates grouped by HTTP method and path, identifying which en
 
 **PromQL:**
 ```promql
-sum(rate(soroban_pulse_http_request_duration_seconds_count[5m])) by (method, path)
+sum(rate(stellarclassic_pulse_http_request_duration_seconds_count[5m])) by (method, path)
 ```
 
 ## SLI Metric Calculations

@@ -26,7 +26,7 @@ export class EndpointItem extends vscode.TreeItem {
         );
         this.iconPath = methodIcon(endpoint.method);
         this.command = {
-            command: 'sorobanpulse.openRequestTester',
+            command: 'stellarclassicpulse.openRequestTester',
             title: 'Open in Request Tester',
             arguments: [endpoint],
         };

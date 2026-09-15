@@ -47,8 +47,8 @@ circuit for a dependency is treated as that dependency being unhealthy.
 ## Metrics
 
 Every state transition increments
-`soroban_pulse_degradation_transitions_total{dependency, level}`, and the
-current level is exposed as a gauge, `soroban_pulse_degradation_level`
+`stellarclassic_pulse_degradation_transitions_total{dependency, level}`, and the
+current level is exposed as a gauge, `stellarclassic_pulse_degradation_level`
 (0=normal, 1=degraded, 2=read_only, 3=unavailable), for alerting and
 dashboards.
 

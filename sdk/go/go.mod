@@ -1,4 +1,4 @@
-module github.com/soroban-pulse/client-go
+module github.com/stellarclassic-pulse/client-go
 
 go 1.21
 

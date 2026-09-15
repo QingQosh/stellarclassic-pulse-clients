@@ -44,7 +44,7 @@ Options:
 ## Formulas used
 
 These follow the well-established PGTune heuristics for a "Mixed" OLTP workload,
-matching Soroban Pulse's read-heavy event indexing/API traffic:
+matching StellarClassic Pulse's read-heavy event indexing/API traffic:
 
 | Parameter | Formula | Rationale |
 |-----------|---------|-----------|

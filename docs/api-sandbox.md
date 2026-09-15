@@ -62,7 +62,7 @@ one contract ID, 10 `diagnostic` events for a second, and 5 `system` events
 for a third, all in the ledger range 1001–1050:
 
 ```bash
-psql "postgres://e2e:e2e@localhost:5433/soroban_pulse_e2e" -f tests/e2e/seed.sql
+psql "postgres://e2e:e2e@localhost:5433/stellarclassic_pulse_e2e" -f tests/e2e/seed.sql
 ```
 
 > The comment header in `seed.sql` references a `make e2e-seed` target; no
@@ -72,7 +72,7 @@ psql "postgres://e2e:e2e@localhost:5433/soroban_pulse_e2e" -f tests/e2e/seed.sql
 Clear it out again with:
 
 ```bash
-psql "postgres://e2e:e2e@localhost:5433/soroban_pulse_e2e" -f tests/e2e/cleanup.sql
+psql "postgres://e2e:e2e@localhost:5433/stellarclassic_pulse_e2e" -f tests/e2e/cleanup.sql
 ```
 
 After seeding, the REST API on `localhost:3001` will serve the seeded rows

@@ -1,6 +1,6 @@
 # PagerDuty Integration
 
-Soroban Pulse can route Soroban contract events to PagerDuty as incidents, giving on-call engineers immediate visibility into anomalous contract activity.
+StellarClassic Pulse can route Soroban contract events to PagerDuty as incidents, giving on-call engineers immediate visibility into anomalous contract activity.
 
 ## Overview
 
@@ -28,7 +28,7 @@ PAGERDUTY_ROUTING_KEY=your_routing_key_here
 ONCALL_PAGERDUTY_API_KEY=your_api_key_here
 
 # Optional — override defaults
-PAGERDUTY_SERVICE_NAME="Soroban Pulse"
+PAGERDUTY_SERVICE_NAME="StellarClassic Pulse"
 PAGERDUTY_AUTO_RESOLVE=true
 PAGERDUTY_AUTO_RESOLVE_THRESHOLD_MINUTES=30
 
@@ -51,7 +51,7 @@ curl -X POST http://localhost:3000/v1/subscriptions/{subscription_id}/integratio
   -H "Authorization: Bearer $API_KEY" \
   -d '{
     "routing_key": "your_routing_key",
-    "service_name": "Soroban Pulse",
+    "service_name": "StellarClassic Pulse",
     "escalation_policy_id": "P1234ABC",
     "contract_filter": ["CABC..."],
     "event_type_filter": ["contract", "system"],
@@ -80,7 +80,7 @@ Create or update the PagerDuty integration for a subscription.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `routing_key` | string | ✓ | Events API v2 routing key |
-| `service_name` | string | | Human-readable name shown in incidents. Default: `"Soroban Pulse"` |
+| `service_name` | string | | Human-readable name shown in incidents. Default: `"StellarClassic Pulse"` |
 | `api_key` | string | | REST API key for on-call / escalation lookups |
 | `escalation_policy_id` | string | | PagerDuty escalation policy ID to attach |
 | `contract_filter` | string[] | | Only trigger for these contract IDs. Empty = all |
@@ -111,7 +111,7 @@ Retrieve integration settings. Note: `routing_key` and `api_key` are never retur
 {
   "id": "uuid",
   "integration_type": "pagerduty",
-  "service_name": "Soroban Pulse",
+  "service_name": "StellarClassic Pulse",
   "escalation_policy_id": "P1234ABC",
   "auto_resolve": true,
   "auto_resolve_threshold_min": 30
@@ -139,7 +139,7 @@ List the most recent 100 incidents for this subscription (newest first).
   "incidents": [
     {
       "id": "uuid",
-      "dedup_key": "soroban-pulse-CABC...-contract",
+      "dedup_key": "stellarclassic-pulse-CABC...-contract",
       "incident_key": "0b856a0bfa784c53be2e21c3...",
       "contract_id": "CABC...",
       "event_type": "contract",
@@ -161,7 +161,7 @@ Acknowledge an open incident via the Events API v2. The `status` in the database
 
 ```json
 {
-  "dedup_key": "soroban-pulse-CABC...-contract",
+  "dedup_key": "stellarclassic-pulse-CABC...-contract",
   "acknowledged_by": "alice@example.com"
 }
 ```
@@ -171,7 +171,7 @@ Acknowledge an open incident via the Events API v2. The `status` in the database
 ```json
 {
   "status": "acknowledged",
-  "dedup_key": "soroban-pulse-CABC...-contract"
+  "dedup_key": "stellarclassic-pulse-CABC...-contract"
 }
 ```
 
@@ -185,7 +185,7 @@ Resolve an open or acknowledged incident via the Events API v2.
 
 ```json
 {
-  "dedup_key": "soroban-pulse-CABC...-contract"
+  "dedup_key": "stellarclassic-pulse-CABC...-contract"
 }
 ```
 
@@ -194,7 +194,7 @@ Resolve an open or acknowledged incident via the Events API v2.
 ```json
 {
   "status": "resolved",
-  "dedup_key": "soroban-pulse-CABC...-contract"
+  "dedup_key": "stellarclassic-pulse-CABC...-contract"
 }
 ```
 
@@ -207,7 +207,7 @@ Resolve an open or acknowledged incident via the Events API v2.
                     │
                    Yes
                     │
-              dedup_key = "soroban-pulse-{contract_id}-{event_type}"
+              dedup_key = "stellarclassic-pulse-{contract_id}-{event_type}"
                     │
               Events API v2 POST (trigger)
                     │
@@ -226,7 +226,7 @@ Resolve an open or acknowledged incident via the Events API v2.
 
 ### Deduplication
 
-The deduplication key is `soroban-pulse-{contract_id}-{event_type}`. A burst of identical events for the same contract + event type creates exactly one incident. The `ON CONFLICT DO UPDATE` in the database ensures idempotent delivery.
+The deduplication key is `stellarclassic-pulse-{contract_id}-{event_type}`. A burst of identical events for the same contract + event type creates exactly one incident. The `ON CONFLICT DO UPDATE` in the database ensures idempotent delivery.
 
 ### Auto-resolve
 
@@ -236,7 +236,7 @@ When `auto_resolve = true` (default), a background task periodically queries for
 
 ## Escalation Policies
 
-When an `escalation_policy_id` is configured, Soroban Pulse attaches it to every triggered incident, ensuring the correct escalation path is used without manual configuration in PagerDuty.
+When an `escalation_policy_id` is configured, StellarClassic Pulse attaches it to every triggered incident, ensuring the correct escalation path is used without manual configuration in PagerDuty.
 
 ### Listing available policies
 
@@ -254,7 +254,7 @@ Copy the `id` of the desired policy into `escalation_policy_id` when creating th
 
 ## On-call Lookup
 
-When `ONCALL_PROVIDER=pagerduty` and `ONCALL_PAGERDUTY_API_KEY` are configured, Soroban Pulse can resolve the current on-call engineer:
+When `ONCALL_PROVIDER=pagerduty` and `ONCALL_PAGERDUTY_API_KEY` are configured, StellarClassic Pulse can resolve the current on-call engineer:
 
 ```rust
 // Example: get current on-call contact
@@ -282,7 +282,7 @@ Three tables are used (created by migration `20260831000001_pagerduty_integratio
 
 | Metric | Description |
 |---|---|
-| `soroban_pulse_pagerduty_failures_total` | Incidents that failed delivery after all retries |
+| `stellarclassic_pulse_pagerduty_failures_total` | Incidents that failed delivery after all retries |
 
 ---
 

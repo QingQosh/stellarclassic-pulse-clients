@@ -5,19 +5,19 @@ import type {
   ListEventsParams,
   Page,
   SorobanEvent,
-  SorobanPulseClientOptions,
+  StellarClassicPulseClientOptions,
   Subscription,
 } from "./types";
 
-const DEFAULT_BASE_URL = "https://api.sorobanpulse.io/v1";
+const DEFAULT_BASE_URL = "https://api.stellarclassicpulse.io/v1";
 
-export class SorobanPulseClient {
+export class StellarClassicPulseClient {
   readonly baseUrl: string;
   private readonly apiKey: string;
   private readonly timeoutMs: number;
   private readonly maxRetries: number;
 
-  constructor(options: SorobanPulseClientOptions) {
+  constructor(options: StellarClassicPulseClientOptions) {
     if (!options.apiKey) {
       throw new AuthenticationError("apiKey is required");
     }
@@ -31,7 +31,7 @@ export class SorobanPulseClient {
     return {
       Authorization: `Bearer ${this.apiKey}`,
       "Content-Type": "application/json",
-      "User-Agent": "soroban-pulse-js-sdk/0.1.0",
+      "User-Agent": "stellarclassic-pulse-js-sdk/0.1.0",
     };
   }
 

@@ -34,13 +34,13 @@ DELETE /v1/admin/maintenance-windows/:id
 When a notification is about to be sent, the system checks `maintenance_windows` for any
 window that overlaps `NOW()` and matches the event's `contract_id`.  If a match is found
 the notification is suppressed and the
-`soroban_pulse_notifications_maintenance_suppressed_total` counter is incremented.
+`stellarclassic_pulse_notifications_maintenance_suppressed_total` counter is incremented.
 
 ### Metric
 
 | Metric | Type | Description |
 |--------|------|-------------|
-| `soroban_pulse_notifications_maintenance_suppressed_total` | counter | Number of notifications suppressed by a maintenance window |
+| `stellarclassic_pulse_notifications_maintenance_suppressed_total` | counter | Number of notifications suppressed by a maintenance window |
 
 ---
 
@@ -147,7 +147,7 @@ The check runs every `NOTIFICATION_HEALTH_CHECK_INTERVAL_SECS` seconds (default:
 
 | Metric | Type | Labels | Description |
 |--------|------|--------|-------------|
-| `soroban_pulse_notification_channel_healthy` | gauge | `channel`, `type` | `1` = healthy, `0` = unhealthy |
+| `stellarclassic_pulse_notification_channel_healthy` | gauge | `channel`, `type` | `1` = healthy, `0` = unhealthy |
 
 ### Alert
 

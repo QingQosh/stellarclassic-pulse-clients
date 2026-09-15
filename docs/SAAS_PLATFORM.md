@@ -2,11 +2,11 @@
 
 **Issue #841**
 
-This document describes the SaaS platform features for managed multi-tenant hosting of SorobanPulse.
+This document describes the SaaS platform features for managed multi-tenant hosting of StellarClassicPulse.
 
 ## Overview
 
-The SaaS platform enables hosting SorobanPulse as a managed service with:
+The SaaS platform enables hosting StellarClassicPulse as a managed service with:
 
 - **Tenant Provisioning**: Automated onboarding and account creation
 - **Subscription Management**: Multiple tiers with different resource limits
@@ -19,7 +19,7 @@ The SaaS platform enables hosting SorobanPulse as a managed service with:
 
 ### Multi-Tenancy Model
 
-SorobanPulse uses a **shared database with tenant isolation** model:
+StellarClassicPulse uses a **shared database with tenant isolation** model:
 
 - All tenants share the same database and application instances
 - Data is isolated using `tenant_id` fields in all tables
@@ -218,7 +218,7 @@ Handle billing system webhooks (Stripe, Paddle, etc.).
 ### Example Integration
 
 ```rust
-use soroban_pulse::saas_platform::billing::*;
+use stellarclassic_pulse::saas_platform::billing::*;
 
 // Handle Stripe webhook
 let webhook = BillingWebhook {

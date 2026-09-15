@@ -1,6 +1,6 @@
 # Time Series Analysis
 
-SorobanPulse can produce time-bucketed event counts for any contract (or for
+StellarClassicPulse can produce time-bucketed event counts for any contract (or for
 all contracts combined) and run statistical analyses on those series.  This
 document covers the data model, the analysis functions, caching, and the
 migration added for issue #932.
@@ -10,7 +10,7 @@ migration added for issue #932.
 ## Overview
 
 The time series subsystem lives in `src/time_series.rs` and is exposed as the
-`soroban_pulse::time_series` crate module.  It provides:
+`stellarclassic_pulse::time_series` crate module.  It provides:
 
 - **`get_time_series`** — query bucketed event counts from the live `events`
   table.
@@ -206,7 +206,7 @@ exactly one bucket duration per step.
 ## Typical Usage
 
 ```rust
-use soroban_pulse::time_series::{
+use stellarclassic_pulse::time_series::{
     TimeSeriesGranularity, TimeSeriesQuery,
     get_time_series, detect_trend, detect_seasonality,
     detect_anomalies, forecast_next_points,

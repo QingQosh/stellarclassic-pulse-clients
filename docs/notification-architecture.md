@@ -42,8 +42,8 @@ shape doesn't fit email/SMS/push, which need retry classification
   `NotificationError::Transient`, using the channel's own `RetryPolicy`
   (`src/retry_policy.rs`, already shared infra) for backoff/jitter timing.
   `InvalidTarget` and `Configuration` fail fast. Records
-  `soroban_pulse_notification_delivery_{success,failure}_total` and
-  `soroban_pulse_notification_delivery_latency_seconds{channel=...}`
+  `stellarclassic_pulse_notification_delivery_{success,failure}_total` and
+  `stellarclassic_pulse_notification_delivery_latency_seconds{channel=...}`
   uniformly for every channel — previously each channel recorded these (or
   channel-specific equivalents) independently.
 

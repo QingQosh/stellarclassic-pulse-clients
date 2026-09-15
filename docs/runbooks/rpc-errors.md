@@ -1,7 +1,7 @@
 # RPC Errors Runbook
 
 ## Symptom
-The Soroban Pulse indexer is experiencing a high rate of errors when calling the Soroban RPC endpoint. The `soroban_pulse_rpc_errors_total` metric is increasing rapidly, or the error rate exceeds 5% of total RPC calls.
+The StellarClassic Pulse indexer is experiencing a high rate of errors when calling the Soroban RPC endpoint. The `stellarclassic_pulse_rpc_errors_total` metric is increasing rapidly, or the error rate exceeds 5% of total RPC calls.
 
 ## Likely Causes
 1. **RPC endpoint downtime or degradation**: The Soroban RPC service is unavailable or responding slowly
@@ -25,21 +25,21 @@ curl -s -X POST https://soroban-testnet.stellar.org \
 
 ### 2. Review indexer logs for specific errors
 ```bash
-kubectl logs -l app=soroban-pulse -c soroban-pulse --tail=200 | grep -i "rpc\|error" | tail -50
+kubectl logs -l app=stellarclassic-pulse -c stellarclassic-pulse --tail=200 | grep -i "rpc\|error" | tail -50
 ```
 
 ### 3. Check RPC error rate and types
 ```bash
 # Error rate over last 5 minutes
-promtool query instant 'rate(soroban_pulse_rpc_errors_total[5m])'
+promtool query instant 'rate(stellarclassic_pulse_rpc_errors_total[5m])'
 
 # Errors by type (if available)
-promtool query instant 'soroban_pulse_rpc_errors_total'
+promtool query instant 'stellarclassic_pulse_rpc_errors_total'
 ```
 
 ### 4. Verify RPC configuration
 ```bash
-kubectl get configmap soroban-pulse-config -o yaml | grep STELLAR_RPC_URL
+kubectl get configmap stellarclassic-pulse-config -o yaml | grep STELLAR_RPC_URL
 ```
 
 ### 5. Check network connectivity

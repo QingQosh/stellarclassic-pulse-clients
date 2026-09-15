@@ -38,7 +38,7 @@ Pre-built scenario templates for common testing cases:
 ### Basic Event Generation
 
 ```rust
-use soroban_pulse::event_fixtures::EventSimulator;
+use stellarclassic_pulse::event_fixtures::EventSimulator;
 
 let mut simulator = EventSimulator::new();
 
@@ -104,7 +104,7 @@ Base64-encoded event type indicators:
 ### Contract Factory
 
 ```rust
-use soroban_pulse::event_fixtures::ContractFactory;
+use stellarclassic_pulse::event_fixtures::ContractFactory;
 
 let mut factory = ContractFactory::new();
 

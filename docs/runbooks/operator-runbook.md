@@ -1,6 +1,6 @@
 # Operator Runbook
 
-Procedures for common operational tasks, incident response, and system maintenance for Soroban Pulse.
+Procedures for common operational tasks, incident response, and system maintenance for StellarClassic Pulse.
 
 ## Table of Contents
 
@@ -34,7 +34,7 @@ Procedures for common operational tasks, incident response, and system maintenan
 **Step 1 — Triage**
 ```bash
 # Is the process running?
-kubectl get pods -l app=soroban-pulse
+kubectl get pods -l app=stellarclassic-pulse
 
 # What is the health endpoint saying?
 curl http://<service>/healthz/ready
@@ -49,13 +49,13 @@ psql $DATABASE_URL -c "SELECT 1;"
 
 **Step 3 — Check logs for panic or startup failure**
 ```bash
-kubectl logs -l app=soroban-pulse --tail=200 | grep -i "panic\|error\|fatal"
+kubectl logs -l app=stellarclassic-pulse --tail=200 | grep -i "panic\|error\|fatal"
 ```
 
 **Step 4 — Restart the service**
 ```bash
-kubectl rollout restart deployment/soroban-pulse
-kubectl rollout status deployment/soroban-pulse
+kubectl rollout restart deployment/stellarclassic-pulse
+kubectl rollout status deployment/stellarclassic-pulse
 ```
 
 **Step 5 — Verify recovery**
@@ -92,9 +92,9 @@ docker compose logs db --tail=50
 curl -s $STELLAR_RPC_URL/health | jq .
 
 # 2. Switch to backup RPC endpoint
-kubectl set env deployment/soroban-pulse \
+kubectl set env deployment/stellarclassic-pulse \
   STELLAR_RPC_URL=https://soroban-testnet.stellar.org
-kubectl rollout restart deployment/soroban-pulse
+kubectl rollout restart deployment/stellarclassic-pulse
 ```
 
 See [docs/runbooks/rpc-errors.md](rpc-errors.md) for the full RPC runbook.
@@ -103,17 +103,17 @@ See [docs/runbooks/rpc-errors.md](rpc-errors.md) for the full RPC runbook.
 
 ### Out-of-memory / OOM kill
 
-**Symptoms**: Pod is in `OOMKilled` state; `soroban_pulse_process_memory_bytes` exceeded the container limit.
+**Symptoms**: Pod is in `OOMKilled` state; `stellarclassic_pulse_process_memory_bytes` exceeded the container limit.
 
 ```bash
 # 1. Confirm OOM kill
 kubectl describe pod <pod-name> | grep -i "oom\|killed\|reason"
 
 # 2. Check current memory usage
-kubectl top pod -l app=soroban-pulse
+kubectl top pod -l app=stellarclassic-pulse
 
 # 3. Temporary fix: increase memory limit
-kubectl set resources deployment/soroban-pulse \
+kubectl set resources deployment/stellarclassic-pulse \
   --limits=memory=1Gi
 ```
 
@@ -163,7 +163,7 @@ If data corruption is widespread, restore from a PostgreSQL backup:
 
 ```bash
 # 1. Stop the service to prevent writes during restore
-kubectl scale deployment/soroban-pulse --replicas=0
+kubectl scale deployment/stellarclassic-pulse --replicas=0
 
 # 2. Restore the database
 ./scripts/restore.sh <backup-file.dump>
@@ -172,8 +172,8 @@ kubectl scale deployment/soroban-pulse --replicas=0
 psql $DATABASE_URL -c "SELECT MAX(ledger), COUNT(*) FROM events;"
 
 # 4. Restart the service
-kubectl scale deployment/soroban-pulse --replicas=1
-kubectl rollout status deployment/soroban-pulse
+kubectl scale deployment/stellarclassic-pulse --replicas=1
+kubectl rollout status deployment/stellarclassic-pulse
 ```
 
 See [docs/backup-verification.md](../backup-verification.md) for backup and restore procedures.
@@ -202,13 +202,13 @@ When the indexer has fallen significantly behind the network tip, it will catch 
 
 **1. Verify the indexer is the active leader:**
 ```bash
-curl http://localhost:3000/metrics | grep soroban_pulse_indexer_is_leader
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_is_leader
 # Should be 1
 ```
 
 **2. Check the lag trend (is it improving or worsening?):**
 ```bash
-curl http://localhost:3000/metrics | grep soroban_pulse_indexer_lag_ledgers
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_lag_ledgers
 ```
 
 Watch this over 2–3 minutes. If the lag is decreasing, the indexer is catching up — leave it running.
@@ -228,8 +228,8 @@ psql $DATABASE_URL -c "
 
 **4. If the database is the bottleneck, increase the pool:**
 ```bash
-kubectl set env deployment/soroban-pulse DB_MAX_CONNECTIONS=20
-kubectl rollout restart deployment/soroban-pulse
+kubectl set env deployment/stellarclassic-pulse DB_MAX_CONNECTIONS=20
+kubectl rollout restart deployment/stellarclassic-pulse
 ```
 
 See [docs/runbooks/indexer-lag.md](indexer-lag.md) for the full runbook.
@@ -242,7 +242,7 @@ Failed webhooks are retried automatically with exponential backoff. If the backl
 
 **1. Check the failure count:**
 ```bash
-curl http://localhost:3000/metrics | grep soroban_pulse_webhook_failures_total
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_webhook_failures_total
 ```
 
 **2. Identify failing subscriptions:**
@@ -275,7 +275,7 @@ See [docs/runbooks/webhook-failures.md](webhook-failures.md) for the full runboo
 
 ```bash
 # Check email failure count
-curl http://localhost:3000/metrics | grep soroban_pulse_email_failures_total
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_email_failures_total
 
 # Pause notifications while investigating
 curl -X POST http://localhost:3000/v1/admin/indexer/pause \
@@ -292,7 +292,7 @@ curl -X POST http://localhost:3000/v1/admin/indexer/resume \
 
 ### How advisory lock failover works
 
-Soroban Pulse uses a PostgreSQL session-level advisory lock (`pg_try_advisory_lock`) for leader election:
+StellarClassic Pulse uses a PostgreSQL session-level advisory lock (`pg_try_advisory_lock`) for leader election:
 
 1. On startup, each replica tries to acquire the lock
 2. The first replica to succeed becomes the **active indexer** (leader)
@@ -309,14 +309,14 @@ To move indexing to a different replica (e.g., before planned maintenance):
 ```bash
 # 1. Identify which pod holds the lock
 kubectl exec -it <pod-name> -- \
-  curl -s http://localhost:3000/metrics | grep soroban_pulse_indexer_is_leader
+  curl -s http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_is_leader
 
 # 2. Gracefully restart the current leader
-kubectl rollout restart deployment/soroban-pulse --timeout=60s
+kubectl rollout restart deployment/stellarclassic-pulse --timeout=60s
 
 # 3. Verify a standby has taken over (within INDEXER_LOCK_RETRY_SECS)
 kubectl exec -it <standby-pod> -- \
-  curl -s http://localhost:3000/metrics | grep soroban_pulse_indexer_is_leader
+  curl -s http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_is_leader
 # Should become 1 on the standby
 ```
 
@@ -331,7 +331,7 @@ SELECT pid, granted FROM pg_locks WHERE locktype = 'advisory';
 Only one row should appear. Multiple rows with `granted = true` indicates a split-brain — restart all replicas immediately.
 
 ```bash
-kubectl rollout restart deployment/soroban-pulse
+kubectl rollout restart deployment/stellarclassic-pulse
 ```
 
 ### Replica promotion in Kubernetes
@@ -340,10 +340,10 @@ If using HPA (Horizontal Pod Autoscaler):
 
 ```bash
 # Scale down to 1 replica to force a single leader
-kubectl scale deployment/soroban-pulse --replicas=1
+kubectl scale deployment/stellarclassic-pulse --replicas=1
 
 # Scale back up after verifying stability
-kubectl scale deployment/soroban-pulse --replicas=3
+kubectl scale deployment/stellarclassic-pulse --replicas=3
 ```
 
 ---
@@ -403,7 +403,7 @@ or
 
 ### Checklist: Indexer not making progress
 
-- [ ] Does `soroban_pulse_indexer_is_leader` == 1 on this replica?
+- [ ] Does `stellarclassic_pulse_indexer_is_leader` == 1 on this replica?
 - [ ] Is the RPC endpoint reachable? (`curl $STELLAR_RPC_URL/health`)
 - [ ] Is `START_LEDGER` set to a valid ledger within the RPC history window?
 - [ ] Are there database errors in the logs? (`RUST_LOG=debug`)
@@ -415,7 +415,7 @@ or
 - [ ] Is `/healthz/ready` returning `200`?
 - [ ] Is the indexer lag below the warning threshold?
 - [ ] Are there slow queries? (`SLOW_QUERY_THRESHOLD_MS` logs)
-- [ ] Is the rate limiter rejecting requests? (`soroban_pulse_rate_limit_rejected_total` rate)
+- [ ] Is the rate limiter rejecting requests? (`stellarclassic_pulse_rate_limit_rejected_total` rate)
 - [ ] Is the correct `API_KEY` being sent (if auth is enabled)?
 - [ ] Are filters using indexed columns? (`contract_id`, `ledger`, `tx_hash`)
 
@@ -424,7 +424,7 @@ or
 - [ ] Is `SSE_KEEPALIVE_SECS` < reverse proxy timeout?
 - [ ] Is the server emitting ping events? (`event: ping` in the stream)
 - [ ] Are there `channel lagged` messages in logs? (SSE ring buffer is full)
-- [ ] Is `soroban_pulse_sse_active_connections` unusually high, indicating resource exhaustion?
+- [ ] Is `stellarclassic_pulse_sse_active_connections` unusually high, indicating resource exhaustion?
 - [ ] Does the client reconnect using `Last-Event-ID`?
 
 ### Checklist: Webhook delivery failures
@@ -460,7 +460,7 @@ Escalate immediately for:
 
 - Prometheus alert definitions: [`docs/alerts.yml`](../alerts.yml)
 - Alertmanager routing config: [`docs/alertmanager.yml`](../alertmanager.yml)
-- PagerDuty escalation policy: configured in PagerDuty under the `SorobanPulse` service
+- PagerDuty escalation policy: configured in PagerDuty under the `StellarClassicPulse` service
 
 ### Declaring an incident
 
@@ -477,10 +477,10 @@ Escalate immediately for:
 curl http://<host>/healthz/ready | jq .
 
 # Current lag
-curl http://<host>/metrics | grep soroban_pulse_indexer_lag_ledgers
+curl http://<host>/metrics | grep stellarclassic_pulse_indexer_lag_ledgers
 
 # Restart the service (Kubernetes)
-kubectl rollout restart deployment/soroban-pulse
+kubectl rollout restart deployment/stellarclassic-pulse
 
 # Pause indexer
 curl -X POST http://<host>/v1/admin/indexer/pause \
@@ -491,7 +491,7 @@ curl -X POST http://<host>/v1/admin/indexer/resume \
   -H "X-Api-Key: $ADMIN_API_KEY"
 
 # View recent logs
-kubectl logs -l app=soroban-pulse --tail=200 | grep -i error
+kubectl logs -l app=stellarclassic-pulse --tail=200 | grep -i error
 
 # Database active connections
 psql $DATABASE_URL -c "SELECT count(*), state FROM pg_stat_activity GROUP BY state;"

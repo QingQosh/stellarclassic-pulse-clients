@@ -1,18 +1,18 @@
-"""Example: verifying SorobanPulse webhooks in a Flask endpoint."""
+"""Example: verifying StellarClassicPulse webhooks in a Flask endpoint."""
 
 import os
 
 from flask import Flask, request, abort
 
-from soroban_pulse import verify_webhook_signature, WebhookVerificationError
+from stellarclassic_pulse import verify_webhook_signature, WebhookVerificationError
 
 app = Flask(__name__)
 WEBHOOK_SECRET = os.environ["SOROBAN_PULSE_WEBHOOK_SECRET"]
 
 
-@app.route("/webhooks/soroban-pulse", methods=["POST"])
+@app.route("/webhooks/stellarclassic-pulse", methods=["POST"])
 def handle_webhook():
-    signature = request.headers.get("X-SorobanPulse-Signature", "")
+    signature = request.headers.get("X-StellarClassicPulse-Signature", "")
     try:
         verify_webhook_signature(request.data, signature, WEBHOOK_SECRET)
     except WebhookVerificationError:

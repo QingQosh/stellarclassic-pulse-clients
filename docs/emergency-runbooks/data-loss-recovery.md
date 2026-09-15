@@ -40,7 +40,7 @@ curl -X POST https://your-service/v1/admin/indexer/pause \
      -H "Authorization: Bearer $ADMIN_API_KEY"
 
 # If the DB is gone, scale down all service replicas first
-kubectl scale deployment soroban-pulse --replicas=0 -n production
+kubectl scale deployment stellarclassic-pulse --replicas=0 -n production
 # or
 docker-compose stop app
 ```
@@ -69,7 +69,7 @@ aws rds describe-db-snapshots \
     --output table | sort -k2
 
 # 2. Choose the most recent snapshot before the loss event
-SNAPSHOT_ID="rds:soroban-pulse-prod-2026-08-30-05-00"
+SNAPSHOT_ID="rds:stellarclassic-pulse-prod-2026-08-30-05-00"
 
 # 3. Restore
 aws rds restore-db-instance-from-db-snapshot \
@@ -83,11 +83,11 @@ aws rds wait db-instance-available \
     --db-instance-identifier $DB_INSTANCE-recovery
 
 # 5. Update the service DATABASE_URL to point at the recovery instance
-export DATABASE_URL="postgres://user:pass@$RECOVERY_HOST:5432/soroban_pulse"
+export DATABASE_URL="postgres://user:pass@$RECOVERY_HOST:5432/stellarclassic_pulse"
 
 # 6. Restart the service
-kubectl set env deployment/soroban-pulse DATABASE_URL="$DATABASE_URL" -n production
-kubectl rollout restart deployment/soroban-pulse -n production
+kubectl set env deployment/stellarclassic-pulse DATABASE_URL="$DATABASE_URL" -n production
+kubectl rollout restart deployment/stellarclassic-pulse -n production
 ```
 
 ### Option B — Continuous backup / WAL restore (self-hosted)
@@ -167,7 +167,7 @@ curl https://your-service/healthz/ready | jq .
 curl https://your-service/v1/events?limit=1 | jq .data[0]
 
 # Check indexer is catching up
-curl https://your-service/metrics | grep soroban_pulse_indexer_lag
+curl https://your-service/metrics | grep stellarclassic_pulse_indexer_lag
 ```
 
 ---

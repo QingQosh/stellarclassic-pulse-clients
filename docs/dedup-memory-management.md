@@ -32,8 +32,8 @@ When `current` fills past `fill_ratio_threshold` (default **80%**):
 1. `current` is promoted to `previous` (the old `previous` is dropped).
 2. A fresh empty filter becomes `current`.
 3. Lookups probe **both** filters so recently-rotated entries are still detected.
-4. Metrics are updated: `soroban_pulse_bloom_filter_rotations_total++` and
-   `soroban_pulse_bloom_filter_fill_ratio` resets to 0.
+4. Metrics are updated: `stellarclassic_pulse_bloom_filter_rotations_total++` and
+   `stellarclassic_pulse_bloom_filter_fill_ratio` resets to 0.
 
 **Memory bound:** At most 2 × single-filter memory is used at any time.
 Between rotations only 1 × single-filter memory is used.
@@ -84,14 +84,14 @@ in code.
 
 | Metric | Type | Description |
 |--------|------|-------------|
-| `soroban_pulse_bloom_filter_hits_total` | Counter | Entries found in filter (potential dedup) |
-| `soroban_pulse_bloom_filter_size` | Gauge | Legacy — number of items seeded |
-| `soroban_pulse_bloom_filter_fill_ratio` | Gauge | **New** — current / capacity (0–1) |
-| `soroban_pulse_bloom_filter_memory_bytes` | Gauge | **New** — estimated heap usage in bytes |
-| `soroban_pulse_bloom_filter_rotations_total` | Counter | **New** — total rotation events |
-| `soroban_pulse_bloom_filter_memory_resets_total` | Counter | **New** — alias for rotations (memory freed) |
-| `soroban_pulse_session_bloom_hits_total` | Counter | Session-level filter hits (Issue #615) |
-| `soroban_pulse_session_bloom_resets_total` | Counter | Session filter resets (new ledger detected) |
+| `stellarclassic_pulse_bloom_filter_hits_total` | Counter | Entries found in filter (potential dedup) |
+| `stellarclassic_pulse_bloom_filter_size` | Gauge | Legacy — number of items seeded |
+| `stellarclassic_pulse_bloom_filter_fill_ratio` | Gauge | **New** — current / capacity (0–1) |
+| `stellarclassic_pulse_bloom_filter_memory_bytes` | Gauge | **New** — estimated heap usage in bytes |
+| `stellarclassic_pulse_bloom_filter_rotations_total` | Counter | **New** — total rotation events |
+| `stellarclassic_pulse_bloom_filter_memory_resets_total` | Counter | **New** — alias for rotations (memory freed) |
+| `stellarclassic_pulse_session_bloom_hits_total` | Counter | Session-level filter hits (Issue #615) |
+| `stellarclassic_pulse_session_bloom_resets_total` | Counter | Session filter resets (new ledger detected) |
 
 ### Grafana Panels to Add
 
@@ -99,7 +99,7 @@ in code.
 {
   "title": "Bloom Filter Fill Ratio",
   "type": "timeseries",
-  "targets": [{ "expr": "soroban_pulse_bloom_filter_fill_ratio" }],
+  "targets": [{ "expr": "stellarclassic_pulse_bloom_filter_fill_ratio" }],
   "fieldConfig": { "defaults": { "max": 1, "min": 0, "unit": "percentunit" }}
 }
 ```
@@ -108,7 +108,7 @@ in code.
 
 ```yaml
 - alert: BloomFilterFillHigh
-  expr: soroban_pulse_bloom_filter_fill_ratio > 0.95
+  expr: stellarclassic_pulse_bloom_filter_fill_ratio > 0.95
   for: 5m
   labels:
     severity: warning
@@ -189,7 +189,7 @@ Unit tests in `src/bloom_filter.rs` cover:
 Run them with:
 
 ```bash
-cargo test -p soroban_pulse bloom_filter
+cargo test -p stellarclassic_pulse bloom_filter
 ```
 
 ---
@@ -198,7 +198,7 @@ cargo test -p soroban_pulse bloom_filter
 
 **Q: False positive rate seems high / legitimate events are being skipped.**
 
-Check `soroban_pulse_bloom_filter_fill_ratio`. If it's near 1.0 for extended
+Check `stellarclassic_pulse_bloom_filter_fill_ratio`. If it's near 1.0 for extended
 periods without rotation, the `BLOOM_FILTER_CAPACITY` may be too low. Increase
 it so rotations happen less frequently:
 
@@ -210,7 +210,7 @@ BLOOM_FILTER_CAPACITY=5000000
 
 Each rotation replaces `previous` with the old `current`. If memory appears to
 grow, check whether the OS is slow to reclaim freed pages (common on Linux with
-`jemalloc`). The `soroban_pulse_process_memory_bytes` metric tracks RSS; a slow
+`jemalloc`). The `stellarclassic_pulse_process_memory_bytes` metric tracks RSS; a slow
 decrease after a rotation is normal.
 
 **Q: The filter rotates too frequently.**

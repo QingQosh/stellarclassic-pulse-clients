@@ -1,4 +1,4 @@
-package soroban_pulse
+package stellarclassic_pulse
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// Client represents a Soroban Pulse API client
+// Client represents a StellarClassic Pulse API client
 type Client struct {
 	baseURL    string
 	apiKey     string
@@ -33,10 +33,10 @@ type ClientConfig struct {
 	OnRetry          func(attempt int, delay time.Duration, reason string)
 }
 
-// NewClient creates a new Soroban Pulse API client
+// NewClient creates a new StellarClassic Pulse API client
 func NewClient(config ClientConfig) *Client {
 	if config.BaseURL == "" {
-		config.BaseURL = "https://api.sorobanpulse.com"
+		config.BaseURL = "https://api.stellarclassicpulse.com"
 	}
 	if config.Timeout == 0 {
 		config.Timeout = 30 * time.Second
@@ -318,7 +318,7 @@ func (c *Client) doRequestWithRetry(ctx context.Context, req *http.Request) (*ht
 // setHeaders sets common headers for requests
 func (c *Client) setHeaders(req *http.Request) {
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "soroban-pulse-go/1.0")
+	req.Header.Set("User-Agent", "stellarclassic-pulse-go/1.0")
 
 	if c.apiKey != "" {
 		req.Header.Set("X-Api-Key", c.apiKey)

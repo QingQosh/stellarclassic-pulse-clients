@@ -39,7 +39,7 @@ describe("AuthContext", () => {
     );
     fireEvent.click(screen.getByText("login"));
     await waitFor(() => expect(screen.getByTestId("user").textContent).toBe("test@example.com"));
-    expect(localStorage.getItem("sorobanpulse.dashboard.auth")).toContain("test-token");
+    expect(localStorage.getItem("stellarclassicpulse.dashboard.auth")).toContain("test-token");
   });
 
   it("logs out and clears storage", async () => {
@@ -52,6 +52,6 @@ describe("AuthContext", () => {
     await waitFor(() => expect(screen.getByTestId("user").textContent).toBe("test@example.com"));
     fireEvent.click(screen.getByText("logout"));
     expect(screen.getByTestId("user").textContent).toBe("anonymous");
-    expect(localStorage.getItem("sorobanpulse.dashboard.auth")).toBeNull();
+    expect(localStorage.getItem("stellarclassicpulse.dashboard.auth")).toBeNull();
   });
 });

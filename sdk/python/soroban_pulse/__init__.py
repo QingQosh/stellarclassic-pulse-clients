@@ -1,20 +1,20 @@
-"""Official Python SDK for SorobanPulse."""
+"""Official Python SDK for StellarClassicPulse."""
 
-from .client import SorobanPulseClient
-from .async_client import AsyncSorobanPulseClient
+from .client import StellarClassicPulseClient
+from .async_client import AsyncStellarClassicPulseClient
 from .subscriptions import EventSubscription
 from .webhooks import verify_webhook_signature, WebhookVerificationError
-from .exceptions import SorobanPulseError, ApiError, AuthenticationError
+from .exceptions import StellarClassicPulseError, ApiError, AuthenticationError
 
 __version__ = "0.1.0"
 
 __all__ = [
-    "SorobanPulseClient",
-    "AsyncSorobanPulseClient",
+    "StellarClassicPulseClient",
+    "AsyncStellarClassicPulseClient",
     "EventSubscription",
     "verify_webhook_signature",
     "WebhookVerificationError",
-    "SorobanPulseError",
+    "StellarClassicPulseError",
     "ApiError",
     "AuthenticationError",
 ]

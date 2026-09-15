@@ -1,4 +1,4 @@
-"""Synchronous SorobanPulse API client."""
+"""Synchronous StellarClassicPulse API client."""
 
 from __future__ import annotations
 
@@ -9,15 +9,15 @@ from urllib.error import HTTPError, URLError
 
 from .exceptions import ApiError, AuthenticationError
 
-DEFAULT_BASE_URL = "https://api.sorobanpulse.io/v1"
+DEFAULT_BASE_URL = "https://api.stellarclassicpulse.io/v1"
 DEFAULT_TIMEOUT = 30
 
 
-class SorobanPulseClient:
-    """Blocking client for the SorobanPulse REST API.
+class StellarClassicPulseClient:
+    """Blocking client for the StellarClassicPulse REST API.
 
     Example:
-        client = SorobanPulseClient(api_key="sp_live_...")
+        client = StellarClassicPulseClient(api_key="sp_live_...")
         events = client.list_events(contract_id="C...", limit=50)
     """
 
@@ -37,7 +37,7 @@ class SorobanPulseClient:
         return {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "User-Agent": "soroban-pulse-python-sdk/0.1.0",
+            "User-Agent": "stellarclassic-pulse-python-sdk/0.1.0",
         }
 
     def _request(self, method: str, path: str, params: Optional[Dict[str, Any]] = None,

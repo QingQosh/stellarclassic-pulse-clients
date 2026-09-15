@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-    Soroban Pulse API
+    StellarClassic Pulse API
 
     Indexes Soroban smart contract events on the Stellar network.
 

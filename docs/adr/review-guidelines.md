@@ -23,7 +23,7 @@ Approving an ADR is not approving that the decision is optimal; it is approving 
 This says nothing a future contributor could act on or verify. It doesn't say which component, what "better" means, or what "resilient" is measured against.
 
 **Specific enough to approve:**
-> Replica lag is polled every 60 seconds from `pg_stat_replication` and exposed as Prometheus gauges (`soroban_pulse_replica_lag_bytes`, `..._replay_lag_seconds`). A warning is logged above 10 MiB / 30 s lag; 100 MiB / 60 s is treated as critical. Read traffic that requires current data (webhook delivery decisions, replay jobs) is routed to the primary, not a replica.
+> Replica lag is polled every 60 seconds from `pg_stat_replication` and exposed as Prometheus gauges (`stellarclassic_pulse_replica_lag_bytes`, `..._replay_lag_seconds`). A warning is logged above 10 MiB / 30 s lag; 100 MiB / 60 s is treated as critical. Read traffic that requires current data (webhook delivery decisions, replay jobs) is routed to the primary, not a replica.
 
 The second version can be checked against the code, gives concrete thresholds, and tells an implementer exactly what to build or verify.
 

@@ -6,12 +6,27 @@ labels: enhancement
 
 ## Problem
 
-<!-- What problem does this feature solve? -->
+<!-- What problem does this feature solve? Who is affected and how often? -->
 
 ## Proposed solution
 
 <!-- Describe the solution you'd like. -->
 
+## Affected component
+
+- [ ] `dashboard/`
+- [ ] `cli/`
+- [ ] `sdk/javascript` or `sdk/typescript`
+- [ ] `sdk/python`
+- [ ] `sdk/go`
+- [ ] `vscode-extension/`
+- [ ] `docs/`
+
 ## Alternatives considered
 
-<!-- Any alternative approaches you've thought about. -->
+## Acceptance criteria
+
+- [ ] 
+- [ ] 
+
+## Additional context

@@ -6,7 +6,7 @@
 > command or config value below against the linked guide before relying on
 > it operationally.
 
-Soroban Pulse indexes Soroban smart contract events on the Stellar network
+StellarClassic Pulse indexes Soroban smart contract events on the Stellar network
 and exposes them via a REST API, Server-Sent Events, and webhook/notification
 channels. This FAQ collects the questions that come up most often from both
 **users** (people querying/subscribing to events) and **operators** (people
@@ -27,15 +27,15 @@ running an instance).
 
 ## General
 
-**What is Soroban Pulse?**
+**What is StellarClassic Pulse?**
 A Rust backend service that polls the Stellar Soroban RPC for contract
 events, indexes them in PostgreSQL, and re-exposes them via a REST API,
 real-time SSE streams, and outbound notification channels (webhooks, email,
 SMS, push, and chat integrations). See the [README](../README.md) and
 [architecture.md](architecture.md) for the full component breakdown.
 
-**Is Soroban Pulse an alternative to Stellar Horizon?**
-It's complementary rather than a drop-in replacement — Soroban Pulse
+**Is StellarClassic Pulse an alternative to Stellar Horizon?**
+It's complementary rather than a drop-in replacement — StellarClassic Pulse
 specializes in Soroban contract *events* with subscription/notification
 delivery on top, whereas Horizon covers the broader ledger/transaction API
 surface. If you're migrating event-watching workflows off Horizon, see
@@ -46,20 +46,20 @@ PostgreSQL. Migrations live in `migrations/` and are applied automatically
 on startup (see [development-setup.md](development-setup.md)).
 
 **Where do I report a bug or request a feature?**
-Open a GitHub issue against this repository. Include your Soroban Pulse
+Open a GitHub issue against this repository. Include your StellarClassic Pulse
 version, deployment platform, and (for bugs) relevant log lines with
 correlation IDs — see [correlation-ids.md](correlation-ids.md).
 
 ## Getting started
 
-**How do I run Soroban Pulse locally?**
+**How do I run StellarClassic Pulse locally?**
 See [development-setup.md](development-setup.md) and
 [QUICK_START_GUIDE.md](../QUICK_START_GUIDE.md) for the full local setup
 (PostgreSQL, environment variables, running migrations, starting the
 service).
 
 **How do I know the indexer is healthy and caught up?**
-Check the `/health` endpoint and the `soroban_pulse_indexer_lag_ledgers`
+Check the `/health` endpoint and the `stellarclassic_pulse_indexer_lag_ledgers`
 gauge (current ledger vs. latest ledger from RPC). See
 [kubernetes-probes.md](kubernetes-probes.md) and
 [metrics-reference.md](metrics-reference.md).
@@ -91,7 +91,7 @@ Common causes, roughly in order of likelihood:
 3. The target (email/phone/push token) is on a suppression list or has
    unsubscribed.
 4. The channel is unhealthy — check the
-   `soroban_pulse_notification_channel_healthy` gauge.
+   `stellarclassic_pulse_notification_channel_healthy` gauge.
 5. It was rate-limited or deduplicated — see
    [notification-rate-limiting.md](notification-rate-limiting.md) and
    [notification-deduplication.md](notification-deduplication.md).
@@ -106,7 +106,7 @@ supported channels; see [priority-queueing.md](priority-queueing.md).
 
 **Can I pause a subscription temporarily instead of deleting it?**
 Yes — see the pause/resume endpoints described in the API guide (issue
-#884 in `metrics.rs` tracks `soroban_pulse_subscriptions_paused_total` /
+#884 in `metrics.rs` tracks `stellarclassic_pulse_subscriptions_paused_total` /
 `_resumed_total` for this).
 
 ## Integrations
@@ -119,7 +119,7 @@ Prometheus remote-write. See the respective `docs/*-integration.md` /
 [pagerduty-integration.md](pagerduty-integration.md),
 [kafka-event-publishing.md](kafka-event-publishing.md)).
 
-**How do I verify a webhook is genuinely from Soroban Pulse?**
+**How do I verify a webhook is genuinely from StellarClassic Pulse?**
 Every webhook is HMAC-signed; verify it using the steps in
 [webhook-verification.md](webhook-verification.md) and
 [webhook-signing.md](webhook-signing.md).
@@ -128,7 +128,7 @@ Every webhook is HMAC-signed; verify it using the steps in
 Delivery retries with backoff per [retry-policies.md](retry-policies.md); if
 retries are exhausted the event fails over according to
 [graceful-degradation.md](graceful-degradation.md), and
-`soroban_pulse_webhook_failures_total` is incremented.
+`stellarclassic_pulse_webhook_failures_total` is incremented.
 
 **Is there a GraphQL API in addition to REST?**
 Yes — see [graphql_api.md](graphql_api.md) and
@@ -139,16 +139,16 @@ Yes — see [graphql_api.md](graphql_api.md) and
 **The indexer is stuck / not advancing.**
 See the "Indexer lag" section of
 [troubleshooting-guide.md](troubleshooting-guide.md) and check
-`soroban_pulse_indexer_current_ledger` vs.
-`soroban_pulse_indexer_latest_ledger`. Also check
-`soroban_pulse_indexer_is_leader` if running multiple replicas — only the
+`stellarclassic_pulse_indexer_current_ledger` vs.
+`stellarclassic_pulse_indexer_latest_ledger`. Also check
+`stellarclassic_pulse_indexer_is_leader` if running multiple replicas — only the
 advisory-lock holder indexes; see
 [advisory-lock-behavior.md](advisory-lock-behavior.md).
 
 **I'm seeing database connection pool exhaustion.**
 See [connection-pool.md](connection-pool.md) and the pool-utilization
 metrics in [metrics-reference.md](metrics-reference.md)
-(`soroban_pulse_db_pool_utilization`, `_pool_exhaustion_alerts_total`).
+(`stellarclassic_pulse_db_pool_utilization`, `_pool_exhaustion_alerts_total`).
 
 **Events are duplicated / missing.**
 See [event-deduplication.md](event-deduplication.md) (bloom-filter and
@@ -162,7 +162,7 @@ content-fingerprint dedup) and [data-quality-monitoring.md](data-quality-monitor
 **A counter metric looks like it reset to a small number.**
 As of issue #993, long-running counters (e.g. push delivery analytics) use
 a saturating counter that will not silently wrap; check
-`soroban_pulse_counter_overflow_total` — if it's non-zero for that counter,
+`stellarclassic_pulse_counter_overflow_total` — if it's non-zero for that counter,
 it genuinely saturated at `u64::MAX` rather than wrapping. See
 [metrics-design.md](metrics-design.md).
 
@@ -193,7 +193,7 @@ See [encryption.md](encryption.md) and
 [event-encryption.md](event-encryption.md) for at-rest/in-transit coverage,
 and [key-rotation.md](key-rotation.md) for key lifecycle.
 
-**Is Soroban Pulse GDPR-compliant for stored event data?**
+**Is StellarClassic Pulse GDPR-compliant for stored event data?**
 See [gdpr-compliance.md](gdpr-compliance.md) for the right-to-erasure and
 anonymization flows.
 

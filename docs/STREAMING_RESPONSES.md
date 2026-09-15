@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the streaming response feature that allows SorobanPulse to efficiently handle large result sets without loading entire datasets into memory.
+This document describes the streaming response feature that allows StellarClassicPulse to efficiently handle large result sets without loading entire datasets into memory.
 
 ## Problem Statement
 
@@ -168,16 +168,16 @@ def stream_events(url: str):
 ### Metrics
 
 ```
-soroban_pulse_streaming_response_items_sent_total
+stellarclassic_pulse_streaming_response_items_sent_total
   - Total items sent across all streaming responses
 
-soroban_pulse_streaming_response_items_per_stream
+stellarclassic_pulse_streaming_response_items_per_stream
   - Histogram of items per streaming response
 
-soroban_pulse_streaming_responses_completed_total
+stellarclassic_pulse_streaming_responses_completed_total
   - Total completed streaming responses
 
-soroban_pulse_streaming_response_errors_total{error_type}
+stellarclassic_pulse_streaming_response_errors_total{error_type}
   - Streaming response errors (serialization, database)
 ```
 
@@ -185,7 +185,7 @@ soroban_pulse_streaming_response_errors_total{error_type}
 
 ```promql
 # Alert if streaming responses have high error rates
-rate(soroban_pulse_streaming_response_errors_total[5m]) > 0.1
+rate(stellarclassic_pulse_streaming_response_errors_total[5m]) > 0.1
 ```
 
 ## Configuration

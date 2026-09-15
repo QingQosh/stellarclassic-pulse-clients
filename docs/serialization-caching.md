@@ -13,7 +13,7 @@ and TTL, wrapped in versioned keys and lock-free counters.
 ## Configuration
 
 ```rust
-use soroban_pulse::serialization_cache::SerializedEventCache;
+use stellarclassic_pulse::serialization_cache::SerializedEventCache;
 
 // explicit
 let cache = SerializedEventCache::new(10_000, 300);
@@ -156,16 +156,16 @@ it is the figure that answers the question actually being asked.
 
 | Metric | Type | Labels |
 |---|---|---|
-| `soroban_pulse_serialization_cache_hits_total` | counter | `entity_type` |
-| `soroban_pulse_serialization_cache_misses_total` | counter | `entity_type` |
-| `soroban_pulse_serialization_time_us` | histogram | `entity_type` |
-| `soroban_pulse_serialization_cache_evictions_total` | counter | `entity_type` |
-| `soroban_pulse_serialization_cache_invalidations_total` | counter | `entity_type`, `strategy` |
-| `soroban_pulse_serialization_cache_prewarmed_total` | counter | `entity_type` |
-| `soroban_pulse_serialization_cache_bytes_saved_total` | counter | `entity_type` |
-| `soroban_pulse_serialization_cache_entry_count` | gauge | - |
-| `soroban_pulse_serialization_cache_hit_rate` | gauge | `entity_type` |
-| `soroban_pulse_serialization_cache_version` | gauge | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_hits_total` | counter | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_misses_total` | counter | `entity_type` |
+| `stellarclassic_pulse_serialization_time_us` | histogram | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_evictions_total` | counter | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_invalidations_total` | counter | `entity_type`, `strategy` |
+| `stellarclassic_pulse_serialization_cache_prewarmed_total` | counter | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_bytes_saved_total` | counter | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_entry_count` | gauge | - |
+| `stellarclassic_pulse_serialization_cache_hit_rate` | gauge | `entity_type` |
+| `stellarclassic_pulse_serialization_cache_version` | gauge | `entity_type` |
 
 `strategy` is `key`, `entity_type`, or `all`.
 

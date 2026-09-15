@@ -6,7 +6,7 @@
 
 ## Overview
 
-SorobanPulse configuration is unified in `src/config.rs` (the `Config` struct)
+StellarClassicPulse configuration is unified in `src/config.rs` (the `Config` struct)
 with validation collected in `src/config_validation.rs`. There are three input
 sources, merged in the following priority order (highest wins):
 
@@ -31,7 +31,7 @@ is absent. Example:
 
 ```toml
 # config.toml
-DATABASE_URL = "postgres://user:pass@localhost/soroban_pulse"
+DATABASE_URL = "postgres://user:pass@localhost/stellarclassic_pulse"
 DB_MAX_CONNECTIONS = "20"
 STELLAR_RPC_URL = "https://soroban-testnet.stellar.org"
 RUST_LOG = "info"

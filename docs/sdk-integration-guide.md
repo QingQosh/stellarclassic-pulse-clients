@@ -1,6 +1,6 @@
 # SDK Integration Guide
 
-This guide covers integrating the Soroban Pulse SDKs into your application. SDKs are available for TypeScript/JavaScript, Python, and Go.
+This guide covers integrating the StellarClassic Pulse SDKs into your application. SDKs are available for TypeScript/JavaScript, Python, and Go.
 
 Building or extending the SDKs themselves rather than consuming them? See the [SDK Development Guide](sdk-development.md) for architecture, per-language contributor tutorials, and webhook verification internals.
 
@@ -19,7 +19,7 @@ Building or extending the SDKs themselves rather than consuming them? See the [S
 
 ## Quickstart
 
-All three SDKs follow the same pattern: create a configuration object pointing at your Soroban Pulse instance, instantiate an API client, and call methods.
+All three SDKs follow the same pattern: create a configuration object pointing at your StellarClassic Pulse instance, instantiate an API client, and call methods.
 
 ### TypeScript
 
@@ -51,7 +51,7 @@ async with openapi_client.ApiClient(config) as client:
 ### Go
 
 ```go
-import sp "github.com/soroban-pulse/client-go"
+import sp "github.com/stellarclassic-pulse/client-go"
 
 client := sp.NewClient(sp.ClientConfig{
     BaseURL: "http://localhost:3000",
@@ -66,7 +66,7 @@ events, err := client.GetEvents(ctx, sp.NewGetEventsOptions())
 
 ## Authentication
 
-Soroban Pulse supports two optional authentication mechanisms. Both are disabled when the corresponding environment variable is unset on the server.
+StellarClassic Pulse supports two optional authentication mechanisms. Both are disabled when the corresponding environment variable is unset on the server.
 
 ### Regular API key (`API_KEY`)
 
@@ -519,7 +519,7 @@ interface PaginatedEvents {
 ```bash
 pip install -r sdk/python/requirements.txt
 # or
-pip install git+https://github.com/Soroban-Pulse/SorobanPulse.git#subdirectory=sdk/python
+pip install git+https://github.com/Soroban-Pulse/StellarClassicPulse.git#subdirectory=sdk/python
 ```
 
 Requires Python 3.9+.
@@ -601,7 +601,7 @@ from openapi_client import (
 ### Installation
 
 ```bash
-go get github.com/soroban-pulse/client-go
+go get github.com/stellarclassic-pulse/client-go
 ```
 
 Requires Go 1.21+. Uses only the standard library (no external dependencies).
@@ -644,7 +644,7 @@ import (
     "log"
     "time"
 
-    sp "github.com/soroban-pulse/client-go"
+    sp "github.com/stellarclassic-pulse/client-go"
 )
 
 func main() {

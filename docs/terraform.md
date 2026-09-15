@@ -1,6 +1,6 @@
 # Terraform Infrastructure Guide (Issue #650)
 
-SorobanPulse's cloud infrastructure is defined as code using [Terraform](https://www.terraform.io/) (>= 1.6). All resources — VPC, RDS PostgreSQL, Application Load Balancer, and monitoring — live under `terraform/`.
+StellarClassicPulse's cloud infrastructure is defined as code using [Terraform](https://www.terraform.io/) (>= 1.6). All resources — VPC, RDS PostgreSQL, Application Load Balancer, and monitoring — live under `terraform/`.
 
 ## Directory Structure
 
@@ -52,23 +52,23 @@ Terraform state is stored in S3 with DynamoDB locking. Create these once **befor
 ```bash
 # Create the state bucket
 aws s3api create-bucket \
-  --bucket soroban-pulse-terraform-state \
+  --bucket stellarclassic-pulse-terraform-state \
   --region us-east-1
 
 # Enable versioning (protect against accidental state deletion)
 aws s3api put-bucket-versioning \
-  --bucket soroban-pulse-terraform-state \
+  --bucket stellarclassic-pulse-terraform-state \
   --versioning-configuration Status=Enabled
 
 # Enable encryption at rest
 aws s3api put-bucket-encryption \
-  --bucket soroban-pulse-terraform-state \
+  --bucket stellarclassic-pulse-terraform-state \
   --server-side-encryption-configuration \
     '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
 
 # Create the DynamoDB lock table
 aws dynamodb create-table \
-  --table-name soroban-pulse-terraform-locks \
+  --table-name stellarclassic-pulse-terraform-locks \
   --attribute-definitions AttributeName=LockID,AttributeType=S \
   --key-schema AttributeName=LockID,KeyType=HASH \
   --billing-mode PAY_PER_REQUEST \
@@ -163,7 +163,7 @@ The application reads `DATABASE_URL` from an environment variable. In ECS, injec
 ```json
 {
   "name": "DATABASE_URL",
-  "valueFrom": "arn:aws:secretsmanager:us-east-1:ACCOUNT:secret:soroban-pulse-staging/rds/credentials"
+  "valueFrom": "arn:aws:secretsmanager:us-east-1:ACCOUNT:secret:stellarclassic-pulse-staging/rds/credentials"
 }
 ```
 

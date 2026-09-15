@@ -2,7 +2,7 @@
 
 ## Overview
 
-Soroban Pulse implements comprehensive OWASP API security headers to protect against common web vulnerabilities. These headers are automatically added to all API responses to enhance security.
+StellarClassic Pulse implements comprehensive OWASP API security headers to protect against common web vulnerabilities. These headers are automatically added to all API responses to enhance security.
 
 ## Implemented Headers
 
@@ -174,7 +174,7 @@ magnetometer=(), microphone=(), midi=(), payment=(), usb=()
 
 ## Header Priority
 
-Soroban Pulse applies headers in this order (most to least protective):
+StellarClassic Pulse applies headers in this order (most to least protective):
 1. Permissions-Policy (disable features)
 2. Strict-Transport-Security (enforce HTTPS)
 3. X-Content-Type-Options (prevent MIME sniffing)
@@ -253,7 +253,7 @@ print("✓ All security headers verified!")
 
 ## Configuration
 
-These headers are applied automatically and cannot be disabled. They are set on all responses from Soroban Pulse.
+These headers are applied automatically and cannot be disabled. They are set on all responses from StellarClassic Pulse.
 
 If you need different security header values:
 
@@ -323,7 +323,7 @@ curl -i -v https://api.example.com/health
 
 A proper security headers configuration can achieve an A grade on [securityheaders.com](https://securityheaders.com/).
 
-Soroban Pulse's header configuration is designed to:
+StellarClassic Pulse's header configuration is designed to:
 - ✅ Prevent MIME type sniffing
 - ✅ Prevent clickjacking
 - ✅ Enforce HTTPS

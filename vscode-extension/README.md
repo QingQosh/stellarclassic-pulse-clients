@@ -1,6 +1,6 @@
-# Soroban Pulse Explorer
+# StellarClassic Pulse Explorer
 
-Browse, test, and inspect [Soroban Pulse](https://github.com/soroban-pulse/soroban-pulse) API endpoints directly from VS Code.
+Browse, test, and inspect [StellarClassic Pulse](https://github.com/stellarclassic-pulse/stellarclassic-pulse) API endpoints directly from VS Code.
 
 ## Features
 
@@ -11,10 +11,10 @@ Browse, test, and inspect [Soroban Pulse](https://github.com/soroban-pulse/sorob
 ## Getting Started
 
 1. Install the extension.
-2. Open **Settings** (`Ctrl+,`) and search for `sorobanpulse`:
-   - Set `sorobanpulse.baseUrl` to your running instance (default: `http://localhost:3000`)
-   - Set `sorobanpulse.apiKey` for authenticated endpoints
-   - Optionally set `sorobanpulse.adminApiKey` for `/admin/*` endpoints
+2. Open **Settings** (`Ctrl+,`) and search for `stellarclassicpulse`:
+   - Set `stellarclassicpulse.baseUrl` to your running instance (default: `http://localhost:3000`)
+   - Set `stellarclassicpulse.apiKey` for authenticated endpoints
+   - Optionally set `stellarclassicpulse.adminApiKey` for `/admin/*` endpoints
 3. Click the **⚡** icon in the activity bar to open the API Explorer.
 4. Click any endpoint to open it in the Request Tester — fill in parameters and hit **Send**.
 
@@ -22,7 +22,7 @@ Browse, test, and inspect [Soroban Pulse](https://github.com/soroban-pulse/sorob
 
 | Command | Description |
 |---------|-------------|
-| `Soroban Pulse: Open Settings` | Jump to extension settings |
+| `StellarClassic Pulse: Open Settings` | Jump to extension settings |
 | Refresh (toolbar) | Reload the endpoint list |
 | Copy URL (right-click) | Copy the full endpoint URL to clipboard |
 
@@ -31,11 +31,11 @@ Browse, test, and inspect [Soroban Pulse](https://github.com/soroban-pulse/sorob
 ```bash
 cd vscode-extension
 npm install
-npm run package        # builds soroban-pulse-explorer-x.x.x.vsix
+npm run package        # builds stellarclassic-pulse-explorer-x.x.x.vsix
 npm run publish        # publishes to VS Code Marketplace (requires vsce login)
 ```
 
 ## Requirements
 
 - VS Code `^1.85.0`
-- A running Soroban Pulse server
+- A running StellarClassic Pulse server

@@ -1,6 +1,6 @@
 # Kubernetes Probes
 
-Soroban Pulse exposes dedicated health check endpoints for Kubernetes liveness and readiness probes. These endpoints allow Kubernetes to manage pod lifecycle and traffic routing automatically.
+StellarClassic Pulse exposes dedicated health check endpoints for Kubernetes liveness and readiness probes. These endpoints allow Kubernetes to manage pod lifecycle and traffic routing automatically.
 
 ## Probe Endpoints
 

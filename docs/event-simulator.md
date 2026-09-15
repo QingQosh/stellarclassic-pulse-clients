@@ -42,7 +42,7 @@ touching a live network.
 ## Usage
 
 ```rust
-use soroban_pulse::event_simulator::{EventFactory, EventPattern, FilterRule, FilterTester};
+use stellarclassic_pulse::event_simulator::{EventFactory, EventPattern, FilterRule, FilterTester};
 use serde_json::json;
 
 let pattern = EventPattern::new("CCONTRACT123", "payment")
@@ -69,7 +69,7 @@ for (event, delay_ms) in load {
 ### Replay
 
 ```rust
-use soroban_pulse::event_simulator::EventReplay;
+use stellarclassic_pulse::event_simulator::EventReplay;
 
 let mut replay = EventReplay::new(events);
 replay.replay_all(|event| {

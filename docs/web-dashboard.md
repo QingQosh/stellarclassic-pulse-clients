@@ -1,7 +1,7 @@
 # Web Operational Dashboard
 
 A React + TypeScript single-page app in `dashboard/` for operators to
-monitor SorobanPulse's system health, subscriptions, and webhook delivery
+monitor StellarClassicPulse's system health, subscriptions, and webhook delivery
 status in real time.
 
 ## Stack
@@ -20,7 +20,7 @@ npm run dev
 ```
 
 The dev server proxies `/api/*` requests to `http://localhost:8080` (see
-`dashboard/vite.config.ts`), matching the existing SorobanPulse API server.
+`dashboard/vite.config.ts`), matching the existing StellarClassicPulse API server.
 
 ## Features
 
@@ -38,7 +38,7 @@ The dev server proxies `/api/*` requests to `http://localhost:8080` (see
 
 ## API contract
 
-The dashboard expects the following endpoints on the SorobanPulse API
+The dashboard expects the following endpoints on the StellarClassicPulse API
 server (see `dashboard/src/api/client.ts` for the exact shapes):
 
 | Endpoint | Purpose |

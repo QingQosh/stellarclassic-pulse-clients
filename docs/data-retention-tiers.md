@@ -33,7 +33,7 @@ pruning logic in `src/pruner.rs` and `src/archiver.rs`.
 ## Usage
 
 ```rust
-use soroban_pulse::retention_tiers::*;
+use stellarclassic_pulse::retention_tiers::*;
 
 let policy = RetentionPolicy::standard("events");
 let mut enforcer = RetentionEnforcer::new(policy);

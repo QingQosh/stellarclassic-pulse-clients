@@ -1,6 +1,6 @@
 # Troubleshooting and Debugging Guide
 
-A reference for diagnosing and resolving common issues in Soroban Pulse.
+A reference for diagnosing and resolving common issues in StellarClassic Pulse.
 
 Not sure which section applies? Start at the [Troubleshooting Decision Tree](troubleshooting-guide.md) for a symptom-first path into the sections below.
 
@@ -92,7 +92,7 @@ psql $DATABASE_URL -c "GRANT ALL PRIVILEGES ON SCHEMA public TO <your_user>;"
 
 ### Indexer not processing events / stuck
 
-**Symptom**: `soroban_pulse_indexer_current_ledger` is not advancing. Logs show no activity.
+**Symptom**: `stellarclassic_pulse_indexer_current_ledger` is not advancing. Logs show no activity.
 
 **Causes**:
 - Another replica holds the advisory lock (normal in multi-replica setups)
@@ -125,7 +125,7 @@ RUST_LOG=debug cargo run 2>&1 | grep -i "indexer\|rpc\|lock"
 **Fix**:
 ```bash
 # Check current indexer lag
-curl http://localhost:3000/metrics | grep soroban_pulse_indexer_lag_ledgers
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_lag_ledgers
 
 # Confirm events exist for the contract
 psql $DATABASE_URL -c "SELECT COUNT(*) FROM events WHERE contract_id = '<id>';"
@@ -177,10 +177,10 @@ Set `RUST_LOG` to control what gets emitted:
 You can also target a single module:
 ```bash
 # Debug only the indexer
-RUST_LOG=soroban_pulse::indexer=debug,info cargo run
+RUST_LOG=stellarclassic_pulse::indexer=debug,info cargo run
 
 # Trace the request handlers
-RUST_LOG=soroban_pulse::handlers=trace,info cargo run
+RUST_LOG=stellarclassic_pulse::handlers=trace,info cargo run
 ```
 
 ### Structured JSON logging
@@ -198,7 +198,7 @@ Example output:
   "message": "Event indexed",
   "contract_id": "CABC...",
   "ledger": 1234567,
-  "target": "soroban_pulse::indexer"
+  "target": "stellarclassic_pulse::indexer"
 }
 ```
 
@@ -219,7 +219,7 @@ See [docs/logging.md](logging.md) for the full structured logging convention.
 
 Suppress noisy modules while keeping application-level info:
 ```bash
-RUST_LOG=soroban_pulse=info,sqlx=warn,hyper=warn cargo run
+RUST_LOG=stellarclassic_pulse=info,sqlx=warn,hyper=warn cargo run
 ```
 
 ---
@@ -228,11 +228,11 @@ RUST_LOG=soroban_pulse=info,sqlx=warn,hyper=warn cargo run
 
 ### Identify slow HTTP endpoints
 
-Check the `soroban_pulse_http_request_duration_seconds` histogram in Prometheus:
+Check the `stellarclassic_pulse_http_request_duration_seconds` histogram in Prometheus:
 ```promql
 # p99 latency per route
 histogram_quantile(0.99,
-  sum(rate(soroban_pulse_http_request_duration_seconds_bucket[5m])) by (le, route, method)
+  sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m])) by (le, route, method)
 )
 ```
 
@@ -256,7 +256,7 @@ LIMIT 20;
 
 ```bash
 cargo install flamegraph
-sudo cargo flamegraph --bin soroban-pulse
+sudo cargo flamegraph --bin stellarclassic-pulse
 # open flamegraph.svg in a browser
 ```
 
@@ -277,9 +277,9 @@ Results are written to `target/criterion/`. Compare before and after a change to
 
 ### Diagnose memory growth
 
-The `soroban_pulse_process_memory_bytes` metric tracks RSS. If it grows without bound:
+The `stellarclassic_pulse_process_memory_bytes` metric tracks RSS. If it grows without bound:
 
-1. Check for long-lived SSE connections accumulating in memory (`soroban_pulse_sse_active_connections`)
+1. Check for long-lived SSE connections accumulating in memory (`stellarclassic_pulse_sse_active_connections`)
 2. Look for queries fetching large unbounded result sets
 3. Run with `RUST_LOG=debug` and watch for `channel lagged` warnings in the SSE ring buffer
 
@@ -295,7 +295,7 @@ The `soroban_pulse_process_memory_bytes` metric tracks RSS. If it grows without 
 | `DB_MIN_CONNECTIONS` | Min idle connections | `1–2`; raise to reduce cold-start latency |
 | `HEALTH_CHECK_TIMEOUT_MS` | Timeout for health check ping | `2000` |
 
-Signs the pool is exhausted: `soroban_pulse_db_pool_size` == `soroban_pulse_db_pool_max` and latency spikes. See [docs/runbooks/db-pool-exhaustion.md](runbooks/db-pool-exhaustion.md).
+Signs the pool is exhausted: `stellarclassic_pulse_db_pool_size` == `stellarclassic_pulse_db_pool_max` and latency spikes. See [docs/runbooks/db-pool-exhaustion.md](runbooks/db-pool-exhaustion.md).
 
 ### Key indexes
 
@@ -339,7 +339,7 @@ For high-concurrency deployments, run PgBouncer in front of PostgreSQL. Set `DB_
 
 ## Indexer Lag Troubleshooting
 
-The indexer lag is the difference between the latest ledger on the Stellar network and the ledger currently being processed. It is exposed as `soroban_pulse_indexer_lag_ledgers`.
+The indexer lag is the difference between the latest ledger on the Stellar network and the ledger currently being processed. It is exposed as `stellarclassic_pulse_indexer_lag_ledgers`.
 
 ### Thresholds
 
@@ -361,7 +361,7 @@ curl http://localhost:3000/healthz/ready | jq .
 
 **2. Is this replica the leader?**
 ```bash
-curl http://localhost:3000/metrics | grep soroban_pulse_indexer_is_leader
+curl http://localhost:3000/metrics | grep stellarclassic_pulse_indexer_is_leader
 # 1 = active, 0 = standby
 ```
 
@@ -382,7 +382,7 @@ psql $DATABASE_URL -c "
 **5. Check resource pressure:**
 ```bash
 # CPU and memory of the process
-top -p $(pgrep soroban-pulse)
+top -p $(pgrep stellarclassic-pulse)
 ```
 
 ### Multi-replica advisory lock
@@ -404,12 +404,12 @@ All metrics are exposed at `GET /metrics` in Prometheus format.
 
 | Metric | Meaning |
 |--------|---------|
-| `soroban_pulse_indexer_is_leader` | `1` = this replica is the active indexer |
-| `soroban_pulse_indexer_lag_ledgers` | Ledgers behind the network tip |
-| `soroban_pulse_indexer_current_ledger` | Last ledger processed |
-| `soroban_pulse_indexer_latest_ledger` | Network tip ledger |
-| `soroban_pulse_events_indexed_total` | Cumulative events ingested |
-| `soroban_pulse_rpc_errors_total` | Cumulative RPC failures |
+| `stellarclassic_pulse_indexer_is_leader` | `1` = this replica is the active indexer |
+| `stellarclassic_pulse_indexer_lag_ledgers` | Ledgers behind the network tip |
+| `stellarclassic_pulse_indexer_current_ledger` | Last ledger processed |
+| `stellarclassic_pulse_indexer_latest_ledger` | Network tip ledger |
+| `stellarclassic_pulse_events_indexed_total` | Cumulative events ingested |
+| `stellarclassic_pulse_rpc_errors_total` | Cumulative RPC failures |
 
 **Healthy state**: `lag_ledgers` < 100, `is_leader` == 1 on exactly one replica, `rpc_errors_total` rate near zero.
 
@@ -417,9 +417,9 @@ All metrics are exposed at `GET /metrics` in Prometheus format.
 
 | Metric | Meaning |
 |--------|---------|
-| `soroban_pulse_http_request_duration_seconds` | Histogram of request durations by route/method/status |
-| `soroban_pulse_rate_limit_rejected_total` | Requests rejected by rate limiter (429s) |
-| `soroban_pulse_sse_active_connections` | Currently open SSE connections |
+| `stellarclassic_pulse_http_request_duration_seconds` | Histogram of request durations by route/method/status |
+| `stellarclassic_pulse_rate_limit_rejected_total` | Requests rejected by rate limiter (429s) |
+| `stellarclassic_pulse_sse_active_connections` | Currently open SSE connections |
 
 **Target SLOs**: p99 latency on `GET /v1/events` < 200 ms at 100 req/s. Error rate < 1%.
 
@@ -427,9 +427,9 @@ All metrics are exposed at `GET /metrics` in Prometheus format.
 
 | Metric | Meaning |
 |--------|---------|
-| `soroban_pulse_db_pool_size` | Open connections right now |
-| `soroban_pulse_db_pool_idle` | Idle connections |
-| `soroban_pulse_db_pool_max` | Configured max (`DB_MAX_CONNECTIONS`) |
+| `stellarclassic_pulse_db_pool_size` | Open connections right now |
+| `stellarclassic_pulse_db_pool_idle` | Idle connections |
+| `stellarclassic_pulse_db_pool_max` | Configured max (`DB_MAX_CONNECTIONS`) |
 
 **Alert**: If `pool_size` / `pool_max` > 0.9 consistently, the pool is near exhaustion.
 
@@ -437,8 +437,8 @@ All metrics are exposed at `GET /metrics` in Prometheus format.
 
 | Metric | Meaning |
 |--------|---------|
-| `soroban_pulse_webhook_failures_total` | Webhooks exhausted all retries |
-| `soroban_pulse_email_failures_total` | Email delivery failures |
+| `stellarclassic_pulse_webhook_failures_total` | Webhooks exhausted all retries |
+| `stellarclassic_pulse_email_failures_total` | Email delivery failures |
 
 A non-zero and rising rate here means subscribers' endpoints are down or misconfigured. See [docs/runbooks/webhook-failures.md](runbooks/webhook-failures.md).
 
@@ -446,7 +446,7 @@ A non-zero and rising rate here means subscribers' endpoints are down or misconf
 
 | Metric | Meaning |
 |--------|---------|
-| `soroban_pulse_process_memory_bytes` | RSS memory (Linux only, updated every 30 s) |
+| `stellarclassic_pulse_process_memory_bytes` | RSS memory (Linux only, updated every 30 s) |
 
 The `PodMemoryNearLimit` alert (defined in `docs/alerts.yml`) fires when this exceeds 90% of the pod memory limit.
 
@@ -485,7 +485,7 @@ Import `docs/grafana-dashboard.json` into Grafana (Dashboards → Import → Upl
 
 Use the GitHub issue template at `.github/ISSUE_TEMPLATE/bug_report.md`. Include:
 
-1. The version or commit SHA of Soroban Pulse you are running
+1. The version or commit SHA of StellarClassic Pulse you are running
 2. Relevant log output (set `RUST_LOG=debug` before reproducing)
 3. The exact request or operation that triggered the issue
 4. Environment details (Docker, Kubernetes, bare metal; single-replica or multi-replica)

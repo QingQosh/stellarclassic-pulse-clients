@@ -43,7 +43,7 @@
 
 1. **Immediate**: Verify system stability
    ```bash
-   kubectl get pods -l app=soroban-pulse
+   kubectl get pods -l app=stellarclassic-pulse
    kubectl top pods
    ```
 
@@ -131,7 +131,7 @@ curl -s http://localhost:3000/metrics | grep feature_flag_error_rate
 ```
 
 ### 5. Notify stakeholders
-Post in #soroban-pulse-incidents with:
+Post in #stellarclassic-pulse-incidents with:
 - Which flag was rolled back
 - Why it was rolled back
 - Current system status

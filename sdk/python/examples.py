@@ -1,5 +1,5 @@
 """
-Soroban Pulse Python SDK - Usage Examples
+StellarClassic Pulse Python SDK - Usage Examples
 
 This module demonstrates common usage patterns for the SDK including:
 - Basic event queries
@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 def basic_event_query():
     """Get events with pagination"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",  # optional
     )
 
@@ -62,7 +62,7 @@ def basic_event_query():
 def with_retry_configuration():
     """Configure retry and exponential backoff"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -97,7 +97,7 @@ def with_retry_configuration():
 def aggressive_retry_policy():
     """Use aggressive retry policy for critical operations"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -128,7 +128,7 @@ def aggressive_retry_policy():
 def conservative_retry_policy():
     """Use conservative retry policy for operations that should fail fast"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -153,7 +153,7 @@ def conservative_retry_policy():
 def get_events_by_contract():
     """Get events for a specific contract"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -183,7 +183,7 @@ def get_events_by_contract():
 def get_events_by_transaction_hash():
     """Get events for a specific transaction"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -209,7 +209,7 @@ def get_events_by_transaction_hash():
 def events_by_ledger_range():
     """Get events within a ledger range"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -239,7 +239,7 @@ def events_by_ledger_range():
 def events_by_type():
     """Get events filtered by type"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -264,7 +264,7 @@ def events_by_type():
 
 def check_service_health():
     """Check the service health status"""
-    config = Configuration(host="https://api.sorobanpulse.com")
+    config = Configuration(host="https://api.stellarclassicpulse.com")
 
     api_client = ApiClient(configuration=config)
     system_api = SystemApi(api_client)
@@ -297,7 +297,7 @@ def error_handling_with_metrics():
         )
 
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -327,7 +327,7 @@ def error_handling_with_metrics():
 def custom_retry_strategy():
     """Configure a custom retry strategy"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -361,7 +361,7 @@ def custom_retry_strategy():
 async def async_event_query():
     """Async event query"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 
@@ -383,7 +383,7 @@ async def async_event_query():
 def multiple_sequential_calls():
     """Make multiple sequential API calls"""
     config = Configuration(
-        host="https://api.sorobanpulse.com",
+        host="https://api.stellarclassicpulse.com",
         api_key="your-api-key",
     )
 

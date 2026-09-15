@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse uses PostgreSQL range partitioning to improve query performance and enable efficient data archival. The system supports both timestamp-based (monthly) and ledger-based partitioning.
+StellarClassicPulse uses PostgreSQL range partitioning to improve query performance and enable efficient data archival. The system supports both timestamp-based (monthly) and ledger-based partitioning.
 
 ## Partitioning Strategies
 
@@ -170,15 +170,15 @@ println!("Pruning effectiveness: {:.1}%",
 
 | Metric Name | Type | Description |
 |---|---|---|
-| `soroban_pulse_partition_count` | Gauge | Total number of partitions |
-| `soroban_pulse_hot_partitions_count` | Gauge | Number of recently accessed partitions |
-| `soroban_pulse_partition_total_size_bytes` | Gauge | Total size of all partitions |
-| `soroban_pulse_partition_skew_max` | Gauge | Maximum row count skew across partitions |
-| `soroban_pulse_partition_created_total` | Counter | Partitions created since startup |
-| `soroban_pulse_archived_partitions_total` | Counter | Partitions archived since startup |
-| `soroban_pulse_ledger_partitions_total` | Gauge | Total ledger-based partitions |
-| `soroban_pulse_ledger_partitions_active` | Gauge | Active ledger partitions |
-| `soroban_pulse_ledger_partitions_archived` | Gauge | Archived ledger partitions |
+| `stellarclassic_pulse_partition_count` | Gauge | Total number of partitions |
+| `stellarclassic_pulse_hot_partitions_count` | Gauge | Number of recently accessed partitions |
+| `stellarclassic_pulse_partition_total_size_bytes` | Gauge | Total size of all partitions |
+| `stellarclassic_pulse_partition_skew_max` | Gauge | Maximum row count skew across partitions |
+| `stellarclassic_pulse_partition_created_total` | Counter | Partitions created since startup |
+| `stellarclassic_pulse_archived_partitions_total` | Counter | Partitions archived since startup |
+| `stellarclassic_pulse_ledger_partitions_total` | Gauge | Total ledger-based partitions |
+| `stellarclassic_pulse_ledger_partitions_active` | Gauge | Active ledger partitions |
+| `stellarclassic_pulse_ledger_partitions_archived` | Gauge | Archived ledger partitions |
 
 ## Performance Considerations
 

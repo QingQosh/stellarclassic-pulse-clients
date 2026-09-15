@@ -1,7 +1,7 @@
 # Indexer Lag Runbook
 
 ## Symptom
-The Soroban Pulse indexer is falling behind the latest ledger on the Stellar network. The `soroban_pulse_indexer_lag_ledgers` metric exceeds the warning threshold (100 ledgers) or critical threshold (500 ledgers).
+The StellarClassic Pulse indexer is falling behind the latest ledger on the Stellar network. The `stellarclassic_pulse_indexer_lag_ledgers` metric exceeds the warning threshold (100 ledgers) or critical threshold (500 ledgers).
 
 ## Likely Causes
 1. **RPC endpoint issues**: The Soroban RPC endpoint is slow, timing out, or returning errors
@@ -14,7 +14,7 @@ The Soroban Pulse indexer is falling behind the latest ledger on the Stellar net
 
 ### 1. Check indexer logs
 ```bash
-kubectl logs -l app=soroban-pulse -c soroban-pulse --tail=100 | grep -i "error\|lag\|rpc"
+kubectl logs -l app=stellarclassic-pulse -c stellarclassic-pulse --tail=100 | grep -i "error\|lag\|rpc"
 ```
 
 ### 2. Verify RPC endpoint health
@@ -23,7 +23,7 @@ kubectl logs -l app=soroban-pulse -c soroban-pulse --tail=100 | grep -i "error\|
 curl -s https://soroban-testnet.stellar.org/health | jq .
 
 # Check RPC error rate
-promtool query instant 'rate(soroban_pulse_rpc_errors_total[5m])'
+promtool query instant 'rate(stellarclassic_pulse_rpc_errors_total[5m])'
 ```
 
 ### 3. Check database performance
@@ -42,8 +42,8 @@ SELECT count(*) FROM pg_stat_activity;
 
 ### 4. Check pod resource usage
 ```bash
-kubectl top pod -l app=soroban-pulse
-kubectl describe pod -l app=soroban-pulse | grep -A 5 "Limits\|Requests"
+kubectl top pod -l app=stellarclassic-pulse
+kubectl describe pod -l app=stellarclassic-pulse | grep -A 5 "Limits\|Requests"
 ```
 
 ### 5. Check advisory lock status (multi-replica only)
@@ -70,7 +70,7 @@ psql $DATABASE_URL -c "SELECT * FROM pg_locks WHERE locktype = 'advisory';"
 - Scale horizontally by adding more replicas
 
 ### For advisory lock issues
-- Verify the leader replica is healthy: `kubectl logs -l app=soroban-pulse,replica=leader`
+- Verify the leader replica is healthy: `kubectl logs -l app=stellarclassic-pulse,replica=leader`
 - Restart the leader replica to force failover
 - Check `INDEXER_LOCK_RETRY_SECS` configuration
 

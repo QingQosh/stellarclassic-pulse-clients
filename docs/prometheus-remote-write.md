@@ -4,9 +4,9 @@ Issue #953: Enable pushing metrics to Prometheus remote write endpoints.
 
 ## Overview
 
-The Prometheus Remote Write integration allows SorobanPulse to push metrics to remote Prometheus instances or compatible systems. This enables:
+The Prometheus Remote Write integration allows StellarClassicPulse to push metrics to remote Prometheus instances or compatible systems. This enables:
 
-- **Centralized metrics collection** across multiple SorobanPulse instances
+- **Centralized metrics collection** across multiple StellarClassicPulse instances
 - **Custom metric filtering** for selective metric submission
 - **Automatic retry logic** with exponential backoff for reliability
 - **Batch submission** for efficient resource usage
@@ -43,7 +43,7 @@ PROMETHEUS_REMOTE_WRITE_RETRY_DELAY_MS=100
 Control which metrics are sent to remote write endpoints:
 
 ```rust
-use soroban_pulse::prometheus_remote_write::{
+use stellarclassic_pulse::prometheus_remote_write::{
     PrometheusRemoteWriteConfig, MetricFilterConfig, PrometheusRemoteWritePublisher
 };
 
@@ -52,7 +52,7 @@ let config = PrometheusRemoteWriteConfig {
     batch_size: 100,
     metric_filter: Some(MetricFilterConfig {
         // Only include metrics matching these patterns
-        include_patterns: vec!["soroban_pulse".to_string()],
+        include_patterns: vec!["stellarclassic_pulse".to_string()],
         // Exclude internal/diagnostic metrics
         exclude_patterns: vec!["internal".to_string(), "debug".to_string()],
     }),
@@ -67,11 +67,11 @@ let publisher = PrometheusRemoteWritePublisher::new(config);
 ### Pushing Metrics
 
 ```rust
-use soroban_pulse::prometheus_remote_write::{RemoteWriteMetric, RemoteWritePublisher};
+use stellarclassic_pulse::prometheus_remote_write::{RemoteWriteMetric, RemoteWritePublisher};
 
 // Create metrics
 let metrics = vec![
-    RemoteWriteMetric::new("soroban_pulse_events_indexed_total".to_string(), 1000.0)
+    RemoteWriteMetric::new("stellarclassic_pulse_events_indexed_total".to_string(), 1000.0)
         .with_labels(vec![("source".to_string(), "ledger".to_string())]),
 ];
 
@@ -95,9 +95,9 @@ match publisher.health_check().await {
 
 The integration tracks its own health via metrics:
 
-- `soroban_pulse_prometheus_remote_write_success_total` - Counter of successful metric submissions
-- `soroban_pulse_prometheus_remote_write_failures_total` - Counter of failed submission attempts
-- `soroban_pulse_prometheus_remote_write_health` - Gauge indicating endpoint health (1.0 = healthy, 0.0 = unhealthy)
+- `stellarclassic_pulse_prometheus_remote_write_success_total` - Counter of successful metric submissions
+- `stellarclassic_pulse_prometheus_remote_write_failures_total` - Counter of failed submission attempts
+- `stellarclassic_pulse_prometheus_remote_write_health` - Gauge indicating endpoint health (1.0 = healthy, 0.0 = unhealthy)
 
 ## Retry Logic
 
@@ -159,13 +159,13 @@ If expected metrics aren't appearing:
 
 ## Integration with Grafana
 
-Use the remote Prometheus data source in Grafana to visualize SorobanPulse metrics collected via remote write:
+Use the remote Prometheus data source in Grafana to visualize StellarClassicPulse metrics collected via remote write:
 
 1. Add a new Prometheus data source pointing to your remote Prometheus instance
 2. Create dashboards using queries like:
    ```promql
-   rate(soroban_pulse_events_indexed_total[5m])
-   soroban_pulse_indexer_lag_ledgers
+   rate(stellarclassic_pulse_events_indexed_total[5m])
+   stellarclassic_pulse_indexer_lag_ledgers
    ```
 
 ## Testing
@@ -179,7 +179,7 @@ cargo test prometheus_remote_write
 Mock implementations are available for testing:
 
 ```rust
-use soroban_pulse::prometheus_remote_write::mock::MockRemoteWritePublisher;
+use stellarclassic_pulse::prometheus_remote_write::mock::MockRemoteWritePublisher;
 
 let publisher = MockRemoteWritePublisher::new();
 // Use in tests without network access

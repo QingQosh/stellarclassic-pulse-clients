@@ -9,7 +9,7 @@
 > this table.
 
 How to translate an existing consumer (from Horizon, another indexer, or a
-hand-rolled poller) into a Soroban Pulse subscription.
+hand-rolled poller) into a StellarClassic Pulse subscription.
 
 ## Core subscription fields
 
@@ -17,7 +17,7 @@ hand-rolled poller) into a Soroban Pulse subscription.
 |---|---|---|
 | `callback_url` | Webhook delivery target | Direct mapping if your existing consumer already receives webhooks. |
 | `from_ledger` | Ledger to start delivering from | Set to the ledger *after* the last one your old system fully processed, to avoid duplicate delivery during a shadow-run — see [data-migration-procedures.md](data-migration-procedures.md). |
-| `acked_ledger` | Last ledger the client has acknowledged | Leave at the default (`0`) for a new subscription; this is maintained by Soroban Pulse, not set by you. |
+| `acked_ledger` | Last ledger the client has acknowledged | Leave at the default (`0`) for a new subscription; this is maintained by StellarClassic Pulse, not set by you. |
 | `status` | `active` \| `cancelled` | Create new subscriptions as `active`; don't reuse a `cancelled` row. |
 | `contract_filter` | Which contract(s) to watch | Maps from whatever contract-scoping your old consumer used (a hardcoded contract ID list, a config file, etc.). See [filter-dsl.md](../filter-dsl.md) for filter expressiveness beyond a flat contract list. |
 
@@ -45,7 +45,7 @@ delivery is implemented once a subscription is configured for a channel.
       subscription's filter; anything not expressible stays a downstream
       concern on the consumer side.
 - [ ] Confirm priority handling — if the old consumer treated some event
-      types as urgent, configure Soroban Pulse's priority rules so those
+      types as urgent, configure StellarClassic Pulse's priority rules so those
       still bypass batching (see [priority-queueing.md](../priority-queueing.md)
       and the `critical` priority path in `src/email.rs`).
 - [ ] Confirm rate-limit expectations carry over — see
@@ -56,7 +56,7 @@ delivery is implemented once a subscription is configured for a channel.
 Old system: a cron job polling Horizon every 10s for a single contract's
 mint events, POSTing matches to an internal Slack webhook.
 
-Soroban Pulse subscription:
+StellarClassic Pulse subscription:
 
 ```
 contract_filter: ["CABCDEF...CONTRACT_ID"]

@@ -1,6 +1,6 @@
 # E2E Testing
 
-End-to-end (E2E) tests for SorobanPulse verify the fully integrated system — the running application, a real PostgreSQL database, a mocked Soroban RPC, and a live webhook receiver — behave correctly together. Where unit and integration tests validate individual components in isolation, E2E tests exercise the same paths a real client would take: HTTP requests in, observable side effects out.
+End-to-end (E2E) tests for StellarClassicPulse verify the fully integrated system — the running application, a real PostgreSQL database, a mocked Soroban RPC, and a live webhook receiver — behave correctly together. Where unit and integration tests validate individual components in isolation, E2E tests exercise the same paths a real client would take: HTTP requests in, observable side effects out.
 
 ## Contents
 
@@ -55,7 +55,7 @@ The E2E stack is defined in `docker-compose.e2e.yml` and consists of four servic
 │       └────────┬────────┘                      │             │
 │                │                               │             │
 │        ┌───────┴──────────────────────────┐    │             │
-│        │        SorobanPulse app          │────┘             │
+│        │        StellarClassicPulse app          │────┘             │
 │        │           :3001                  │                  │
 │        └──────────────────────────────────┘                  │
 └─────────────────────────────────────────────────────────────┘
@@ -65,10 +65,10 @@ The E2E stack is defined in `docker-compose.e2e.yml` and consists of four servic
 |---|---|
 | **PostgreSQL** | Real database instance seeded with `tests/e2e/seed.sql` before tests run |
 | **WireMock** | Stubs the Soroban RPC `getEvents` and `getLatestLedger` endpoints; can be reset between tests via its admin API |
-| **SorobanPulse app** | The application under test, built from the local source and configured to point at the other services |
+| **StellarClassicPulse app** | The application under test, built from the local source and configured to point at the other services |
 | **webhook-receiver** | A minimal HTTP server that accepts POST requests, records delivered payloads, and exposes them for test assertions |
 
-The app is configured at startup with environment variables that wire it to the E2E services (e.g., `STELLAR_RPC_URL=http://wiremock:8080`, `DATABASE_URL=postgres://e2e:e2e@db/soroban_pulse_e2e`).
+The app is configured at startup with environment variables that wire it to the E2E services (e.g., `STELLAR_RPC_URL=http://wiremock:8080`, `DATABASE_URL=postgres://e2e:e2e@db/stellarclassic_pulse_e2e`).
 
 Tests run outside the compose network using the ports mapped to `localhost`. WireMock stubs are configured and inspected via its REST admin API at `E2E_RPC_ADMIN_URL`. Webhook payloads are inspected via the receiver's own API at `E2E_WEBHOOK_URL`.
 
@@ -152,7 +152,7 @@ The filtering tests are listed under [Ledger Range and Event Type Filtering](#le
 
 Additional tests that cover observability, backwards compatibility, and rate limiting.
 
-- `e2e_metrics_endpoint_returns_prometheus_format` — `GET /metrics` returns `200` and the body contains `soroban_pulse_events_indexed_total` and `soroban_pulse_indexer_current_ledger`
+- `e2e_metrics_endpoint_returns_prometheus_format` — `GET /metrics` returns `200` and the body contains `stellarclassic_pulse_events_indexed_total` and `stellarclassic_pulse_indexer_current_ledger`
 - `e2e_rate_limiting_is_disabled_in_e2e_env` — The E2E stack sets `RATE_LIMIT_PER_MINUTE=0`; 20 rapid requests each return a non-`429` status
 - `e2e_deprecated_routes_return_deprecation_header` — `GET /events` returns `200` with a `Deprecation: true` header
 
@@ -182,7 +182,7 @@ Verify admin-only endpoints work correctly and are properly protected.
 
 Verify the system degrades gracefully and recovers correctly from errors.
 
-- `e2e_health_during_rpc_errors` — When WireMock is configured to return `500` for all RPC calls, the DB health field in `/healthz/ready` remains `"ok"` (the process is still alive and the database is reachable); `soroban_pulse_rpc_errors_total` in `/metrics` is `> 0` once errors accumulate
+- `e2e_health_during_rpc_errors` — When WireMock is configured to return `500` for all RPC calls, the DB health field in `/healthz/ready` remains `"ok"` (the process is still alive and the database is reachable); `stellarclassic_pulse_rpc_errors_total` in `/metrics` is `> 0` once errors accumulate
 - `e2e_recovery_after_rpc_restore` — A temporary RPC error stub is injected then removed; a new event stubbed after the restore is indexed within 30 s, confirming the indexer's error-backoff loop recovered automatically
 - `e2e_subscription_deletion_stops_delivery` — After a subscription is deleted via `DELETE /v1/subscriptions/{id}`, a subsequently injected event produces zero webhook deliveries within a 15 s observation window
 - `e2e_unknown_route_returns_404` — A `GET` to `/v1/this-path-does-not-exist` returns `404` with a JSON body containing an `"error"` or `"message"` field
@@ -221,7 +221,7 @@ The `--wait` flag blocks until all service health checks pass. The app service h
 
 ```bash
 docker compose -f docker-compose.e2e.yml exec -T db \
-  psql -U e2e -d soroban_pulse_e2e \
+  psql -U e2e -d stellarclassic_pulse_e2e \
   -f /dev/stdin < tests/e2e/seed.sql
 ```
 
@@ -267,7 +267,7 @@ The `-v` flag removes the named volumes (including the PostgreSQL data volume) s
 
 | Variable | Description | Default |
 |---|---|---|
-| `E2E_BASE_URL` | Base URL of the SorobanPulse app under test | required — tests are skipped if unset |
+| `E2E_BASE_URL` | Base URL of the StellarClassicPulse app under test | required — tests are skipped if unset |
 | `E2E_WEBHOOK_URL` | Base URL of the webhook receiver service | `http://localhost:9001` |
 | `E2E_RPC_ADMIN_URL` | WireMock admin API base URL | `http://localhost:8080` |
 | `E2E_ADMIN_API_KEY` | Admin API key sent in `X-Api-Key` for admin endpoint tests | `e2e-admin-key` |

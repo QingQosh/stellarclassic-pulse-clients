@@ -1,6 +1,6 @@
 # Security Headers
 
-SorobanPulse applies the OWASP-recommended set of HTTP security headers to
+StellarClassicPulse applies the OWASP-recommended set of HTTP security headers to
 every response via `security_headers_middleware` in
 `src/middleware/security_headers.rs`, and validates CORS origins at
 startup via `validate_cors_origins`.

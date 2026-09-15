@@ -32,7 +32,7 @@ work adds:
 ## Usage
 
 ```rust
-use soroban_pulse::normalizer::*;
+use stellarclassic_pulse::normalizer::*;
 use serde_json::json;
 
 let rules = vec![/* NormalizationRule { pointer: "/amount", transform: "divide_by_decimals", .. } */];

@@ -150,23 +150,23 @@ match delivery_result {
 ## Metrics Recorded
 
 ### Per-Endpoint Metrics
-- `soroban_pulse_circuit_breaker_opened_total`: Total times circuit opened
-- `soroban_pulse_circuit_breaker_closed_total`: Total times circuit closed
-- `soroban_pulse_circuit_breaker_half_open_total`: Total times circuit went half-open
-- `soroban_pulse_circuit_breaker_success_total`: Total successful requests per endpoint
-- `soroban_pulse_circuit_breaker_failure_total`: Total failed requests per endpoint
-- `soroban_pulse_circuit_breaker_rejection_total`: Total rejected requests (circuit open)
+- `stellarclassic_pulse_circuit_breaker_opened_total`: Total times circuit opened
+- `stellarclassic_pulse_circuit_breaker_closed_total`: Total times circuit closed
+- `stellarclassic_pulse_circuit_breaker_half_open_total`: Total times circuit went half-open
+- `stellarclassic_pulse_circuit_breaker_success_total`: Total successful requests per endpoint
+- `stellarclassic_pulse_circuit_breaker_failure_total`: Total failed requests per endpoint
+- `stellarclassic_pulse_circuit_breaker_rejection_total`: Total rejected requests (circuit open)
 
 ### Dashboard Queries
 ```promql
 # Current circuit states
-group by (endpoint) (soroban_pulse_circuit_breaker_state)
+group by (endpoint) (stellarclassic_pulse_circuit_breaker_state)
 
 # Failure rate by endpoint
-soroban_pulse_circuit_breaker_failure_total / soroban_pulse_circuit_breaker_requests_total
+stellarclassic_pulse_circuit_breaker_failure_total / stellarclassic_pulse_circuit_breaker_requests_total
 
 # Circuit opens per hour
-increase(soroban_pulse_circuit_breaker_opened_total[1h])
+increase(stellarclassic_pulse_circuit_breaker_opened_total[1h])
 ```
 
 ## Failure Detection

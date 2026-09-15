@@ -54,7 +54,7 @@ Real-time alerts when:
 ### Basic Usage
 
 ```rust
-use soroban_pulse::capacity_planning::CapacityPlanner;
+use stellarclassic_pulse::capacity_planning::CapacityPlanner;
 
 let mut planner = CapacityPlanner::new();
 
@@ -332,10 +332,10 @@ Quarterly threshold review:
 apiVersion: autoscaling.knative.dev/v1alpha1
 kind: KPA
 metadata:
-  name: soroban-pulse
+  name: stellarclassic-pulse
 spec:
   scaleTargetRef:
-    name: soroban-pulse
+    name: stellarclassic-pulse
   maxScaleDownRate: "0.1"
   # Use capacity planning metrics
   metrics:
@@ -352,7 +352,7 @@ spec:
 ```python
 # Put custom metrics
 cloudwatch.put_metric_data(
-    Namespace='SorobanPulse',
+    Namespace='StellarClassicPulse',
     MetricData=[
         {
             'MetricName': 'DatabaseConnections',

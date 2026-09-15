@@ -1,6 +1,6 @@
-# Retry Policy and Exponential Backoff in Soroban Pulse TypeScript SDK
+# Retry Policy and Exponential Backoff in StellarClassic Pulse TypeScript SDK
 
-This document explains how to configure and use the retry and backoff functionality in the Soroban Pulse TypeScript SDK.
+This document explains how to configure and use the retry and backoff functionality in the StellarClassic Pulse TypeScript SDK.
 
 ## Overview
 
@@ -306,10 +306,10 @@ if (circuitOpen) {
 ### Example 1: Fetching Events with Retry
 
 ```typescript
-import { EventsApi, Configuration } from "@soroban/pulse-client";
+import { EventsApi, Configuration } from "@stellarclassic/pulse-client";
 
 const config = new Configuration({
-  basePath: "https://api.sorobanpulse.com",
+  basePath: "https://api.stellarclassicpulse.com",
   maxRetries: 3,
   onRetry: (attempt, delayMs, reason) => {
     console.log(`Retry ${attempt}: ${reason} (waiting ${delayMs}ms)`);
@@ -340,7 +340,7 @@ fetchEventsSafely();
 
 ```typescript
 const config = new Configuration({
-  basePath: "https://api.sorobanpulse.com",
+  basePath: "https://api.stellarclassicpulse.com",
   apiKey: "your-api-key",
 });
 
@@ -430,5 +430,5 @@ return await api.call();  // Retries automatically
 ## See Also
 
 - [Main TypeScript SDK README](./README.md)
-- [Soroban Pulse API Documentation](https://soroban-pulse.com/docs)
+- [StellarClassic Pulse API Documentation](https://stellarclassic-pulse.com/docs)
 - [HTTP Retry Strategies Guide](https://en.wikipedia.org/wiki/Exponential_backoff)

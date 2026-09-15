@@ -1,6 +1,6 @@
 # SOC 2 Compliance Checklist (Issue #944)
 
-This document describes SorobanPulse's SOC 2 Type II compliance controls across all five Trust Service Criteria (TSC).
+This document describes StellarClassicPulse's SOC 2 Type II compliance controls across all five Trust Service Criteria (TSC).
 
 ## Trust Service Criteria Coverage
 

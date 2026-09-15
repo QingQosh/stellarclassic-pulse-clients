@@ -1,6 +1,6 @@
 # HTTP Caching
 
-Soroban Pulse adds standard HTTP caching headers to cacheable read endpoints
+StellarClassic Pulse adds standard HTTP caching headers to cacheable read endpoints
 so clients, CDNs, and shared caches can avoid unnecessary round trips.
 
 Implementation: [`src/http_caching.rs`](../src/http_caching.rs), built on top
@@ -12,7 +12,7 @@ of the ETag/If-Modified-Since primitives in
 `CachePolicy` describes the caching behavior for a resource class:
 
 ```rust
-use soroban_pulse::http_caching::CachePolicy;
+use stellarclassic_pulse::http_caching::CachePolicy;
 
 let policy = CachePolicy::new("events.list", 60)
     .public()
@@ -48,6 +48,6 @@ match revalidate("events.detail", &req_headers, &etag, &last_modified) {
 
 ## Cache Effectiveness Metrics
 
-Every revalidation call records `soroban_pulse_http_cache_results_total{resource,result}`
+Every revalidation call records `stellarclassic_pulse_http_cache_results_total{resource,result}`
 (`hit` = 304 served, `miss` = full response served), letting you compute a
 per-resource cache hit rate (`CacheEffectivenessSnapshot::hit_rate`).

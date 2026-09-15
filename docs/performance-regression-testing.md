@@ -163,7 +163,7 @@ Recommendation: Check query optimization, database indices
 
 ```bash
 # Profile with perf
-cargo flamegraph --bin soroban-pulse
+cargo flamegraph --bin stellarclassic-pulse
 
 # Profile with criterion
 cargo bench

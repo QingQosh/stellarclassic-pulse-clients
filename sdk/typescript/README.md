@@ -1,6 +1,6 @@
-# Soroban Pulse TypeScript SDK
+# StellarClassic Pulse TypeScript SDK
 
-Auto-generated TypeScript client for the Soroban Pulse API.
+Auto-generated TypeScript client for the StellarClassic Pulse API.
 
 ## Features
 

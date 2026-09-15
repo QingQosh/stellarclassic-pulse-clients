@@ -8,7 +8,7 @@ implemented in `src/notification_batching.rs`.
 ## Configuration
 
 ```rust
-use sorobanpulse::notification_batching::BatchConfig;
+use stellarclassicpulse::notification_batching::BatchConfig;
 use std::time::Duration;
 
 let config = BatchConfig {

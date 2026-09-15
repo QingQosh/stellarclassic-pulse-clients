@@ -1,7 +1,7 @@
 # SSE Connections Runbook
 
 ## Symptom
-The number of active Server-Sent Events (SSE) connections is unusually high or growing unbounded. The `soroban_pulse_sse_active_connections` metric is increasing or exceeds expected levels, potentially causing memory exhaustion or resource starvation.
+The number of active Server-Sent Events (SSE) connections is unusually high or growing unbounded. The `stellarclassic_pulse_sse_active_connections` metric is increasing or exceeds expected levels, potentially causing memory exhaustion or resource starvation.
 
 ## Likely Causes
 1. **Clients not disconnecting**: SSE clients are not properly closing connections
@@ -14,24 +14,24 @@ The number of active Server-Sent Events (SSE) connections is unusually high or g
 
 ### 1. Check current SSE connection count
 ```bash
-promtool query instant 'soroban_pulse_sse_active_connections'
+promtool query instant 'stellarclassic_pulse_sse_active_connections'
 ```
 
 ### 2. Monitor connection growth over time
 ```bash
 # Check if connections are growing linearly
-promtool query range 'soroban_pulse_sse_active_connections' --start=1h --step=1m
+promtool query range 'stellarclassic_pulse_sse_active_connections' --start=1h --step=1m
 ```
 
 ### 3. Check application logs for SSE errors
 ```bash
-kubectl logs -l app=soroban-pulse -c soroban-pulse --tail=200 | grep -i "sse\|stream\|broadcast"
+kubectl logs -l app=stellarclassic-pulse -c stellarclassic-pulse --tail=200 | grep -i "sse\|stream\|broadcast"
 ```
 
 ### 4. Check pod resource usage
 ```bash
-kubectl top pod -l app=soroban-pulse
-kubectl describe pod -l app=soroban-pulse | grep -A 5 "Memory\|CPU"
+kubectl top pod -l app=stellarclassic-pulse
+kubectl describe pod -l app=stellarclassic-pulse | grep -A 5 "Memory\|CPU"
 ```
 
 ### 5. Inspect active connections from the pod
@@ -46,12 +46,12 @@ lsof -p $$ | grep socket | wc -l
 ### Immediate actions
 1. **Restart the indexer pod** to clear accumulated connections:
    ```bash
-   kubectl rollout restart deployment/soroban-pulse
+   kubectl rollout restart deployment/stellarclassic-pulse
    ```
 
 2. **Monitor memory usage** after restart:
    ```bash
-   kubectl top pod -l app=soroban-pulse --watch
+   kubectl top pod -l app=stellarclassic-pulse --watch
    ```
 
 ### If connections are not disconnecting

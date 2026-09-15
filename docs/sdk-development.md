@@ -1,6 +1,6 @@
 # SDK Development Guide
 
-This guide is for contributors building, maintaining, or extending the Soroban Pulse client SDKs — architecture and design decisions, a tutorial per supported language, webhook signature verification per SDK, and error-handling best practices.
+This guide is for contributors building, maintaining, or extending the StellarClassic Pulse client SDKs — architecture and design decisions, a tutorial per supported language, webhook signature verification per SDK, and error-handling best practices.
 
 Looking to *use* an SDK in an application rather than develop one? See [docs/sdk-integration-guide.md](sdk-integration-guide.md) for the consumer-facing quickstart, subscription patterns, and streaming reference. This guide covers the same SDKs from the maintainer's side: why they're structured the way they are, and how to extend them consistently.
 
@@ -55,7 +55,7 @@ Every SDK follows the same rough shape so a contributor moving between languages
 
 1. **Match the wire contract exactly.** Field names, enum values, and status code semantics come from `openapi.json` — don't invent client-side names that diverge from the spec, even if a different name reads better in that language's idiom (case conventions are the one exception: `snake_case` in Python, `camelCase` in TypeScript, matching each language's own convention rather than the JSON body's).
 2. **Retry only idempotent operations by default**, and only on the status codes in the [HTTP error reference](sdk-integration-guide.md#http-error-reference) (`429`, `500`, `502`, `503`, `504`). Never retry on `4xx` client errors other than `429`.
-3. **Every network-facing default should be overridable** (base URL, timeout, retry count, max delay) — hardcoding these forces a fork for anyone self-hosting Soroban Pulse.
+3. **Every network-facing default should be overridable** (base URL, timeout, retry count, max delay) — hardcoding these forces a fork for anyone self-hosting StellarClassic Pulse.
 4. **New behavioral modules (streaming, verification, retry) get their own file**, not bolted onto the generated API classes, so regeneration never risks clobbering them.
 
 ---
@@ -113,7 +113,7 @@ Source: [sdk/python/](../sdk/python/).
 4. **Publishing a local build for testing in another project:**
    ```bash
    python setup.py sdist bdist_wheel
-   pip install dist/soroban_pulse_client-*.whl --force-reinstall
+   pip install dist/stellarclassic_pulse_client-*.whl --force-reinstall
    ```
 5. **Docs**: the `sdk/python/docs/` directory holds per-model/per-API generated markdown — regenerate it alongside the client rather than editing by hand.
 
@@ -132,11 +132,11 @@ Source: [sdk/go/](../sdk/go/). This client is hand-written (no generator in the 
    go test ./...        # includes retry_policy_test.go
    ```
 2. **Adding a new endpoint method**: add the request/response types to `models.go` (matching the field names and JSON tags in `openapi.json` exactly — see [design principle #1](#design-principles-for-new-sdk-work)), then add the method to `client.go` following the existing pattern (accept `context.Context` first, return `(*T, error)`).
-3. **Testing retry behavior in isolation** without hitting a real server — `retry_policy_test.go` uses an `httptest.Server` that returns configured status codes; follow that pattern for new retry-related tests rather than requiring a live Soroban Pulse instance.
+3. **Testing retry behavior in isolation** without hitting a real server — `retry_policy_test.go` uses an `httptest.Server` that returns configured status codes; follow that pattern for new retry-related tests rather than requiring a live StellarClassic Pulse instance.
 4. **Local module replace for testing against another project:**
    ```bash
    # in the consuming project's go.mod
-   replace github.com/soroban-pulse/client-go => /absolute/path/to/SorobanPulse/sdk/go
+   replace github.com/stellarclassic-pulse/client-go => /absolute/path/to/StellarClassicPulse/sdk/go
    ```
 5. **Keeping the README example current**: `sdk/go/README.md` carries the canonical usage example since there's no generated `examples.go` — update it whenever `client.go`'s public API changes shape.
 
@@ -146,7 +146,7 @@ See [docs/sdk-integration-guide.md § Go Guide](sdk-integration-guide.md#go-guid
 
 ## Rust Integration (No Dedicated SDK Yet)
 
-There is currently no published `soroban-pulse-client` Rust crate — Rust consumers (including this repo's own integration tests) talk to the API directly with `reqwest` against the types in `src/models.rs`, or against types generated from [openapi.json](../openapi.json).
+There is currently no published `stellarclassic-pulse-client` Rust crate — Rust consumers (including this repo's own integration tests) talk to the API directly with `reqwest` against the types in `src/models.rs`, or against types generated from [openapi.json](../openapi.json).
 
 ### Direct integration with `reqwest`
 
@@ -307,7 +307,7 @@ These apply across all SDKs, generated or hand-written:
 
 1. **Distinguish retryable from terminal errors at the type level, not by re-inspecting the status code at every call site.** Every SDK here already does this (TypeScript throws after retries exhaust; Python raises `ApiException` with `.status`; Go returns a typed error) — extend that pattern rather than introducing raw status-code checks in application-facing code.
 2. **Never swallow a `429` silently.** Surface `Retry-After` (or the SDK's parsed equivalent) to the caller, or handle it internally with backoff — don't retry immediately in a loop, which turns a rate limit into a self-inflicted denial of service against your own client. See [docs/subscription-best-practices.md § Client-side REST polling backoff](subscription-best-practices.md#client-side-rest-polling-backoff).
-3. **Preserve the server's error body.** Soroban Pulse returns a structured JSON error body on 4xx/5xx responses; include it in the exception/error message rather than just the status code, since it usually names the exact invalid field.
+3. **Preserve the server's error body.** StellarClassic Pulse returns a structured JSON error body on 4xx/5xx responses; include it in the exception/error message rather than just the status code, since it usually names the exact invalid field.
 4. **Fail closed on webhook verification.** Any error while parsing the signature header (missing prefix, wrong length, decode failure) must be treated as an invalid signature, not skipped — see the `Result`/exception-based designs above; none of them have a silent bypass path.
 5. **Log with the request's correlation ID, not just the error message**, so a failure in an SDK can be cross-referenced against server-side logs — see [docs/logging.md](logging.md) for the `correlation_id` field convention. Every SDK's HTTP client should read the response's correlation/request-id header (where present) and attach it to thrown/returned errors.
 6. **Time out every request explicitly.** Don't rely on a language's default (often "never") — each SDK exposes a configurable timeout (`Configuration.timeout`, `context.WithTimeout`, `aiohttp.ClientTimeout`); set one before shipping integration code, not just during debugging.

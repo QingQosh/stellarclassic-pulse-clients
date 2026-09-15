@@ -1,6 +1,6 @@
 # Load Testing Guide
 
-> **Issue #923** — Comprehensive load testing scenario suite for SorobanPulse.
+> **Issue #923** — Comprehensive load testing scenario suite for StellarClassicPulse.
 >
 > This guide covers prerequisites, scenario descriptions, how to run tests locally
 > and in CI, how to interpret k6 output, and how to extend the suite.
@@ -72,7 +72,7 @@ Load tests are most representative when the database contains realistic event da
 
 ```bash
 # Seed with the integration test dataset
-PGPASSWORD=postgres psql -h localhost -U postgres soroban_pulse_test \
+PGPASSWORD=postgres psql -h localhost -U postgres stellarclassic_pulse_test \
   -f tests/e2e/seed.sql
 ```
 
@@ -486,7 +486,7 @@ key used in `data.metrics["name"]`.
 ### Service crashes during load test
 
 Check:
-- `docker logs soroban-pulse` or the process stdout for panic messages
+- `docker logs stellarclassic-pulse` or the process stdout for panic messages
 - Database connection limit: `SHOW max_connections;` in psql
 - OS file descriptor limit: `ulimit -n` (should be ≥ 65536 for load testing)
 

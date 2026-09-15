@@ -1,6 +1,6 @@
 # Event Aggregation
 
-SorobanPulse can aggregate Soroban contract events in real time, grouping them
+StellarClassicPulse can aggregate Soroban contract events in real time, grouping them
 into time windows and computing statistics over arbitrary numeric fields.  This
 document describes the data model, the API, and the operational concerns for
 the aggregation subsystem (issue #934).

@@ -86,8 +86,8 @@ emergency_procedures:
     comment: "EMERGENCY: Complete system shutdown in progress"
     requires_approval: true
     approval_contacts:
-      - "oncall@soroban-pulse.io"
-      - "ops-lead@soroban-pulse.io"
+      - "oncall@stellarclassic-pulse.io"
+      - "ops-lead@stellarclassic-pulse.io"
 
 # Monitoring and cleanup
 cleanup_policy:

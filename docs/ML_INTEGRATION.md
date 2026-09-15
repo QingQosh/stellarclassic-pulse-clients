@@ -2,7 +2,7 @@
 
 **Issue #842**
 
-This document describes the AI/ML integration capabilities for intelligent features in SorobanPulse.
+This document describes the AI/ML integration capabilities for intelligent features in StellarClassicPulse.
 
 ## Overview
 
@@ -26,7 +26,7 @@ Improves upon basic statistical methods with machine learning.
 Captures level, trend, and seasonality in time series data:
 
 ```rust
-use soroban_pulse::ml_integration::MLEnhancedForecaster;
+use stellarclassic_pulse::ml_integration::MLEnhancedForecaster;
 
 // Create forecaster with 24-hour seasonality
 let mut forecaster = MLEnhancedForecaster::new(24, 3.0);
@@ -62,7 +62,7 @@ Automatically discovers recurring patterns in event sequences.
 Compares event sequences to detect similar patterns:
 
 ```rust
-use soroban_pulse::ml_integration::PatternRecognitionEngine;
+use stellarclassic_pulse::ml_integration::PatternRecognitionEngine;
 
 let mut engine = PatternRecognitionEngine::new(0.7); // 70% confidence threshold
 
@@ -89,7 +89,7 @@ for (pattern_name, confidence) in detected {
 Categorize events using Gaussian Naive Bayes classifier.
 
 ```rust
-use soroban_pulse::ml_integration::EventClassifier;
+use stellarclassic_pulse::ml_integration::EventClassifier;
 
 let mut classifier = EventClassifier::new();
 
@@ -125,7 +125,7 @@ if let Some((class, confidence)) = classifier.classify(&test_features) {
 Time series forecasting with confidence intervals.
 
 ```rust
-use soroban_pulse::ml_integration::train_anomaly_model;
+use stellarclassic_pulse::ml_integration::train_anomaly_model;
 
 // Train model on historical data
 let model = train_anomaly_model(
@@ -150,7 +150,7 @@ println!("Training samples: {}", model.training_samples);
 Auto-learned filters that adapt based on user behavior.
 
 ```rust
-use soroban_pulse::ml_integration::{create_intelligent_filter, FilterAction};
+use stellarclassic_pulse::ml_integration::{create_intelligent_filter, FilterAction};
 
 let conditions = vec![
     FilterCondition {
@@ -204,7 +204,7 @@ Filters track their own performance:
 ML-driven suggestions for improving configuration.
 
 ```rust
-use soroban_pulse::ml_integration::get_optimization_recommendations;
+use stellarclassic_pulse::ml_integration::get_optimization_recommendations;
 
 let recommendations = get_optimization_recommendations(&pool, tenant_id).await?;
 

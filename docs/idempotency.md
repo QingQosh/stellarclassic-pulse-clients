@@ -26,12 +26,12 @@ to retrieve an unrelated cached response.
 
 `InMemoryStore::remove_expired()` purges records whose `created_at + ttl`
 has passed, and increments
-`soroban_pulse_idempotency_keys_expired_total`. Call this periodically
+`stellarclassic_pulse_idempotency_keys_expired_total`. Call this periodically
 (e.g. from a background maintenance task) to bound memory usage.
 
 ## Metrics
 
-`soroban_pulse_idempotency_requests_total{outcome="hit"|"miss"|"stored"}`
+`stellarclassic_pulse_idempotency_requests_total{outcome="hit"|"miss"|"stored"}`
 tracks cache effectiveness — a high hit rate on a given route often
 indicates a client retrying aggressively on transient errors.
 
@@ -39,7 +39,7 @@ indicates a client retrying aggressively on transient errors.
 
 `IdempotencyStore` is a trait so the default `InMemoryStore` (single
 instance, in-process) can be swapped for a shared backend when running
-multiple SorobanPulse instances behind a load balancer:
+multiple StellarClassicPulse instances behind a load balancer:
 
 - **Postgres-backed**: a table `idempotency_keys(key PRIMARY KEY,
   status_code, body, created_at, ttl_secs)` with the same get/put/remove

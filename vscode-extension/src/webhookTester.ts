@@ -49,7 +49,7 @@ export async function testWebhook(): Promise<void> {
         ignoreFocusOut: true,
     });
 
-    const timeoutMs = vscode.workspace.getConfiguration('sorobanpulse').get<number>('timeoutMs', 10000);
+    const timeoutMs = vscode.workspace.getConfiguration('stellarclassicpulse').get<number>('timeoutMs', 10000);
     const body = samplePayload(contractId?.trim() || 'CTESTCONTRACTID0000000000000000000000000000000000000');
 
     await vscode.window.withProgress(
@@ -63,7 +63,7 @@ export async function testWebhook(): Promise<void> {
                         url,
                         headers: {
                             'content-type': 'application/json',
-                            'x-soroban-pulse-test': 'true',
+                            'x-stellarclassic-pulse-test': 'true',
                         },
                         body,
                     },
@@ -81,7 +81,7 @@ export async function testWebhook(): Promise<void> {
                 if (ok) {
                     vscode.window.showInformationMessage(`Webhook test succeeded: ${result.status} in ${durationMs}ms.`);
                 } else {
-                    vscode.window.showWarningMessage(`Webhook test returned ${result.status} — see "Soroban Pulse" output for details.`);
+                    vscode.window.showWarningMessage(`Webhook test returned ${result.status} — see "StellarClassic Pulse" output for details.`);
                 }
             } catch (err) {
                 const message = err instanceof Error ? err.message : String(err);
@@ -98,7 +98,7 @@ function truncate(s: string, max: number): string {
 let outputChannel: vscode.OutputChannel | undefined;
 function getOutputChannel(): vscode.OutputChannel {
     if (!outputChannel) {
-        outputChannel = vscode.window.createOutputChannel('Soroban Pulse');
+        outputChannel = vscode.window.createOutputChannel('StellarClassic Pulse');
     }
     return outputChannel;
 }

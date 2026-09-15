@@ -25,7 +25,7 @@ keys.is_in_grace_period(3600);       // true for 1 hour after rotation
   `secondary`, so timing doesn't leak which key (or how much of it)
   matched.
 - **Added by this change**: `rotate_with_metrics(new_key)` — identical to
-  `rotate()`, plus increments `soroban_pulse_api_key_rotations_total`.
+  `rotate()`, plus increments `stellarclassic_pulse_api_key_rotations_total`.
   Kept separate from `rotate()` itself so `rotate()` stays a plain,
   dependency-free, synchronously-testable state transition (see this
   module's existing test coverage, extended here to cover the metrics

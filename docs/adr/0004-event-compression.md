@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-08-29
-- **Owners:** SorobanPulse maintainers
+- **Owners:** StellarClassicPulse maintainers
 - **Related:** Issue #610, [`migrations/20260628000004_event_data_gzip.sql`](../../migrations/20260628000004_event_data_gzip.sql)
 
 ## Context
@@ -11,7 +11,7 @@
 
 ## Decision
 
-SorobanPulse compresses `event_data` at rest using gzip, applied at the application layer rather than relying on PostgreSQL's built-in TOAST compression alone. `src/event_compression.rs` provides `compress`/`decompress` over the JSON bytes using `flate2` at the default compression level. Storage uses two columns added by `migrations/20260628000004_event_data_gzip.sql`: `event_data_compressed BYTEA` and `compression_algo TEXT`, added alongside the existing plain `event_data` column rather than replacing it.
+StellarClassicPulse compresses `event_data` at rest using gzip, applied at the application layer rather than relying on PostgreSQL's built-in TOAST compression alone. `src/event_compression.rs` provides `compress`/`decompress` over the JSON bytes using `flate2` at the default compression level. Storage uses two columns added by `migrations/20260628000004_event_data_gzip.sql`: `event_data_compressed BYTEA` and `compression_algo TEXT`, added alongside the existing plain `event_data` column rather than replacing it.
 
 Compression is applied at ingest time in the indexer (`src/indexer.rs`) when `config.event_compression_enabled` is set: the plain `event_data` is still computed and size-checked against `max_event_data_bytes` first, and only then is the compressed form additionally computed and stored, with a metric (`record_compression_ratio`) recording the size reduction achieved. Existing rows are migrated out-of-band by `migrate_existing_events`, which batches over rows where `event_data_compressed IS NULL` (an index, `idx_events_uncompressed`, exists specifically to make that scan cheap) rather than compressing everything in a single blocking pass.
 

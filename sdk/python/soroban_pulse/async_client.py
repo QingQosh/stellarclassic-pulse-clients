@@ -1,4 +1,4 @@
-"""Async (asyncio) SorobanPulse API client, mirroring `SorobanPulseClient`."""
+"""Async (asyncio) StellarClassicPulse API client, mirroring `StellarClassicPulseClient`."""
 
 from __future__ import annotations
 
@@ -10,12 +10,12 @@ from .exceptions import ApiError, AuthenticationError
 from .client import DEFAULT_BASE_URL, DEFAULT_TIMEOUT
 
 
-class AsyncSorobanPulseClient:
+class AsyncStellarClassicPulseClient:
     """Async client built on top of `aiohttp` (imported lazily so the sync
     client has no hard dependency on it).
 
     Example:
-        async with AsyncSorobanPulseClient(api_key="sp_live_...") as client:
+        async with AsyncStellarClassicPulseClient(api_key="sp_live_...") as client:
             events = await client.list_events(contract_id="C...")
     """
 
@@ -32,7 +32,7 @@ class AsyncSorobanPulseClient:
         self.timeout = timeout
         self._session = None
 
-    async def __aenter__(self) -> "AsyncSorobanPulseClient":
+    async def __aenter__(self) -> "AsyncStellarClassicPulseClient":
         import aiohttp  # noqa: WPS433 (lazy import to keep this optional)
 
         self._session = aiohttp.ClientSession(
@@ -50,13 +50,13 @@ class AsyncSorobanPulseClient:
         return {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "User-Agent": "soroban-pulse-python-sdk/0.1.0",
+            "User-Agent": "stellarclassic-pulse-python-sdk/0.1.0",
         }
 
     async def _request(self, method: str, path: str, params: Optional[Dict[str, Any]] = None,
                         body: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         if self._session is None:
-            raise RuntimeError("AsyncSorobanPulseClient must be used as an async context manager")
+            raise RuntimeError("AsyncStellarClassicPulseClient must be used as an async context manager")
 
         url = f"{self.base_url}{path}"
         clean_params = {k: v for k, v in (params or {}).items() if v is not None}

@@ -3,7 +3,7 @@
 # flake8: noqa
 
 """
-    Soroban Pulse API
+    StellarClassic Pulse API
 
     Indexes Soroban smart contract events on the Stellar network.
 

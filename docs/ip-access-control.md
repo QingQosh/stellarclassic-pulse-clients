@@ -43,7 +43,7 @@ enough detail to probe the policy.
 
 ## Metrics
 
-`soroban_pulse_ip_access_blocked_total` — incremented on every block,
+`stellarclassic_pulse_ip_access_blocked_total` — incremented on every block,
 regardless of which list (allow or deny) caused it.
 
 ## What's not implemented

@@ -1,5 +1,5 @@
 /**
- * Server-Sent Events (SSE) streaming support for Soroban Pulse
+ * Server-Sent Events (SSE) streaming support for StellarClassic Pulse
  */
 
 import * as runtime from './runtime';
@@ -352,7 +352,7 @@ export class SSEStream {
 
     try {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(`soroban-pulse-sse-last-id-${this.url}`, this.lastEventId);
+        localStorage.setItem(`stellarclassic-pulse-sse-last-id-${this.url}`, this.lastEventId);
       }
     } catch (error) {
       // Silently fail if localStorage is not available
@@ -366,7 +366,7 @@ export class SSEStream {
     try {
       if (typeof localStorage !== 'undefined') {
         this.lastEventId =
-          localStorage.getItem(`soroban-pulse-sse-last-id-${this.url}`) || null;
+          localStorage.getItem(`stellarclassic-pulse-sse-last-id-${this.url}`) || null;
       }
     } catch (error) {
       // Silently fail if localStorage is not available

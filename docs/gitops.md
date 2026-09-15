@@ -1,6 +1,6 @@
 # GitOps for Infrastructure Management (Issue #910)
 
-This document describes how to operate SorobanPulse deployments through
+This document describes how to operate StellarClassicPulse deployments through
 GitOps: the desired state of each environment lives in Git, and a
 reconciling controller (ArgoCD) continuously makes the cluster match it,
 rather than operators running `kubectl apply` / `helm upgrade` by hand.
@@ -13,8 +13,8 @@ cluster.
 
 ## Why GitOps
 
-SorobanPulse already has two ways to deploy: raw manifests in `k8s/` and the
-Helm chart in `helm/soroban-pulse/`. Both assume a human (or a CI job with
+StellarClassicPulse already has two ways to deploy: raw manifests in `k8s/` and the
+Helm chart in `helm/stellarclassic-pulse/`. Both assume a human (or a CI job with
 cluster credentials) runs `kubectl` / `helm` against the target cluster.
 That means:
 
@@ -80,7 +80,7 @@ kubectl -n argocd port-forward svc/argocd-server 8080:443
 
 A production install should front `argocd-server` with the same ingress
 pattern already used for the app itself (see `k8s/ingress.yaml` /
-`helm/soroban-pulse/templates/ingress.yaml`) rather than leaving it on
+`helm/stellarclassic-pulse/templates/ingress.yaml`) rather than leaving it on
 port-forward.
 
 ### CLI login
@@ -102,8 +102,8 @@ they have a real tradeoff, not just a style preference.
 
 ### Option A: separate "config repo" (recommended at scale)
 
-Application source code (`SorobanPulse`, this repo) stays separate from a
-second repository — e.g. `SorobanPulse-deploy` — that holds only Helm
+Application source code (`StellarClassicPulse`, this repo) stays separate from a
+second repository — e.g. `StellarClassicPulse-deploy` — that holds only Helm
 values overlays and/or rendered manifests per environment. A release process
 (CI, or a human) bumps an image tag / chart version in the config repo after
 the app repo's CI publishes an artifact.
@@ -125,9 +125,9 @@ The [`gitops/`](../gitops/) directory added alongside this document keeps
 the ArgoCD Application/AppProject manifests in the same repository as the
 application and the Helm chart they deploy.
 
-**Why this is reasonable here**: SorobanPulse is a single-service project
+**Why this is reasonable here**: StellarClassicPulse is a single-service project
 with two environments and a small maintainer group. The feedback-loop risk
-above is real but small — ArgoCD watches `helm/soroban-pulse` for chart/value
+above is real but small — ArgoCD watches `helm/stellarclassic-pulse` for chart/value
 changes, not the application source under `src/`, so a typical `cargo`
 commit doesn't touch anything ArgoCD reconciles, and a values-file commit is
 already something a human deliberately made.
@@ -144,8 +144,8 @@ Example manifests live under [`gitops/argocd/`](../gitops/argocd/):
 | File | Purpose |
 |---|---|
 | [`project.yaml`](../gitops/argocd/project.yaml) | `AppProject` scoping allowed source repos, destination namespaces, and resource kinds |
-| [`application-production.yaml`](../gitops/argocd/application-production.yaml) | `Application` deploying `helm/soroban-pulse` (branch `main`) into `soroban-pulse-production` |
-| [`application-staging.yaml`](../gitops/argocd/application-staging.yaml) | `Application` deploying the same chart into `soroban-pulse-staging` |
+| [`application-production.yaml`](../gitops/argocd/application-production.yaml) | `Application` deploying `helm/stellarclassic-pulse` (branch `main`) into `stellarclassic-pulse-production` |
+| [`application-staging.yaml`](../gitops/argocd/application-staging.yaml) | `Application` deploying the same chart into `stellarclassic-pulse-staging` |
 
 Apply the project before the applications:
 
@@ -156,16 +156,16 @@ kubectl apply -n argocd -f gitops/argocd/application-staging.yaml
 ```
 
 Both `Application` manifests point `source.repoURL` at
-`https://github.com/Soroban-Pulse/SorobanPulse.git` as a placeholder — set it
+`https://github.com/Soroban-Pulse/StellarClassicPulse.git` as a placeholder — set it
 to the actual clone URL of the repository as configured in your ArgoCD
 instance, and make sure it matches an entry in `project.yaml`'s
 `sourceRepos` (ArgoCD rejects an Application whose source repo isn't
 whitelisted by its project).
 
 **Prerequisite gap — staging values file does not exist yet.**
-`application-staging.yaml` references `helm/soroban-pulse/values-staging.yaml`
+`application-staging.yaml` references `helm/stellarclassic-pulse/values-staging.yaml`
 via `spec.source.helm.valueFiles`. As of this writing,
-`helm/soroban-pulse/values.yaml` only defines one set of defaults (shaped for
+`helm/stellarclassic-pulse/values.yaml` only defines one set of defaults (shaped for
 production: `env.ENVIRONMENT: "production"`, `replicaCount: 2`), and no
 `values-staging.yaml` exists in the chart directory. **This Application will
 fail to sync until that file is created.** The comment in
@@ -177,7 +177,7 @@ instance against this repo, since it also requires deciding on the staging
 secret backend (see [Secrets management](#6-secrets-management-integration)).
 
 Production does not have this gap: it works against
-`helm/soroban-pulse/values.yaml` as committed, with an optional
+`helm/stellarclassic-pulse/values.yaml` as committed, with an optional
 `values-production.yaml` overlay called out in a comment for when
 production-specific overrides (e.g. `existingSecret`) are needed beyond the
 chart defaults.
@@ -260,27 +260,27 @@ Regardless of `selfHeal`, both of the following work at any time:
 
 ```bash
 # Show the diff between Git state and live cluster state
-argocd app diff soroban-pulse-production
+argocd app diff stellarclassic-pulse-production
 
 # Manually trigger a sync (e.g. after a values change, or to force-heal
 # even if selfHeal is false)
-argocd app sync soroban-pulse-staging
+argocd app sync stellarclassic-pulse-staging
 ```
 
 ## 6. Secrets management integration
 
-`k8s/secret.yaml` and `helm/soroban-pulse/templates/secret.yaml` currently
+`k8s/secret.yaml` and `helm/stellarclassic-pulse/templates/secret.yaml` currently
 render a plain `Secret` populated from `stringData` — either hardcoded
 placeholder values (`k8s/secret.yaml`, meant as a template for manual
 `kubectl apply`, not real credentials) or from `values.yaml`'s `secrets:`
 block (the Helm chart). Both are documented in
-[`helm/soroban-pulse/README.md`](../helm/soroban-pulse/README.md) as
+[`helm/stellarclassic-pulse/README.md`](../helm/stellarclassic-pulse/README.md) as
 development/staging-only, because a Kubernetes `Secret` is base64-encoded,
 not encrypted, and `values.yaml` or a raw `Secret` manifest sitting in Git
 makes those credentials readable to anyone with read access to the repo.
 
 That's incompatible with GitOps as described in this document: if
-`gitops/argocd/application-production.yaml` syncs `helm/soroban-pulse`
+`gitops/argocd/application-production.yaml` syncs `helm/stellarclassic-pulse`
 against a `values.yaml` (or override file) that contains
 `secrets.databaseUrl`, that connection string is in Git history, in
 ArgoCD's synced-manifest cache, and in every clone of the repo, permanently.
@@ -307,29 +307,29 @@ because the chart already supports the mechanism it relies on
    apiVersion: external-secrets.io/v1beta1
    kind: ExternalSecret
    metadata:
-     name: soroban-pulse-production-credentials
-     namespace: soroban-pulse-production
+     name: stellarclassic-pulse-production-credentials
+     namespace: stellarclassic-pulse-production
    spec:
      refreshInterval: 1h
      secretStoreRef:
        name: aws-secretsmanager
        kind: ClusterSecretStore
      target:
-       name: soroban-pulse-production-credentials
+       name: stellarclassic-pulse-production-credentials
      data:
        - secretKey: DATABASE_URL
          remoteRef:
-           key: soroban-pulse/production/database-url
+           key: stellarclassic-pulse/production/database-url
        - secretKey: API_KEY
          remoteRef:
-           key: soroban-pulse/production/api-key
+           key: stellarclassic-pulse/production/api-key
    ```
 4. Point the chart at the resulting Secret instead of letting it manage its
    own — this is exactly the `existingSecret` mechanism already documented
-   in `helm/soroban-pulse/README.md`:
+   in `helm/stellarclassic-pulse/README.md`:
    ```yaml
    # values-production.yaml
-   existingSecret: "soroban-pulse-production-credentials"
+   existingSecret: "stellarclassic-pulse-production-credentials"
    ```
 5. ArgoCD then syncs the `ExternalSecret` object (a reference) via the
    normal GitOps flow; ESO reconciles it against the real secret store
@@ -344,7 +344,7 @@ secret store changes.
 that are safe to commit and are decrypted in-cluster by a controller) is a
 lighter-weight alternative when there's no existing cloud secret manager to
 integrate with — it's already mentioned as an option in
-`helm/soroban-pulse/README.md`.
+`helm/stellarclassic-pulse/README.md`.
 
 ## 7. Implement PR-based deployment workflow
 
@@ -369,9 +369,9 @@ helm-lint:
     - uses: azure/setup-helm@v4
       with:
         version: "3.14.0"
-    - run: helm lint helm/soroban-pulse
-    - run: helm template soroban-pulse helm/soroban-pulse | grep -v "DATABASE_URL\|API_KEY\|SMTP_PASSWORD"
-    - run: helm template soroban-pulse helm/soroban-pulse --set existingSecret=my-secret
+    - run: helm lint helm/stellarclassic-pulse
+    - run: helm template stellarclassic-pulse helm/stellarclassic-pulse | grep -v "DATABASE_URL\|API_KEY\|SMTP_PASSWORD"
+    - run: helm template stellarclassic-pulse helm/stellarclassic-pulse --set existingSecret=my-secret
 ```
 
 (`helm lint` + `helm template` against both the default and `existingSecret`
@@ -384,7 +384,7 @@ code paths — see `.github/workflows/ci.yml` for the exact job.)
 - Lints the `Application`/`AppProject` manifests under `gitops/argocd/`
   (e.g. `kubeconform` or `kubectl apply --dry-run=client` against the ArgoCD
   CRD schemas).
-- Runs `helm template helm/soroban-pulse -f helm/soroban-pulse/values-staging.yaml`
+- Runs `helm template helm/stellarclassic-pulse -f helm/stellarclassic-pulse/values-staging.yaml`
   once that file exists, to catch a values file that doesn't actually render.
 
 This repository does not add such a workflow as part of this change — no
@@ -403,7 +403,7 @@ gitops-validate:
       with:
         version: "3.14.0"
     - name: Render staging values (once values-staging.yaml exists)
-      run: helm template soroban-pulse helm/soroban-pulse -f helm/soroban-pulse/values-staging.yaml
+      run: helm template stellarclassic-pulse helm/stellarclassic-pulse -f helm/stellarclassic-pulse/values-staging.yaml
     - name: Validate ArgoCD manifests are well-formed YAML
       run: |
         for f in gitops/argocd/*.yaml; do
@@ -429,7 +429,7 @@ what ArgoCD actually did in the cluster, including syncs triggered by
 `selfHeal` reverting manual drift:
 
 ```bash
-argocd app history soroban-pulse-production
+argocd app history stellarclassic-pulse-production
 ```
 
 This shows each sync's revision (git commit SHA), deploy time, and whether

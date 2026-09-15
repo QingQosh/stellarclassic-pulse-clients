@@ -9,7 +9,7 @@ when error rates spike.
 ## Flag Evaluation
 
 ```rust
-use sorobanpulse::feature_flags::{is_feature_enabled, FeatureFlagContext};
+use stellarclassicpulse::feature_flags::{is_feature_enabled, FeatureFlagContext};
 
 let context = FeatureFlagContext {
     contract_id: Some("CABC123...".to_string()),
@@ -46,7 +46,7 @@ a given flag, so a user's flag state doesn't flicker between requests.
 hashing to assign a context to one of several named, weighted variants:
 
 ```rust
-use sorobanpulse::feature_flags::{assign_variant, FlagVariant};
+use stellarclassicpulse::feature_flags::{assign_variant, FlagVariant};
 
 let variants = vec![
     FlagVariant { name: "control".into(), weight: 50 },
@@ -81,4 +81,4 @@ endpoint.
 `FeatureFlagWatcher` continues to poll the recent request error rate and
 automatically disables any flag with `auto_rollback = TRUE` when the error
 rate exceeds `DEFAULT_ROLLBACK_THRESHOLD` (5% by default), recording an audit
-row and a `soroban_pulse_feature_flag_rollback` metric.
+row and a `stellarclassic_pulse_feature_flag_rollback` metric.

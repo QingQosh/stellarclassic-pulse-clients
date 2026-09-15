@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse includes an advanced query plan cache with adaptive TTL and schema-aware invalidation. This reduces planning overhead for repeated queries and enables targeted cache management.
+StellarClassicPulse includes an advanced query plan cache with adaptive TTL and schema-aware invalidation. This reduces planning overhead for repeated queries and enables targeted cache management.
 
 ## Features
 
@@ -160,11 +160,11 @@ These patterns cover all primary API access patterns documented in `docs/schema.
 
 | Metric Name | Type | Description |
 |---|---|---|
-| `soroban_pulse_query_plan_cache_hits` | Counter | Cumulative cache hits |
-| `soroban_pulse_query_plan_cache_misses` | Counter | Cumulative cache misses |
-| `soroban_pulse_query_plan_cache_evictions` | Counter | Cumulative evictions |
-| `soroban_pulse_query_plan_cache_entries` | Gauge | Current cache size (entries) |
-| `soroban_pulse_query_plan_cache_hit_ratio` | Gauge | Current hit ratio (0.0-1.0) |
+| `stellarclassic_pulse_query_plan_cache_hits` | Counter | Cumulative cache hits |
+| `stellarclassic_pulse_query_plan_cache_misses` | Counter | Cumulative cache misses |
+| `stellarclassic_pulse_query_plan_cache_evictions` | Counter | Cumulative evictions |
+| `stellarclassic_pulse_query_plan_cache_entries` | Gauge | Current cache size (entries) |
+| `stellarclassic_pulse_query_plan_cache_hit_ratio` | Gauge | Current hit ratio (0.0-1.0) |
 
 ## Performance Impact
 

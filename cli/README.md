@@ -1,6 +1,6 @@
 # spulse
 
-Command-line tool for querying and analyzing Soroban Pulse events locally.
+Command-line tool for querying and analyzing StellarClassic Pulse events locally.
 
 ## Install
 
@@ -13,15 +13,15 @@ cargo install spulse
 ### Homebrew
 
 ```bash
-brew tap soroban-pulse/tap
+brew tap stellarclassic-pulse/tap
 brew install spulse
 ```
 
 ### From source
 
 ```bash
-git clone https://github.com/soroban-pulse/soroban-pulse
-cd soroban-pulse/cli
+git clone https://github.com/stellarclassic-pulse/stellarclassic-pulse
+cd stellarclassic-pulse/cli
 cargo build --release
 # binary at: target/release/spulse
 ```
@@ -29,7 +29,7 @@ cargo build --release
 ## Quick start
 
 ```bash
-# Point at your Soroban Pulse instance
+# Point at your StellarClassic Pulse instance
 spulse config set base_url http://localhost:3000
 spulse config set api_key  your-api-key
 

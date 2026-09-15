@@ -2,7 +2,7 @@
 
 ## Overview
 
-The index analysis module provides comprehensive monitoring and optimization recommendations for database indexes in SorobanPulse. It automatically detects unused indexes, identifies bloat, and recommends optimization strategies.
+The index analysis module provides comprehensive monitoring and optimization recommendations for database indexes in StellarClassicPulse. It automatically detects unused indexes, identifies bloat, and recommends optimization strategies.
 
 ## Features
 
@@ -87,12 +87,12 @@ for rec in &report.recommendations {
 
 | Metric Name | Type | Description |
 |---|---|---|
-| `soroban_pulse_unused_indexes_total` | Gauge | Count of unused indexes |
-| `soroban_pulse_fragmented_indexes_total` | Gauge | Count of fragmented indexes |
-| `soroban_pulse_index_scan_count` | Gauge | Per-index scan count (labels: table, index) |
-| `soroban_pulse_index_bloat_ratio` | Gauge | Per-index bloat ratio (labels: table, index) |
-| `soroban_pulse_index_size_bytes` | Gauge | Per-index size in bytes (labels: table, index) |
-| `soroban_pulse_index_dead_tuples` | Gauge | Per-index dead tuple count (labels: table, index) |
+| `stellarclassic_pulse_unused_indexes_total` | Gauge | Count of unused indexes |
+| `stellarclassic_pulse_fragmented_indexes_total` | Gauge | Count of fragmented indexes |
+| `stellarclassic_pulse_index_scan_count` | Gauge | Per-index scan count (labels: table, index) |
+| `stellarclassic_pulse_index_bloat_ratio` | Gauge | Per-index bloat ratio (labels: table, index) |
+| `stellarclassic_pulse_index_size_bytes` | Gauge | Per-index size in bytes (labels: table, index) |
+| `stellarclassic_pulse_index_dead_tuples` | Gauge | Per-index dead tuple count (labels: table, index) |
 
 ## Index Health Scoring
 

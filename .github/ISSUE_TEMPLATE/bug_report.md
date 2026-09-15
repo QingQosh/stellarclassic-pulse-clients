@@ -1,12 +1,21 @@
 ---
 name: Bug Report
-about: Report a reproducible bug
+about: Report a reproducible bug in the dashboard, CLI, SDK, or VS Code extension
 labels: bug
 ---
 
 ## Describe the bug
 
-<!-- A clear description of what the bug is. -->
+<!-- A clear and concise description of what the bug is. -->
+
+## Affected component
+
+- [ ] `dashboard/`
+- [ ] `cli/`
+- [ ] `sdk/javascript` or `sdk/typescript`
+- [ ] `sdk/python`
+- [ ] `sdk/go`
+- [ ] `vscode-extension/`
 
 ## Steps to reproduce
 
@@ -16,14 +25,15 @@ labels: bug
 
 ## Expected behaviour
 
-<!-- What you expected to happen. -->
-
 ## Actual behaviour
 
-<!-- What actually happened. Include logs or error output if relevant. -->
+<!-- Include error output, console logs, or screenshots if relevant. -->
 
 ## Environment
 
 - OS:
-- Rust version (`rustc --version`):
-- Service version / commit:
+- Node / Python / Go version (whichever applies):
+- Component version / commit:
+- Backend URL / version being used:
+
+## Additional context

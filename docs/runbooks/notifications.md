@@ -39,12 +39,12 @@
 
 1. **Immediate**: Scale up notification workers
    ```bash
-   kubectl scale deployment soroban-pulse-notifications --replicas=5
+   kubectl scale deployment stellarclassic-pulse-notifications --replicas=5
    ```
 
 2. **Short-term**: Increase worker concurrency
    ```bash
-   kubectl set env deployment/soroban-pulse NOTIFICATION_WORKERS=10
+   kubectl set env deployment/stellarclassic-pulse NOTIFICATION_WORKERS=10
    ```
 
 3. **Long-term**: Review notification batching strategy
@@ -96,10 +96,10 @@ WHERE status = 'queued' AND created_at < NOW() - INTERVAL '1 hour';
 
 ### Check notification worker health
 ```bash
-kubectl get pods -l app=soroban-pulse -o jsonpath='{.items[*].status.conditions[?(@.type=="Ready")].status}'
+kubectl get pods -l app=stellarclassic-pulse -o jsonpath='{.items[*].status.conditions[?(@.type=="Ready")].status}'
 ```
 
 ### Restart notification workers
 ```bash
-kubectl rollout restart deployment/soroban-pulse-notifications
+kubectl rollout restart deployment/stellarclassic-pulse-notifications
 ```

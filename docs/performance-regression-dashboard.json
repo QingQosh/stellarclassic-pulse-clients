@@ -19,7 +19,7 @@
     { "type": "panel", "id": "text",       "name": "Text",        "version": "" }
   ],
   "annotations": { "list": [] },
-  "description": "Soroban Pulse — performance regression dashboard. Visualises k6 load-test trends, SLO breach history, and baseline comparisons (issue #811).",
+  "description": "StellarClassic Pulse — performance regression dashboard. Visualises k6 load-test trends, SLO breach history, and baseline comparisons (issue #811).",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -27,7 +27,7 @@
   "links": [],
   "schemaVersion": 37,
   "style": "dark",
-  "tags": ["soroban-pulse", "performance", "load-testing", "regression"],
+  "tags": ["stellarclassic-pulse", "performance", "load-testing", "regression"],
   "templating": {
     "list": [
       {
@@ -79,7 +79,7 @@
   "time": { "from": "now-30d", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Soroban Pulse — Performance Regression",
+  "title": "StellarClassic Pulse — Performance Regression",
   "uid": "soroban-perf-regression",
   "version": 1,
   "panels": [
@@ -116,7 +116,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
           "legendFormat": "p99 latency",
           "refId": "A"
         }
@@ -148,7 +148,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "sum(rate(soroban_pulse_http_request_duration_seconds_count{status=~\"5..\"}[5m])) / sum(rate(soroban_pulse_http_request_duration_seconds_count[5m]))",
+          "expr": "sum(rate(stellarclassic_pulse_http_request_duration_seconds_count{status=~\"5..\"}[5m])) / sum(rate(stellarclassic_pulse_http_request_duration_seconds_count[5m]))",
           "legendFormat": "error rate",
           "refId": "A"
         }
@@ -180,7 +180,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events/stream.*\"}[5m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events/stream.*\"}[5m])) by (le)) * 1000",
           "legendFormat": "SSE p99",
           "refId": "A"
         }
@@ -212,7 +212,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_sse_active_connections",
+          "expr": "stellarclassic_pulse_sse_active_connections",
           "legendFormat": "SSE connections",
           "refId": "A"
         }
@@ -244,7 +244,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "increase(soroban_pulse_webhook_failures_total[1h])",
+          "expr": "increase(stellarclassic_pulse_webhook_failures_total[1h])",
           "legendFormat": "failures/hr",
           "refId": "A"
         }
@@ -276,7 +276,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_indexer_lag_ledgers",
+          "expr": "stellarclassic_pulse_indexer_lag_ledgers",
           "legendFormat": "lag",
           "refId": "A"
         }
@@ -326,17 +326,17 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "histogram_quantile(0.50, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.50, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
           "legendFormat": "p50", "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "histogram_quantile(0.95, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.95, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
           "legendFormat": "p95", "refId": "B"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
+          "expr": "histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000",
           "legendFormat": "p99", "refId": "C"
         },
         {
@@ -364,7 +364,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket[5m])) by (le, route)) * 1000",
+          "expr": "histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m])) by (le, route)) * 1000",
           "legendFormat": "{{route}}", "refId": "A"
         }
       ]
@@ -387,7 +387,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "sum(rate(soroban_pulse_http_request_duration_seconds_count[1m])) by (route)",
+          "expr": "sum(rate(stellarclassic_pulse_http_request_duration_seconds_count[1m])) by (route)",
           "legendFormat": "{{route}}", "refId": "A"
         }
       ]
@@ -418,7 +418,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "sum(rate(soroban_pulse_http_request_duration_seconds_count{status=~\"5..\"}[5m])) by (route) / sum(rate(soroban_pulse_http_request_duration_seconds_count[5m])) by (route)",
+          "expr": "sum(rate(stellarclassic_pulse_http_request_duration_seconds_count{status=~\"5..\"}[5m])) by (route) / sum(rate(stellarclassic_pulse_http_request_duration_seconds_count[5m])) by (route)",
           "legendFormat": "{{route}}", "refId": "A"
         },
         {
@@ -471,17 +471,17 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "(histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000) / 80",
+          "expr": "(histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events\"}[5m])) by (le)) * 1000) / 80",
           "legendFormat": "events_steady / 80ms baseline", "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "(histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events/stream.*\"}[5m])) by (le)) * 1000) / 110",
+          "expr": "(histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket{route=~\"/v1/events/stream.*\"}[5m])) by (le)) * 1000) / 110",
           "legendFormat": "sse_stream / 110ms baseline", "refId": "B"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "(histogram_quantile(0.99, sum(rate(soroban_pulse_http_request_duration_seconds_bucket[5m])) by (le)) * 1000) / 200",
+          "expr": "(histogram_quantile(0.99, sum(rate(stellarclassic_pulse_http_request_duration_seconds_bucket[5m])) by (le)) * 1000) / 200",
           "legendFormat": "all routes / 200ms SLO", "refId": "C"
         }
       ]
@@ -504,17 +504,17 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_db_pool_size",
+          "expr": "stellarclassic_pulse_db_pool_size",
           "legendFormat": "open connections", "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_db_pool_idle",
+          "expr": "stellarclassic_pulse_db_pool_idle",
           "legendFormat": "idle connections", "refId": "B"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_db_pool_max",
+          "expr": "stellarclassic_pulse_db_pool_max",
           "legendFormat": "pool max", "refId": "C"
         }
       ]
@@ -537,7 +537,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_process_memory_bytes",
+          "expr": "stellarclassic_pulse_process_memory_bytes",
           "legendFormat": "RSS memory", "refId": "A"
         }
       ]
@@ -560,7 +560,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "rate(soroban_pulse_rate_limit_rejected_total[1m])",
+          "expr": "rate(stellarclassic_pulse_rate_limit_rejected_total[1m])",
           "legendFormat": "rejected req/s", "refId": "A"
         }
       ]
@@ -590,7 +590,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "rate(soroban_pulse_webhook_failures_total[5m])",
+          "expr": "rate(stellarclassic_pulse_webhook_failures_total[5m])",
           "legendFormat": "failures/s", "refId": "A"
         }
       ]
@@ -613,12 +613,12 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "soroban_pulse_indexer_lag_ledgers",
+          "expr": "stellarclassic_pulse_indexer_lag_ledgers",
           "legendFormat": "lag (ledgers)", "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "rate(soroban_pulse_rpc_errors_total[5m])",
+          "expr": "rate(stellarclassic_pulse_rpc_errors_total[5m])",
           "legendFormat": "RPC errors/s", "refId": "B"
         }
       ]
@@ -641,7 +641,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "expr": "rate(soroban_pulse_events_indexed_total[1m])",
+          "expr": "rate(stellarclassic_pulse_events_indexed_total[1m])",
           "legendFormat": "events/s indexed", "refId": "A"
         }
       ]
@@ -658,7 +658,7 @@
       "gridPos": { "h": 6, "w": 24, "x": 0, "y": 57 },
       "id": 41,
       "options": {
-        "content": "## How to use this dashboard\n\n1. **Run a load test** using one of the k6 scripts in `tests/load/`.\n2. **Archive the result** with `node tests/load/lib/results.js archive <scenario> <result.json> [db_size]`.\n3. **Check for regressions** with `node tests/load/regression_check.js <scenario> <result.json>` or `node tests/load/lib/baseline.js compare <scenario> <result.json>`.\n4. **View trends** with `node tests/load/lib/results.js trend <scenario> --last 10`.\n5. **Promote a new baseline** after an intentional improvement: `node tests/load/lib/baseline.js promote <scenario> <result.json> [db_size]`.\n\n### Regression thresholds (from `baselines.json`)\n\n| Metric type | Threshold |\n|---|---|\n| Latency (p50/p95/p99) | > 20% above baseline |\n| Error rate | > 2 percentage points above baseline |\n| Memory growth (soak) | > 50% above baseline |\n\nSee [docs/load-testing-runbook.md](https://github.com/Soroban-Pulse/SorobanPulse/blob/main/docs/load-testing-runbook.md) for the full runbook.",
+        "content": "## How to use this dashboard\n\n1. **Run a load test** using one of the k6 scripts in `tests/load/`.\n2. **Archive the result** with `node tests/load/lib/results.js archive <scenario> <result.json> [db_size]`.\n3. **Check for regressions** with `node tests/load/regression_check.js <scenario> <result.json>` or `node tests/load/lib/baseline.js compare <scenario> <result.json>`.\n4. **View trends** with `node tests/load/lib/results.js trend <scenario> --last 10`.\n5. **Promote a new baseline** after an intentional improvement: `node tests/load/lib/baseline.js promote <scenario> <result.json> [db_size]`.\n\n### Regression thresholds (from `baselines.json`)\n\n| Metric type | Threshold |\n|---|---|\n| Latency (p50/p95/p99) | > 20% above baseline |\n| Error rate | > 2 percentage points above baseline |\n| Memory growth (soak) | > 50% above baseline |\n\nSee [docs/load-testing-runbook.md](https://github.com/Soroban-Pulse/StellarClassicPulse/blob/main/docs/load-testing-runbook.md) for the full runbook.",
         "mode": "markdown"
       },
       "title": "Usage Guide",

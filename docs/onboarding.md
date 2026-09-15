@@ -19,7 +19,7 @@ For deeper environment configuration beyond this day-1 checklist — OS-specific
 
 1. **Clone and configure.**
    ```bash
-   git clone <repo-url> && cd SorobanPulse
+   git clone <repo-url> && cd StellarClassicPulse
    cp .env.example .env   # fill in real values — see README § Setup
    ```
 2. **Get a database running before your first build.** This is the step most
@@ -27,7 +27,7 @@ For deeper environment configuration beyond this day-1 checklist — OS-specific
    database?](#why-does-cargo-build-need-a-database) below.
    ```bash
    docker compose up -d postgres   # or point DATABASE_URL at an existing instance
-   export DATABASE_URL=postgres://postgres:postgres@localhost:5432/soroban_pulse
+   export DATABASE_URL=postgres://postgres:postgres@localhost:5432/stellarclassic_pulse
    ```
 3. **Build.**
    ```bash
@@ -74,7 +74,7 @@ migrations first, *then* build.
 
 ```bash
 docker compose up -d postgres
-export DATABASE_URL=postgres://postgres:postgres@localhost:5432/soroban_pulse
+export DATABASE_URL=postgres://postgres:postgres@localhost:5432/stellarclassic_pulse
 cargo sqlx migrate run --source migrations   # or: cargo run (runs migrations on startup)
 cargo build
 ```

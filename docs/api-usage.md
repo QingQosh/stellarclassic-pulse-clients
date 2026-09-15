@@ -1,6 +1,6 @@
 # API Usage Guide
 
-Practical recipes for working with the SorobanPulse REST API.  Every example
+Practical recipes for working with the StellarClassicPulse REST API.  Every example
 uses `curl` and assumes the service is running at `http://localhost:3000`.
 Substitute your deployed base URL as needed.
 
@@ -529,9 +529,9 @@ done
 ### Prometheus metrics quick-check
 
 ```bash
-# Pull all soroban_pulse_* metrics
+# Pull all stellarclassic_pulse_* metrics
 curl -sf http://localhost:3000/metrics \
-  | grep '^soroban_pulse'
+  | grep '^stellarclassic_pulse'
 ```
 
 ### Interactive OpenAPI explorer

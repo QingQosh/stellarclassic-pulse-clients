@@ -2,7 +2,7 @@
 
 ## Overview
 
-Soroban Pulse uses URL-based versioning to provide a stable API contract while allowing for breaking changes in future versions. All production API endpoints are prefixed with `/v1/`.
+StellarClassic Pulse uses URL-based versioning to provide a stable API contract while allowing for breaking changes in future versions. All production API endpoints are prefixed with `/v1/`.
 
 ## Versioning Scheme
 
@@ -157,11 +157,11 @@ The current OpenAPI spec is available at `/openapi.json`.
 
 ## Monitoring Deprecated Endpoints
 
-Operators can monitor usage of deprecated endpoints using the `soroban_pulse_http_request_duration_seconds` metric:
+Operators can monitor usage of deprecated endpoints using the `stellarclassic_pulse_http_request_duration_seconds` metric:
 
 ```promql
 # Requests to deprecated unversioned endpoints
-sum(rate(soroban_pulse_http_request_duration_seconds_count{route!~"/v[0-9]+/.*"}[5m])) by (route)
+sum(rate(stellarclassic_pulse_http_request_duration_seconds_count{route!~"/v[0-9]+/.*"}[5m])) by (route)
 ```
 
 Set up alerts to notify when deprecated endpoints are still receiving traffic close to the sunset date.

@@ -2,7 +2,7 @@
 
 Issue #684: Fix SSE connection timeout on reverse proxies
 
-This document provides guidance on configuring Soroban Pulse SSE (Server-Sent Events) behind common reverse proxies to prevent connection timeouts.
+This document provides guidance on configuring StellarClassic Pulse SSE (Server-Sent Events) behind common reverse proxies to prevent connection timeouts.
 
 ## Problem
 
@@ -10,11 +10,11 @@ SSE connections are long-lived HTTP connections that remain open to stream event
 
 ## Solution
 
-Soroban Pulse implements a keep-alive mechanism that sends periodic ping comments (`: ping`) over the SSE connection to prevent proxy idle timeouts. This mechanism is configurable and works with all standards-compliant SSE proxies.
+StellarClassic Pulse implements a keep-alive mechanism that sends periodic ping comments (`: ping`) over the SSE connection to prevent proxy idle timeouts. This mechanism is configurable and works with all standards-compliant SSE proxies.
 
 ## Configuration
 
-### Soroban Pulse Keep-Alive Settings
+### StellarClassic Pulse Keep-Alive Settings
 
 The SSE keep-alive interval is configured via environment variables:
 
@@ -40,12 +40,12 @@ SSE_KEEPALIVE_SECS=15
 
 **Recommended settings:**
 ```bash
-# Soroban Pulse
+# StellarClassic Pulse
 SSE_KEEPALIVE_SECS=15
 
 # nginx configuration
 location /events {
-    proxy_pass http://soroban-pulse;
+    proxy_pass http://stellarclassic-pulse;
     
     # Critical: Disable buffering for SSE
     proxy_buffering off;
@@ -69,11 +69,11 @@ location /events {
 
 **Recommended settings:**
 ```bash
-# Soroban Pulse
+# StellarClassic Pulse
 SSE_KEEPALIVE_SECS=15
 
 # HAProxy configuration (haproxy.cfg)
-backend soroban_pulse
+backend stellarclassic_pulse
     balance roundrobin
     
     # Allow long timeouts for SSE
@@ -94,12 +94,12 @@ backend soroban_pulse
 
 **Recommended settings:**
 ```bash
-# Soroban Pulse
+# StellarClassic Pulse
 SSE_KEEPALIVE_SECS=15
 
 # AWS ALB configuration
 - Type: TCP
-- Idle timeout: 60+ seconds (keep higher than Soroban Pulse keep-alive)
+- Idle timeout: 60+ seconds (keep higher than StellarClassic Pulse keep-alive)
 - Stickiness: Enabled (for WebSocket compatibility)
 ```
 
@@ -115,7 +115,7 @@ SSE_KEEPALIVE_SECS=15
 
 **Configuration:**
 ```bash
-# Soroban Pulse
+# StellarClassic Pulse
 SSE_KEEPALIVE_SECS=10  # Lower value for CloudFront
 
 # CloudFront settings
@@ -132,7 +132,7 @@ SSE_KEEPALIVE_SECS=10  # Lower value for CloudFront
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: soroban-pulse
+  name: stellarclassic-pulse
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffering: "off"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
@@ -147,14 +147,14 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: soroban-pulse
+            name: stellarclassic-pulse
             port:
               number: 8000
 ```
 
 ## How It Works
 
-1. **Keep-Alive Mechanism:** Soroban Pulse sends SSE-compatible keep-alive comments (lines starting with `:`) every `SSE_KEEPALIVE_SECS` seconds.
+1. **Keep-Alive Mechanism:** StellarClassic Pulse sends SSE-compatible keep-alive comments (lines starting with `:`) every `SSE_KEEPALIVE_SECS` seconds.
 
 2. **Proxy Behavior:** Most reverse proxies treat any data transmission (including comments) as activity, preventing idle timeouts.
 
@@ -171,7 +171,7 @@ spec:
 echo $SSE_KEEPALIVE_SECS
 
 # From running container
-docker exec soroban-pulse env | grep SSE_KEEPALIVE
+docker exec stellarclassic-pulse env | grep SSE_KEEPALIVE
 ```
 
 ### Monitor Connection Health
@@ -219,10 +219,10 @@ curl -N http://localhost:8000/v1/events/stream?event_type=ContractInvoke
 
 ```bash
 # Check docker-compose.yml for proxy configuration
-docker-compose logs -f soroban-pulse | grep -i "sse\|keepalive"
+docker-compose logs -f stellarclassic-pulse | grep -i "sse\|keepalive"
 
 # Monitor connection count
-docker stats soroban-pulse
+docker stats stellarclassic-pulse
 ```
 
 ## Performance Considerations

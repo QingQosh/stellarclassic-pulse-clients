@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse supports integration with modern service mesh platforms to provide advanced traffic management, security, and observability features. This guide covers deployment with both Istio and Linkerd.
+StellarClassicPulse supports integration with modern service mesh platforms to provide advanced traffic management, security, and observability features. This guide covers deployment with both Istio and Linkerd.
 
 ## Supported Service Meshes
 
@@ -64,7 +64,7 @@ kubectl label namespace default istio-injection=enabled
 kubectl get pods -n istio-system
 ```
 
-### Deploy SorobanPulse with Istio
+### Deploy StellarClassicPulse with Istio
 
 ```bash
 # Apply Istio configurations
@@ -78,8 +78,8 @@ kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 
 # Verify mesh injection
-kubectl get pods -l app=soroban-pulse -o jsonpath='{.items[0].spec.containers[*].name}'
-# Should show: soroban-pulse istio-proxy
+kubectl get pods -l app=stellarclassic-pulse -o jsonpath='{.items[0].spec.containers[*].name}'
+# Should show: stellarclassic-pulse istio-proxy
 ```
 
 ### Configuration Examples
@@ -91,9 +91,9 @@ kubectl get pods -l app=soroban-pulse -o jsonpath='{.items[0].spec.containers[*]
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
-  name: soroban-pulse-circuit-breaker
+  name: stellarclassic-pulse-circuit-breaker
 spec:
-  host: soroban-pulse-service
+  host: stellarclassic-pulse-service
   trafficPolicy:
     outlierDetection:
       consecutive5xxErrors: 5
@@ -109,7 +109,7 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: soroban-pulse-retries
+  name: stellarclassic-pulse-retries
 spec:
   http:
   - retries:
@@ -125,7 +125,7 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: soroban-pulse-canary
+  name: stellarclassic-pulse-canary
 spec:
   http:
   - match:
@@ -134,16 +134,16 @@ spec:
           exact: "true"
     route:
     - destination:
-        host: soroban-pulse-service
+        host: stellarclassic-pulse-service
         subset: canary
       weight: 100
   - route:
     - destination:
-        host: soroban-pulse-service
+        host: stellarclassic-pulse-service
         subset: stable
       weight: 90
     - destination:
-        host: soroban-pulse-service
+        host: stellarclassic-pulse-service
         subset: canary
       weight: 10
 ```
@@ -190,11 +190,11 @@ linkerd install | kubectl apply -f -
 linkerd check
 ```
 
-### Deploy SorobanPulse with Linkerd
+### Deploy StellarClassicPulse with Linkerd
 
 ```bash
 # Inject Linkerd proxy
-kubectl get deploy soroban-pulse -o yaml \
+kubectl get deploy stellarclassic-pulse -o yaml \
   | linkerd inject - \
   | kubectl apply -f -
 
@@ -204,8 +204,8 @@ kubectl apply -f k8s/linkerd-trafficsplit.yaml
 kubectl apply -f k8s/linkerd-server.yaml
 
 # Verify mesh injection
-kubectl get pods -l app=soroban-pulse -o jsonpath='{.items[0].spec.containers[*].name}'
-# Should show: soroban-pulse linkerd-proxy
+kubectl get pods -l app=stellarclassic-pulse -o jsonpath='{.items[0].spec.containers[*].name}'
+# Should show: stellarclassic-pulse linkerd-proxy
 ```
 
 ### Configuration Examples
@@ -217,7 +217,7 @@ kubectl get pods -l app=soroban-pulse -o jsonpath='{.items[0].spec.containers[*]
 apiVersion: linkerd.io/v1alpha2
 kind: ServiceProfile
 metadata:
-  name: soroban-pulse-service.default.svc.cluster.local
+  name: stellarclassic-pulse-service.default.svc.cluster.local
 spec:
   routes:
   - name: get_ledger
@@ -235,13 +235,13 @@ spec:
 apiVersion: split.smi-spec.io/v1alpha1
 kind: TrafficSplit
 metadata:
-  name: soroban-pulse-canary
+  name: stellarclassic-pulse-canary
 spec:
-  service: soroban-pulse-service
+  service: stellarclassic-pulse-service
   backends:
-  - service: soroban-pulse-stable
+  - service: stellarclassic-pulse-stable
     weight: 90
-  - service: soroban-pulse-canary
+  - service: stellarclassic-pulse-canary
     weight: 10
 ```
 
@@ -255,10 +255,10 @@ linkerd viz install | kubectl apply -f -
 linkerd viz dashboard
 
 # View metrics
-linkerd viz stat deploy/soroban-pulse
+linkerd viz stat deploy/stellarclassic-pulse
 
 # View live traffic
-linkerd viz tap deploy/soroban-pulse
+linkerd viz tap deploy/stellarclassic-pulse
 ```
 
 ## Distributed Tracing
@@ -285,7 +285,7 @@ kubectl apply -f k8s/observability-telemetry.yaml
 
 # Configure application
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector.observability:4317
-export OTEL_SERVICE_NAME=soroban-pulse
+export OTEL_SERVICE_NAME=stellarclassic-pulse
 ```
 
 ## Performance Tuning
@@ -326,7 +326,7 @@ trafficPolicy:
 
 ```bash
 # Verify mTLS is enabled
-istioctl authn tls-check soroban-pulse-pod.default
+istioctl authn tls-check stellarclassic-pulse-pod.default
 
 # Should show: STATUS: AUTO_MTLS
 ```
@@ -338,11 +338,11 @@ istioctl authn tls-check soroban-pulse-pod.default
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: soroban-pulse-authz
+  name: stellarclassic-pulse-authz
 spec:
   selector:
     matchLabels:
-      app: soroban-pulse
+      app: stellarclassic-pulse
   rules:
   - from:
     - source:
@@ -374,8 +374,8 @@ linkerd check
 kubectl top pods
 
 # Review traffic policies
-kubectl describe virtualservice soroban-pulse-vs
-kubectl describe serviceprofile soroban-pulse-service
+kubectl describe virtualservice stellarclassic-pulse-vs
+kubectl describe serviceprofile stellarclassic-pulse-service
 ```
 
 **Issue**: mTLS connection failures
@@ -431,11 +431,11 @@ kubectl get peerauthentication
 - [Istio Documentation](https://istio.io/latest/docs/)
 - [Linkerd Documentation](https://linkerd.io/2/overview/)
 - [Service Mesh Comparison](https://servicemesh.es/)
-- [SorobanPulse Training](../training/README.md)
+- [StellarClassicPulse Training](../training/README.md)
 
 ## Support
 
 For service mesh integration support:
-- GitHub Issues: https://github.com/Soroban-Pulse/SorobanPulse/issues
+- GitHub Issues: https://github.com/Soroban-Pulse/StellarClassicPulse/issues
 - Community Slack: #service-mesh
-- Email: support@soroban-pulse.example.com
+- Email: support@stellarclassic-pulse.example.com

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Soroban Pulse provides granular rate limiting on a per-API-key basis using a sliding window algorithm. This ensures fair usage across different clients and prevents abuse of the API.
+StellarClassic Pulse provides granular rate limiting on a per-API-key basis using a sliding window algorithm. This ensures fair usage across different clients and prevents abuse of the API.
 
 ## Features
 
@@ -51,7 +51,7 @@ RATE_LIMIT_KEY_PER_DAY=100000
 
 ## Sliding Window Algorithm
 
-Soroban Pulse uses a sliding window rate limiting algorithm:
+StellarClassic Pulse uses a sliding window rate limiting algorithm:
 
 1. **Time Windows**: Divides time into rolling windows (minute, hour, day)
 2. **Counter Tracking**: Stores request count for each window per API key

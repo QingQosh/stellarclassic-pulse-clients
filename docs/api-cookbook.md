@@ -30,7 +30,7 @@ a given ledger onward.
 curl -X POST http://localhost:3000/subscriptions \
   -H "Content-Type: application/json" \
   -d '{
-    "callback_url": "https://example.com/webhooks/soroban-pulse",
+    "callback_url": "https://example.com/webhooks/stellarclassic-pulse",
     "from_ledger": 1234000,
     "subscription_type": "webhook",
     "batch_size": 25,

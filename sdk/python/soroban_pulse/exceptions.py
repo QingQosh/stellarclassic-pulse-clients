@@ -1,15 +1,15 @@
-"""Exception types raised by the SorobanPulse Python SDK."""
+"""Exception types raised by the StellarClassicPulse Python SDK."""
 
 from __future__ import annotations
 
 from typing import Any, Optional
 
 
-class SorobanPulseError(Exception):
+class StellarClassicPulseError(Exception):
     """Base class for all SDK errors."""
 
 
-class ApiError(SorobanPulseError):
+class ApiError(StellarClassicPulseError):
     """Raised when the API returns a non-2xx response."""
 
     def __init__(self, status_code: int, message: str, payload: Optional[Any] = None) -> None:
@@ -19,5 +19,5 @@ class ApiError(SorobanPulseError):
         self.payload = payload
 
 
-class AuthenticationError(SorobanPulseError):
+class AuthenticationError(StellarClassicPulseError):
     """Raised when the API key is missing or rejected by the server."""

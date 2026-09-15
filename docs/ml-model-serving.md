@@ -33,7 +33,7 @@ The module provides:
 ## Usage
 
 ```rust
-use soroban_pulse::model_serving::*;
+use stellarclassic_pulse::model_serving::*;
 use std::sync::Arc;
 
 let registry = ModelRegistry::new(Arc::new(DefaultFeatureExtractor));

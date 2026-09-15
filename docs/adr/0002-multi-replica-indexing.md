@@ -2,18 +2,18 @@
 
 - **Status:** Accepted
 - **Date:** 2026-08-29
-- **Owners:** SorobanPulse maintainers
+- **Owners:** StellarClassicPulse maintainers
 - **Related:** [Replica sync monitoring](../replica-monitoring.md), [Event deduplication across replicas](../event_deduplication_replicas.md), [Multi-deployment architecture guide](../multi-deployment-architecture.md)
 
 ## Context
 
-SorobanPulse must remain available and keep serving reads during a database or regional outage, and must scale read traffic (dashboards, event search, GraphQL queries) beyond what a single PostgreSQL instance can serve. At the same time, ledger event indexing must not double-process or lose events: two indexer instances writing concurrently would race on ledger cursors and could insert duplicate or conflicting rows.
+StellarClassicPulse must remain available and keep serving reads during a database or regional outage, and must scale read traffic (dashboards, event search, GraphQL queries) beyond what a single PostgreSQL instance can serve. At the same time, ledger event indexing must not double-process or lose events: two indexer instances writing concurrently would race on ledger cursors and could insert duplicate or conflicting rows.
 
 PostgreSQL streaming replication gives read replicas that lag the primary by a variable, unbounded amount, so any design that fans out indexing or reads to replicas has to say explicitly how staleness and split-brain are bounded. Some deployments also want geo-redundancy across regions or cloud providers, where replication latency and egress cost are materially higher than same-region replication.
 
 ## Decision
 
-SorobanPulse uses a single writable primary for event indexing per network, selected via a PostgreSQL advisory lock, with any number of read-only streaming replicas serving HTTP/GraphQL/SSE read traffic (`src/replica_monitor.rs`, `docs/multi-deployment-architecture.md`). Only the instance holding the advisory lock indexes; standby instances serve reads from their local (replica) connection and attempt to acquire the lock on startup or after a connection failure, so promotion is driven by whichever instance reconnects to the new primary first.
+StellarClassicPulse uses a single writable primary for event indexing per network, selected via a PostgreSQL advisory lock, with any number of read-only streaming replicas serving HTTP/GraphQL/SSE read traffic (`src/replica_monitor.rs`, `docs/multi-deployment-architecture.md`). Only the instance holding the advisory lock indexes; standby instances serve reads from their local (replica) connection and attempt to acquire the lock on startup or after a connection failure, so promotion is driven by whichever instance reconnects to the new primary first.
 
 Replica health is tracked by a background task that polls `pg_stat_replication` every 60 seconds and exposes per-replica byte lag and write/flush/replay lag as Prometheus gauges, plus an admin endpoint (`GET /v1/admin/replication/status`). Warnings are logged at 10 MiB / 30 s lag and treated as critical at 100 MiB / 60 s (`LAG_WARN_BYTES`, `LAG_WARN_SECS`, `LAG_CRITICAL_BYTES`, `LAG_CRITICAL_SECS` in `src/replica_monitor.rs`), so operators can detect a replica falling behind before it is promoted or used for reads that require freshness.
 
@@ -29,7 +29,7 @@ Allowing every instance to index independently would remove the single point of 
 
 ### No read replicas (single instance)
 
-Simplest option, but ties read availability to the same instance doing indexing and provides no protection against a regional or provider outage, and no way to scale read throughput independently of indexing throughput. Rejected because SorobanPulse's HTTP/GraphQL/SSE read paths and its indexing path have different scaling and availability needs.
+Simplest option, but ties read availability to the same instance doing indexing and provides no protection against a regional or provider outage, and no way to scale read throughput independently of indexing throughput. Rejected because StellarClassicPulse's HTTP/GraphQL/SSE read paths and its indexing path have different scaling and availability needs.
 
 ### External replication proxy (e.g., pgpool/pgbouncer-based load balancing)
 

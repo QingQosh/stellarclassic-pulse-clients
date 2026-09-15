@@ -92,7 +92,7 @@ impl Config {
 }
 
 fn config_path() -> Result<PathBuf> {
-    let dirs = ProjectDirs::from("io", "soroban-pulse", "spulse")
+    let dirs = ProjectDirs::from("io", "stellarclassic-pulse", "spulse")
         .context("could not determine config directory")?;
     Ok(dirs.config_dir().join("config.toml"))
 }

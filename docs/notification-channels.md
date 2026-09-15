@@ -26,15 +26,15 @@ WHERE id = '<primary-channel-uuid>';
 1. The primary channel is attempted according to its `retry_policy`.
 2. If all retries fail, `deliver_with_failover` is called with the failover URL.
 3. The failover channel is attempted once (using its own retry policy).
-4. On failover, the `soroban_pulse_notification_failover_total` counter increments
+4. On failover, the `stellarclassic_pulse_notification_failover_total` counter increments
    (labeled by `channel_type`).
 5. If both channels fail the event is written to the DLQ (`webhook_failures`) and
-   `soroban_pulse_webhook_failures_total` increments.
+   `stellarclassic_pulse_webhook_failures_total` increments.
 
 ### Metric
 
 ```
-soroban_pulse_notification_failover_total{channel_type="webhook"}
+stellarclassic_pulse_notification_failover_total{channel_type="webhook"}
 ```
 
 ---
@@ -114,12 +114,12 @@ INSERT INTO notification_costs (channel_id, channel_name, channel_type, cost_cen
 VALUES ($1, $2, $3, $4);
 ```
 
-The `soroban_pulse_notification_cost_usd_total` counter is also incremented.
+The `stellarclassic_pulse_notification_cost_usd_total` counter is also incremented.
 
 ### Metric
 
 ```
-soroban_pulse_notification_cost_usd_total
+stellarclassic_pulse_notification_cost_usd_total
 ```
 
 ### GET /v1/admin/notifications/costs
@@ -176,7 +176,7 @@ curl -X POST \
   "channel_name": "primary-webhook",
   "channel_type": "webhook",
   "success":      true,
-  "subject":      "[TEST] Soroban Pulse notification test – channel 'primary-webhook'"
+  "subject":      "[TEST] StellarClassic Pulse notification test – channel 'primary-webhook'"
 }
 ```
 
@@ -187,7 +187,7 @@ curl -X POST \
   "channel_name": "primary-webhook",
   "channel_type": "webhook",
   "success":      false,
-  "subject":      "[TEST] Soroban Pulse notification test – channel 'primary-webhook'"
+  "subject":      "[TEST] StellarClassic Pulse notification test – channel 'primary-webhook'"
 }
 ```
 
@@ -199,8 +199,8 @@ clearly distinguishable from real event notifications.
 ### Metric
 
 ```
-soroban_pulse_notification_test_total{channel_type="webhook", result="success"}
-soroban_pulse_notification_test_total{channel_type="webhook", result="failure"}
+stellarclassic_pulse_notification_test_total{channel_type="webhook", result="success"}
+stellarclassic_pulse_notification_test_total{channel_type="webhook", result="failure"}
 ```
 
 ## #809 – Unified Channel Interface

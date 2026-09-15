@@ -42,7 +42,7 @@ endpoint.
 | `compression` | `None` | `Gzip` compresses each chunk as it goes past. |
 
 ```rust
-use soroban_pulse::streaming_response::{StreamingJsonResponse, StreamingOptions, StreamCompression};
+use stellarclassic_pulse::streaming_response::{StreamingJsonResponse, StreamingOptions, StreamCompression};
 
 let options = StreamingOptions::default()
     .with_buffer_size(16_384)
@@ -104,7 +104,7 @@ to compress is not a streaming response.
 nothing extra. When the channel is full it records a backpressure event and then
 awaits the send, which is where the producer actually parks.
 
-`soroban_pulse_streaming_response_backpressure_total` rising is not a fault. It
+`stellarclassic_pulse_streaming_response_backpressure_total` rising is not a fault. It
 means backpressure is working. It is, however, the early warning that clients
 are reading slower than the database produces and that request timeouts are
 coming.
@@ -153,15 +153,15 @@ metrics and in `StreamingStats`.
 
 | Metric | Type | Meaning |
 |---|---|---|
-| `soroban_pulse_streaming_response_items_sent_total` | counter | Rows written across all streams |
-| `soroban_pulse_streaming_responses_completed_total` | counter | Streams that ran to completion |
-| `soroban_pulse_streaming_response_items_per_stream` | histogram | Rows per response |
-| `soroban_pulse_streaming_response_errors_total` | counter | Labelled `serialization`, `database`, `compression` |
-| `soroban_pulse_streaming_response_chunks_total` | counter | Chunks flushed |
-| `soroban_pulse_streaming_response_chunk_bytes` | histogram | Bytes per chunk on the wire |
-| `soroban_pulse_streaming_response_backpressure_total` | counter | Times a producer parked on a full channel |
-| `soroban_pulse_streaming_responses_cancelled_total` | counter | Labelled `caller` or `client` |
-| `soroban_pulse_streaming_response_duration_seconds` | histogram | Wall time per response |
+| `stellarclassic_pulse_streaming_response_items_sent_total` | counter | Rows written across all streams |
+| `stellarclassic_pulse_streaming_responses_completed_total` | counter | Streams that ran to completion |
+| `stellarclassic_pulse_streaming_response_items_per_stream` | histogram | Rows per response |
+| `stellarclassic_pulse_streaming_response_errors_total` | counter | Labelled `serialization`, `database`, `compression` |
+| `stellarclassic_pulse_streaming_response_chunks_total` | counter | Chunks flushed |
+| `stellarclassic_pulse_streaming_response_chunk_bytes` | histogram | Bytes per chunk on the wire |
+| `stellarclassic_pulse_streaming_response_backpressure_total` | counter | Times a producer parked on a full channel |
+| `stellarclassic_pulse_streaming_responses_cancelled_total` | counter | Labelled `caller` or `client` |
+| `stellarclassic_pulse_streaming_response_duration_seconds` | histogram | Wall time per response |
 
 ## Tuning guidance
 

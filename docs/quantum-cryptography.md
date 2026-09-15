@@ -2,7 +2,7 @@
 
 ## Overview
 
-SorobanPulse implements post-quantum cryptographic algorithms to prepare for the era of quantum computing. This document outlines the quantum-resistant features, migration strategy, and implementation details.
+StellarClassicPulse implements post-quantum cryptographic algorithms to prepare for the era of quantum computing. This document outlines the quantum-resistant features, migration strategy, and implementation details.
 
 ## Why Quantum-Ready Cryptography?
 
@@ -147,7 +147,7 @@ progress = 15.5
 ### Generating Keys
 
 ```rust
-use soroban_pulse::crypto::quantum_ready::*;
+use stellarclassic_pulse::crypto::quantum_ready::*;
 
 // Generate hybrid key pair
 let config = QuantumConfig {
@@ -400,7 +400,7 @@ cargo bench quantum_crypto
 
 ### Quantum Key Distribution (QKD)
 
-While SorobanPulse focuses on post-quantum cryptography, QKD may complement the solution:
+While StellarClassicPulse focuses on post-quantum cryptography, QKD may complement the solution:
 - Unconditional security based on physics
 - Requires specialized hardware
 - Limited to specific use cases
@@ -430,15 +430,15 @@ Future enhancements may include quantum-resistant homomorphic encryption:
 
 ### Training
 
-- SorobanPulse Security Specialist (SPSS) Certification
+- StellarClassicPulse Security Specialist (SPSS) Certification
 - Quantum-Safe Cryptography Workshop
 - Migration Planning Training
 
 ## Support
 
 For questions about quantum-ready cryptography:
-- Documentation: https://docs.soroban-pulse.example.com/quantum
-- Security Team: security@soroban-pulse.example.com
+- Documentation: https://docs.stellarclassic-pulse.example.com/quantum
+- Security Team: security@stellarclassic-pulse.example.com
 - Community: #quantum-crypto channel
 
 ## Changelog

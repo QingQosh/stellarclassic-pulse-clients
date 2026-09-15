@@ -23,7 +23,7 @@ export function LoginPage() {
   return (
     <div className="login-page">
       <form onSubmit={handleSubmit} className="login-form">
-        <h1>SorobanPulse Dashboard</h1>
+        <h1>StellarClassicPulse Dashboard</h1>
         <label>
           Email
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />

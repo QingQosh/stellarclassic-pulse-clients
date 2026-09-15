@@ -1,6 +1,6 @@
 # Backup Verification
 
-Soroban Pulse runs automated backup verification daily via `.github/workflows/backup-ci.yml`.
+StellarClassic Pulse runs automated backup verification daily via `.github/workflows/backup-ci.yml`.
 
 ## What Is Tested
 

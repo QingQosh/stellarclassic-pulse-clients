@@ -1,11 +1,11 @@
-export class SorobanPulseError extends Error {
+export class StellarClassicPulseError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "SorobanPulseError";
+    this.name = "StellarClassicPulseError";
   }
 }
 
-export class ApiError extends SorobanPulseError {
+export class ApiError extends StellarClassicPulseError {
   statusCode: number;
   payload: unknown;
 
@@ -17,7 +17,7 @@ export class ApiError extends SorobanPulseError {
   }
 }
 
-export class AuthenticationError extends SorobanPulseError {
+export class AuthenticationError extends StellarClassicPulseError {
   constructor(message: string) {
     super(message);
     this.name = "AuthenticationError";

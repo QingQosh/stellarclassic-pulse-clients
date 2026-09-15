@@ -5,7 +5,7 @@
 
 ## Overview
 
-SorobanPulse uses SQLx's PostgreSQL connection pool. Poor pool sizing leads to
+StellarClassicPulse uses SQLx's PostgreSQL connection pool. Poor pool sizing leads to
 two failure modes:
 
 - **Under-provisioned**: requests queue waiting for a free connection, adding
@@ -27,14 +27,14 @@ The following metrics are emitted by `src/connection_pool.rs`:
 
 | Metric | Type | Description |
 |--------|------|-------------|
-| `soroban_pulse_db_pool_utilization` | Gauge | Active connections / max (0–1) |
-| `soroban_pulse_db_pool_active_connections` | Gauge | Connections currently in use |
-| `soroban_pulse_db_pool_max_connections` | Gauge | Configured maximum |
-| `soroban_pulse_db_pool_acquire_latency_seconds` | Histogram | Time from `pool.acquire()` returning |
-| `soroban_pulse_db_pool_exhaustion_alerts_total` | Counter | Times utilization ≥ 90% |
-| `soroban_pulse_db_pool_wait_seconds` | Histogram | **New (Issue #995)** — time a caller queued waiting for a slot |
-| `soroban_pulse_db_pool_wait_timeout_total` | Counter | **New (Issue #995)** — waits exceeding 1 s |
-| `soroban_pulse_db_pool_queue_depth` | Gauge | **New (Issue #995)** — callers currently waiting |
+| `stellarclassic_pulse_db_pool_utilization` | Gauge | Active connections / max (0–1) |
+| `stellarclassic_pulse_db_pool_active_connections` | Gauge | Connections currently in use |
+| `stellarclassic_pulse_db_pool_max_connections` | Gauge | Configured maximum |
+| `stellarclassic_pulse_db_pool_acquire_latency_seconds` | Histogram | Time from `pool.acquire()` returning |
+| `stellarclassic_pulse_db_pool_exhaustion_alerts_total` | Counter | Times utilization ≥ 90% |
+| `stellarclassic_pulse_db_pool_wait_seconds` | Histogram | **New (Issue #995)** — time a caller queued waiting for a slot |
+| `stellarclassic_pulse_db_pool_wait_timeout_total` | Counter | **New (Issue #995)** — waits exceeding 1 s |
+| `stellarclassic_pulse_db_pool_queue_depth` | Gauge | **New (Issue #995)** — callers currently waiting |
 
 ### 1.2 Grafana Quick-Start
 
@@ -70,11 +70,11 @@ cargo run 2>&1 | jq 'select(.fields.suggested_max != null)'
 
 ### Checklist
 
-- [ ] `soroban_pulse_db_pool_utilization` sustained above **0.85** → pool too small
-- [ ] `soroban_pulse_db_pool_wait_seconds` p99 above **100 ms** → pool starvation
-- [ ] `soroban_pulse_db_pool_queue_depth` non-zero at peak → requests queuing
-- [ ] `soroban_pulse_db_pool_exhaustion_alerts_total` growing → pool maxed out
-- [ ] `soroban_pulse_db_pool_utilization` sustained below **0.20** → pool too large
+- [ ] `stellarclassic_pulse_db_pool_utilization` sustained above **0.85** → pool too small
+- [ ] `stellarclassic_pulse_db_pool_wait_seconds` p99 above **100 ms** → pool starvation
+- [ ] `stellarclassic_pulse_db_pool_queue_depth` non-zero at peak → requests queuing
+- [ ] `stellarclassic_pulse_db_pool_exhaustion_alerts_total` growing → pool maxed out
+- [ ] `stellarclassic_pulse_db_pool_utilization` sustained below **0.20** → pool too large
 
 ### Bottleneck Patterns
 
@@ -138,9 +138,9 @@ DB_STATEMENT_TIMEOUT_MS=5000  # Kill runaway queries after 5 s
 Issue #995 introduces explicit wait-time instrumentation. The
 `acquire_tracked_with_wait` function wraps `pool.acquire()` and:
 
-1. Increments `soroban_pulse_db_pool_queue_depth` on entry.
-2. Records the wait duration in `soroban_pulse_db_pool_wait_seconds` on exit.
-3. Increments `soroban_pulse_db_pool_wait_timeout_total` when wait > 1 s.
+1. Increments `stellarclassic_pulse_db_pool_queue_depth` on entry.
+2. Records the wait duration in `stellarclassic_pulse_db_pool_wait_seconds` on exit.
+3. Increments `stellarclassic_pulse_db_pool_wait_timeout_total` when wait > 1 s.
 4. Decrements the queue depth gauge on exit.
 
 ### Alerting Rule
@@ -149,7 +149,7 @@ Add to `docs/alerts.yml`:
 
 ```yaml
 - alert: PoolWaitTimeHigh
-  expr: histogram_quantile(0.99, rate(soroban_pulse_db_pool_wait_seconds_bucket[5m])) > 0.1
+  expr: histogram_quantile(0.99, rate(stellarclassic_pulse_db_pool_wait_seconds_bucket[5m])) > 0.1
   for: 5m
   labels:
     severity: warning
@@ -158,7 +158,7 @@ Add to `docs/alerts.yml`:
     description: "p99 connection wait time is {{ $value | humanizeDuration }}. Consider increasing DB_MAX_CONNECTIONS."
 
 - alert: PoolQueueDepthNonZero
-  expr: soroban_pulse_db_pool_queue_depth > 0
+  expr: stellarclassic_pulse_db_pool_queue_depth > 0
   for: 2m
   labels:
     severity: warning
@@ -191,7 +191,7 @@ Run the full event load test and watch pool metrics in a separate terminal:
 make run
 
 # Terminal 2 — watch pool metrics
-watch -n 2 'curl -s http://localhost:3000/metrics | grep soroban_pulse_db_pool'
+watch -n 2 'curl -s http://localhost:3000/metrics | grep stellarclassic_pulse_db_pool'
 
 # Terminal 3 — run the load test
 k6 run tests/load/events.js
@@ -208,8 +208,8 @@ k6 run tests/load/burst.js
 ```
 
 Expected behavior:
-- `soroban_pulse_db_pool_queue_depth` spikes.
-- `soroban_pulse_db_pool_wait_seconds` p99 rises.
+- `stellarclassic_pulse_db_pool_queue_depth` spikes.
+- `stellarclassic_pulse_db_pool_wait_seconds` p99 rises.
 - HTTP responses return 503 once the queue is full, not 500.
 - After the burst, the pool recovers to normal utilization.
 
@@ -251,7 +251,7 @@ connections.
 
 Only one replica holds the advisory lock and actively indexes (leader). Standby
 replicas still maintain connections for read queries. The
-`soroban_pulse_indexer_is_leader` gauge tells you which replica is the current
+`stellarclassic_pulse_indexer_is_leader` gauge tells you which replica is the current
 leader.
 
 ### Per-Replica Tuning

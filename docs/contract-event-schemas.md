@@ -4,7 +4,7 @@ Reference for Soroban contract event patterns and their XDR representations.
 
 ## Event Structure
 
-Every event emitted by a Soroban contract is captured by SorobanPulse with the following fields:
+Every event emitted by a Soroban contract is captured by StellarClassicPulse with the following fields:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -110,7 +110,7 @@ Emitted when a spender allowance is set.
 
 ## XDR Format
 
-Soroban contract events use XDR (External Data Representation) to encode topics and data. SorobanPulse decodes these into JSON but also exposes the raw base64-encoded XDR in the `topic` array.
+Soroban contract events use XDR (External Data Representation) to encode topics and data. StellarClassicPulse decodes these into JSON but also exposes the raw base64-encoded XDR in the `topic` array.
 
 ### ScVal Types
 
@@ -151,7 +151,7 @@ let val = ScVal::from_xdr_base64(topic_b64, stellar_xdr::curr::Limits::none()).u
 
 ### Topic Filtering
 
-SorobanPulse indexes `topic[0]` as `topic_0_sym` for fast equality filtering. Use the `topic_0` query parameter to filter by event name:
+StellarClassicPulse indexes `topic[0]` as `topic_0_sym` for fast equality filtering. Use the `topic_0` query parameter to filter by event name:
 
 ```bash
 # Fetch all transfer events for a contract
@@ -180,7 +180,7 @@ GET /v1/events?event_type=contract
 
 - Maximum `event_data` JSON size: `MAX_EVENT_DATA_BYTES` (default 64 KiB)
 - Events exceeding this limit are logged and skipped
-- The `soroban_pulse_events_oversized_total` counter tracks skipped events
+- The `stellarclassic_pulse_events_oversized_total` counter tracks skipped events
 
 ## Schema Validation Rules
 

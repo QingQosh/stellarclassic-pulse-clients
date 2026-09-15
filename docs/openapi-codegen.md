@@ -8,7 +8,7 @@ subscription scaffolding).
 
 ## Why
 
-Soroban Pulse exposes an HTTP API consumed from multiple language SDKs
+StellarClassic Pulse exposes an HTTP API consumed from multiple language SDKs
 (`sdk/typescript`, `sdk/python`, `sdk/go` — see [client-libraries.md](client-libraries.md)
 and [codegen.md](codegen.md)). Hand-maintaining model/client code for four
 languages in lockstep with the API is error-prone. This generator produces
@@ -49,7 +49,7 @@ Each language backend implements the `ClientGenerator` trait
 ## Usage
 
 ```rust
-use soroban_pulse::codegen::openapi::{OpenApiSpec, SchemaDef, FieldDef, FieldType, OperationDef, generate_all};
+use stellarclassic_pulse::codegen::openapi::{OpenApiSpec, SchemaDef, FieldDef, FieldType, OperationDef, generate_all};
 
 let spec = OpenApiSpec {
     title: "Pulse API".into(),
@@ -80,7 +80,7 @@ for (language, files) in generate_all(&spec) {
 Generating a single language:
 
 ```rust
-use soroban_pulse::codegen::openapi::{RustGenerator, ClientGenerator};
+use stellarclassic_pulse::codegen::openapi::{RustGenerator, ClientGenerator};
 
 let files = RustGenerator.generate(&spec);
 ```

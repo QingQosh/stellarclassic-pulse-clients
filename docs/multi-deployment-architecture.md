@@ -1,17 +1,17 @@
 # Multi-Deployment Architecture Guide
 
-Guidance for running SorobanPulse across multiple regions or cloud providers to achieve high availability and geo-redundancy.
+Guidance for running StellarClassicPulse across multiple regions or cloud providers to achieve high availability and geo-redundancy.
 
 ## Overview
 
-A multi-deployment setup runs two or more SorobanPulse instances in separate failure domains (regions, availability zones, or cloud providers). Each instance maintains its own database replica, but event indexing is coordinated via an advisory lock so only one instance writes new events at a time.
+A multi-deployment setup runs two or more StellarClassicPulse instances in separate failure domains (regions, availability zones, or cloud providers). Each instance maintains its own database replica, but event indexing is coordinated via an advisory lock so only one instance writes new events at a time.
 
 ```
 ┌──────────────────────┐      ┌──────────────────────┐
 │   Region A (Primary) │      │  Region B (Standby)  │
 │                      │      │                      │
 │  ┌────────────────┐  │      │  ┌────────────────┐  │
-│  │  SorobanPulse  │  │      │  │  SorobanPulse  │  │
+│  │  StellarClassicPulse  │  │      │  │  StellarClassicPulse  │  │
 │  │  (Indexer +    │  │      │  │  (HTTP only    │  │
 │  │   HTTP)        │  │      │  │   + standby)   │  │
 │  └───────┬────────┘  │      │  └───────┬────────┘  │
@@ -33,11 +33,11 @@ The simplest production setup. One region is active (holds the advisory lock and
 
 **Setup:**
 1. Configure PostgreSQL streaming replication from Region A → Region B.
-2. Deploy SorobanPulse in both regions with identical configuration.
+2. Deploy StellarClassicPulse in both regions with identical configuration.
 3. Both instances connect to their local database. Region B connects to the replica in read-only mode.
 4. Region A wins the advisory lock on startup; Region B serves HTTP from the replica.
 
-**Failover:** When Region A becomes unavailable, promote the Region B replica and restart its SorobanPulse instance. It will acquire the advisory lock and begin indexing.
+**Failover:** When Region A becomes unavailable, promote the Region B replica and restart its StellarClassicPulse instance. It will acquire the advisory lock and begin indexing.
 
 ### Pattern 2: Active-Active with Read Distribution
 
@@ -45,7 +45,7 @@ Both regions serve HTTP traffic. Indexing remains in one region (lock holder), b
 
 **Setup:**
 1. Configure streaming replication as above.
-2. Deploy SorobanPulse in both regions.
+2. Deploy StellarClassicPulse in both regions.
 3. Place a global load balancer (AWS Route 53, Cloudflare, GCP GLB) in front of both regions.
 4. Use health checks to route write-path traffic only to the primary region.
 
@@ -78,7 +78,7 @@ bootstrap:
     maximum_lag_on_failover: 1048576  # 1 MB
 ```
 
-When Patroni promotes the replica, SorobanPulse's database connection pool will see a connection error, reconnect, and re-attempt the advisory lock. The first instance to reconnect to the new primary will acquire the lock and resume indexing.
+When Patroni promotes the replica, StellarClassicPulse's database connection pool will see a connection error, reconnect, and re-attempt the advisory lock. The first instance to reconnect to the new primary will acquire the lock and resume indexing.
 
 ### Manual Failover Procedure
 
@@ -92,17 +92,17 @@ When Patroni promotes the replica, SorobanPulse's database connection pool will 
    # On the Region B PostgreSQL host
    pg_ctl promote -D /var/lib/postgresql/data
    # Or for managed databases:
-   aws rds failover-db-cluster --db-cluster-identifier soroban-pulse
+   aws rds failover-db-cluster --db-cluster-identifier stellarclassic-pulse
    ```
 
 3. **Update `DATABASE_URL` in Region B** to point to the now-promoted instance.
 
-4. **Restart the Region B SorobanPulse instance.** It will acquire the advisory lock and start indexing from the last checkpoint stored in `indexer_checkpoints`.
+4. **Restart the Region B StellarClassicPulse instance.** It will acquire the advisory lock and start indexing from the last checkpoint stored in `indexer_checkpoints`.
 
 5. **Verify recovery:**
    ```bash
    curl https://region-b.pulse.example.com/healthz/ready
-   curl https://region-b.pulse.example.com/v1/metrics | grep soroban_pulse_indexer_lag
+   curl https://region-b.pulse.example.com/v1/metrics | grep stellarclassic_pulse_indexer_lag
    ```
 
 6. **Update DNS** (if not managed automatically) to point traffic to Region B.
@@ -120,7 +120,7 @@ When Patroni promotes the replica, SorobanPulse's database connection pool will 
 
 ### Database Replication
 
-SorobanPulse relies on standard PostgreSQL logical or physical replication. Physical (streaming) replication is recommended for most deployments:
+StellarClassicPulse relies on standard PostgreSQL logical or physical replication. Physical (streaming) replication is recommended for most deployments:
 
 ```sql
 -- On the primary, create a replication slot
@@ -131,7 +131,7 @@ primary_conninfo = 'host=db-primary.region-a.internal port=5432 user=replicator 
 primary_slot_name = 'region_b_slot'
 ```
 
-**Replication lag monitoring:** The `soroban_pulse_indexer_lag` metric tracks how far behind the indexer is from the chain tip. A separate lag metric from the replica itself (`pg_wal_lsn_diff`) should be monitored via the Prometheus job scraping the replica's `pg_stat_replication`.
+**Replication lag monitoring:** The `stellarclassic_pulse_indexer_lag` metric tracks how far behind the indexer is from the chain tip. A separate lag metric from the replica itself (`pg_wal_lsn_diff`) should be monitored via the Prometheus job scraping the replica's `pg_stat_replication`.
 
 ### Configuration Sync
 
@@ -160,20 +160,20 @@ Subscriptions and webhook channel registrations are stored in the PostgreSQL dat
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: soroban-pulse
-  namespace: soroban-pulse
+  name: stellarclassic-pulse
+  namespace: stellarclassic-pulse
 spec:
   replicas: 2
   template:
     spec:
       containers:
-      - name: soroban-pulse
-        image: soroban-pulse:latest
+      - name: stellarclassic-pulse
+        image: stellarclassic-pulse:latest
         env:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: soroban-pulse-secrets
+              name: stellarclassic-pulse-secrets
               key: database-url-region-a
         - name: STELLAR_RPC_URL
           value: "https://soroban-mainnet.stellar.org"
@@ -207,13 +207,13 @@ curl https://region-a.pulse.example.com/healthz/ready
 curl https://region-b.pulse.example.com/healthz/ready
 
 # Confirm only one region is actively indexing
-curl https://region-a.pulse.example.com/v1/metrics | grep soroban_pulse_indexer_is_leader
-curl https://region-b.pulse.example.com/v1/metrics | grep soroban_pulse_indexer_is_leader
+curl https://region-a.pulse.example.com/v1/metrics | grep stellarclassic_pulse_indexer_is_leader
+curl https://region-b.pulse.example.com/v1/metrics | grep stellarclassic_pulse_indexer_is_leader
 ```
 
 ## Data Consistency
 
-SorobanPulse should use a single writable PostgreSQL primary per network. Cross-region replicas are eventually consistent and can lag behind the primary, so route admin operations, subscription changes, webhook registration, and replay jobs to the primary region.
+StellarClassicPulse should use a single writable PostgreSQL primary per network. Cross-region replicas are eventually consistent and can lag behind the primary, so route admin operations, subscription changes, webhook registration, and replay jobs to the primary region.
 
 For read traffic, choose a consistency mode per workload:
 

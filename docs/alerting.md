@@ -1,6 +1,6 @@
 # Real-time Alerting Configuration (Issue #897)
 
-Soroban Pulse implements comprehensive real-time alerting for critical operational events using Prometheus AlertManager.
+StellarClassic Pulse implements comprehensive real-time alerting for critical operational events using Prometheus AlertManager.
 
 ## Overview
 
@@ -166,7 +166,7 @@ Alert: IndexerLagCritical
 Severity: Critical
 Component: indexer
 Description: Indexer lag is 523 ledgers (threshold: 500)
-Runbook: https://github.com/Soroban-Pulse/SorobanPulse/blob/main/docs/runbooks/indexer-lag.md
+Runbook: https://github.com/Soroban-Pulse/StellarClassicPulse/blob/main/docs/runbooks/indexer-lag.md
 ```
 
 ## Integration with Opsgenie
@@ -245,15 +245,15 @@ Component: {{ .Alerts[0].Labels.component }}
 
 ## Metrics
 
-Alert-related metrics exported by Soroban Pulse:
+Alert-related metrics exported by StellarClassic Pulse:
 
 | Metric | Type | Labels | Description |
 |--------|------|--------|-------------|
-| `soroban_pulse_alerts_fired_total` | Counter | alert_name, severity | Alerts fired |
-| `soroban_pulse_alerts_resolved_total` | Counter | alert_name | Alerts resolved |
-| `soroban_pulse_alerts_silenced_total` | Counter | alert_name | Alerts silenced |
-| `soroban_pulse_active_alerts` | Gauge | component | Currently active alerts |
-| `soroban_pulse_alert_silence_duration_minutes` | Gauge | alert_name | Silence duration |
+| `stellarclassic_pulse_alerts_fired_total` | Counter | alert_name, severity | Alerts fired |
+| `stellarclassic_pulse_alerts_resolved_total` | Counter | alert_name | Alerts resolved |
+| `stellarclassic_pulse_alerts_silenced_total` | Counter | alert_name | Alerts silenced |
+| `stellarclassic_pulse_active_alerts` | Gauge | component | Currently active alerts |
+| `stellarclassic_pulse_alert_silence_duration_minutes` | Gauge | alert_name | Silence duration |
 
 ## Best Practices
 

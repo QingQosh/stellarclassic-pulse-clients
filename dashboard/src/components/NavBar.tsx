@@ -6,7 +6,7 @@ export function NavBar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">SorobanPulse</div>
+      <div className="navbar-brand">StellarClassicPulse</div>
       {user && (
         <div className="navbar-links">
           <Link to="/">Status</Link>

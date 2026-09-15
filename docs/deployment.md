@@ -9,10 +9,10 @@
 | CPU | `100m` | `1000m` |
 | Memory | `256Mi` | `512Mi` |
 
-These values are set in both `k8s/deployment.yaml` and `helm/soroban-pulse/values.yaml`. The Helm chart exposes the full `resources` block in `values.yaml` so you can override it without editing the template:
+These values are set in both `k8s/deployment.yaml` and `helm/stellarclassic-pulse/values.yaml`. The Helm chart exposes the full `resources` block in `values.yaml` so you can override it without editing the template:
 
 ```bash
-helm upgrade soroban-pulse ./helm/soroban-pulse \
+helm upgrade stellarclassic-pulse ./helm/stellarclassic-pulse \
   --set resources.requests.memory=512Mi \
   --set resources.limits.memory=1Gi \
   --set resources.limits.cpu=2000m
@@ -27,7 +27,7 @@ helm upgrade soroban-pulse ./helm/soroban-pulse \
 
 ### Memory alert
 
-The `PodMemoryNearLimit` alert in `docs/alerts.yml` fires when `soroban_pulse_process_memory_bytes` exceeds 90% of the 512 MiB limit for more than 5 minutes. Respond by:
+The `PodMemoryNearLimit` alert in `docs/alerts.yml` fires when `stellarclassic_pulse_process_memory_bytes` exceeds 90% of the 512 MiB limit for more than 5 minutes. Respond by:
 
 1. Checking for a memory leak (`kubectl top pod`, heap profiling).
 2. Increasing the limit and request if usage is legitimately growing with load.
@@ -52,15 +52,15 @@ The `db` service uses `pg_isready` as its healthcheck, and the `app` service dec
 
 ## Direct TLS
 
-By default, Soroban Pulse serves plain HTTP and relies on an external reverse proxy (nginx, Caddy, AWS ALB, etc.) for TLS termination. For simpler deployments — a single VPS, a development environment with self-signed certificates, or any setup where adding a proxy is impractical — the service can handle TLS directly.
+By default, StellarClassic Pulse serves plain HTTP and relies on an external reverse proxy (nginx, Caddy, AWS ALB, etc.) for TLS termination. For simpler deployments — a single VPS, a development environment with self-signed certificates, or any setup where adding a proxy is impractical — the service can handle TLS directly.
 
 ### Enabling direct TLS
 
 Set both `TLS_CERT_FILE` and `TLS_KEY_FILE` to PEM-encoded certificate and key files:
 
 ```bash
-TLS_CERT_FILE=/etc/ssl/certs/soroban-pulse.crt
-TLS_KEY_FILE=/etc/ssl/private/soroban-pulse.key
+TLS_CERT_FILE=/etc/ssl/certs/stellarclassic-pulse.crt
+TLS_KEY_FILE=/etc/ssl/private/stellarclassic-pulse.key
 PORT=443
 ```
 
@@ -93,7 +93,7 @@ Set `BEHIND_PROXY=true` when running behind a proxy so the service trusts `X-For
 
 ## Horizontal Scaling
 
-Soroban Pulse supports running multiple replicas safely. Only one replica will run the indexer loop at a time; all others serve HTTP traffic in read-only mode.
+StellarClassic Pulse supports running multiple replicas safely. Only one replica will run the indexer loop at a time; all others serve HTTP traffic in read-only mode.
 
 ### How it works
 
@@ -122,11 +122,11 @@ On graceful shutdown (`SIGTERM` / `Ctrl-C`), the active indexer explicitly relea
 ```yaml
 services:
   app:
-    image: soroban-pulse:latest
+    image: stellarclassic-pulse:latest
     deploy:
       replicas: 3
     environment:
-      DATABASE_URL: postgres://user:pass@db:5432/soroban_pulse
+      DATABASE_URL: postgres://user:pass@db:5432/stellarclassic_pulse
 ```
 
 With 3 replicas running, exactly one will hold the advisory lock and index events. The other two serve HTTP only. If the indexer replica is killed, one of the remaining two will acquire the lock on its next startup.
@@ -173,10 +173,10 @@ If a new version fails health checks or integration tests after deployment:
 
 ```bash
 # 1. Roll back the application to the previous version
-kubectl rollout undo deployment/soroban-pulse
+kubectl rollout undo deployment/stellarclassic-pulse
 
 # 2. Roll back the database migration
-kubectl exec -it deployment/soroban-pulse -- make migrate-down
+kubectl exec -it deployment/stellarclassic-pulse -- make migrate-down
 ```
 
 **Scenario 2: Migration causes performance degradation**
@@ -202,7 +202,7 @@ If a migration inadvertently corrupts data:
 make migrate-down
 
 # 2. Restore from the most recent backup taken before the migration
-./scripts/restore.sh s3://my-bucket/backups/soroban_pulse_pre_migration.dump
+./scripts/restore.sh s3://my-bucket/backups/stellarclassic_pulse_pre_migration.dump
 
 # 3. Fix the migration script
 # 4. Test thoroughly in staging before re-applying
@@ -217,13 +217,13 @@ Before deploying to production, test both the up and down migrations:
 docker-compose -f docker-compose.test.yml up -d
 
 # 2. Apply the migration
-DATABASE_URL=postgres://postgres:postgres@localhost/soroban_pulse_test make migrate
+DATABASE_URL=postgres://postgres:postgres@localhost/stellarclassic_pulse_test make migrate
 
 # 3. Verify the schema changes
 psql $DATABASE_URL -c "\d events"
 
 # 4. Roll back the migration
-DATABASE_URL=postgres://postgres:postgres@localhost/soroban_pulse_test make migrate-down
+DATABASE_URL=postgres://postgres:postgres@localhost/stellarclassic_pulse_test make migrate-down
 
 # 5. Verify the schema is restored
 psql $DATABASE_URL -c "\d events"
@@ -241,25 +241,25 @@ For stricter separation of concerns, you can disable in-process migrations and r
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: soroban-pulse-migrate
+  name: stellarclassic-pulse-migrate
 spec:
   template:
     spec:
       restartPolicy: OnFailure
       containers:
         - name: migrate
-          image: soroban-pulse:latest
+          image: stellarclassic-pulse:latest
           command: ["./migrate"] # separate migrate binary
           envFrom:
             - secretRef:
-                name: soroban-pulse-secrets
+                name: stellarclassic-pulse-secrets
 ```
 
 Reference this Job in your `Deployment` rollout pipeline (e.g., Argo CD sync waves, Helm hooks) so it runs to completion before any application pods start.
 
 ---
 
-Soroban Pulse ships three `.env.*.example` templates:
+StellarClassic Pulse ships three `.env.*.example` templates:
 
 | File                      | Purpose                                                   |
 | ------------------------- | --------------------------------------------------------- |
@@ -363,7 +363,7 @@ Create a secret and mount it as an environment variable:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: soroban-pulse-secrets
+  name: stellarclassic-pulse-secrets
 stringData:
   DATABASE_URL: "postgres://user:pass@host:5432/db"
   API_KEY: "your-api-key"
@@ -371,7 +371,7 @@ stringData:
 # In your Deployment spec:
 envFrom:
   - secretRef:
-      name: soroban-pulse-secrets
+      name: stellarclassic-pulse-secrets
 ```
 
 Or mount as a file and use `DATABASE_URL_FILE`:
@@ -380,7 +380,7 @@ Or mount as a file and use `DATABASE_URL_FILE`:
 volumes:
   - name: db-secret
     secret:
-      secretName: soroban-pulse-secrets
+      secretName: stellarclassic-pulse-secrets
 volumeMounts:
   - name: db-secret
     mountPath: /run/secrets
@@ -450,7 +450,7 @@ The CSP differs by route:
 
 ## TLS Termination
 
-Soroban Pulse speaks plain HTTP and **must never be exposed directly on port 80 or 443 without TLS in front of it**. All TLS termination must happen at a reverse proxy or load balancer layer.
+StellarClassic Pulse speaks plain HTTP and **must never be exposed directly on port 80 or 443 without TLS in front of it**. All TLS termination must happen at a reverse proxy or load balancer layer.
 
 Set `BEHIND_PROXY=true` in your environment so the service trusts `X-Forwarded-For` headers from the proxy and logs real client IPs.
 
@@ -461,7 +461,7 @@ Set `BEHIND_PROXY=true` in your environment so the service trusts `X-Forwarded-F
 Install certbot and obtain a certificate, then use the config below.
 
 ```nginx
-# /etc/nginx/sites-available/soroban-pulse
+# /etc/nginx/sites-available/stellarclassic-pulse
 server {
     listen 80;
     server_name api.example.com;
@@ -488,7 +488,7 @@ server {
 ```
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/soroban-pulse /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/stellarclassic-pulse /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
@@ -554,7 +554,7 @@ export BACKUP_ENCRYPTION_KEY="your-secure-passphrase-here"
 ```bash
 # Example: AWS Secrets Manager
 export BACKUP_ENCRYPTION_KEY=$(aws secretsmanager get-secret-value \
-  --secret-id soroban-pulse/backup-key \
+  --secret-id stellarclassic-pulse/backup-key \
   --query SecretString --output text)
 ```
 
@@ -564,25 +564,25 @@ Use `scripts/backup.sh` to create an encrypted compressed custom-format dump:
 
 ```bash
 # Dump to a local directory (encrypted)
-DATABASE_URL=postgres://user:pass@localhost/soroban_pulse \
+DATABASE_URL=postgres://user:pass@localhost/stellarclassic_pulse \
 BACKUP_ENCRYPTION_KEY="your-passphrase" \
 ./scripts/backup.sh
 
 # Dump and upload to S3 (encrypted)
 DATABASE_URL=postgres://... \
 BACKUP_ENCRYPTION_KEY="your-passphrase" \
-BACKUP_DEST=s3://my-bucket/soroban-pulse \
+BACKUP_DEST=s3://my-bucket/stellarclassic-pulse \
 ./scripts/backup.sh
 ```
 
-Backups are saved with a `.gpg` extension (e.g., `soroban_pulse_20260314T000000Z.dump.gpg`).
+Backups are saved with a `.gpg` extension (e.g., `stellarclassic_pulse_20260314T000000Z.dump.gpg`).
 
 Schedule with cron (hourly example):
 
 ```cron
 0 * * * * \
   DATABASE_URL=postgres://... \
-  BACKUP_ENCRYPTION_KEY=$(aws secretsmanager get-secret-value --secret-id soroban-pulse/backup-key --query SecretString --output text) \
+  BACKUP_ENCRYPTION_KEY=$(aws secretsmanager get-secret-value --secret-id stellarclassic-pulse/backup-key --query SecretString --output text) \
   BACKUP_DEST=s3://my-bucket/backups \
   /app/scripts/backup.sh >> /var/log/soroban-backup.log 2>&1
 ```
@@ -593,12 +593,12 @@ Schedule with cron (hourly example):
 # From a local encrypted file
 DATABASE_URL=postgres://... \
 BACKUP_ENCRYPTION_KEY="your-passphrase" \
-./scripts/restore.sh ./backups/soroban_pulse_20260314T000000Z.dump.gpg
+./scripts/restore.sh ./backups/stellarclassic_pulse_20260314T000000Z.dump.gpg
 
 # From S3 (encrypted)
 DATABASE_URL=postgres://... \
 BACKUP_ENCRYPTION_KEY="your-passphrase" \
-./scripts/restore.sh s3://my-bucket/backups/soroban_pulse_20260314T000000Z.dump.gpg
+./scripts/restore.sh s3://my-bucket/backups/stellarclassic_pulse_20260314T000000Z.dump.gpg
 ```
 
 The restore script prompts for confirmation before overwriting data.
@@ -644,13 +644,13 @@ When using a managed service, disable the `db` service in `docker-compose.yml` a
 docker-compose up -d db
 
 # 2. Run a backup
-DATABASE_URL=postgres://user:pass@localhost:5432/soroban_pulse \
+DATABASE_URL=postgres://user:pass@localhost:5432/stellarclassic_pulse \
   BACKUP_DEST=./backups ./scripts/backup.sh
 
 # 3. Restore into a fresh database to verify
-createdb soroban_pulse_verify
-DATABASE_URL=postgres://user:pass@localhost:5432/soroban_pulse_verify \
-  ./scripts/restore.sh ./backups/soroban_pulse_*.dump
+createdb stellarclassic_pulse_verify
+DATABASE_URL=postgres://user:pass@localhost:5432/stellarclassic_pulse_verify \
+  ./scripts/restore.sh ./backups/stellarclassic_pulse_*.dump
 ```
 
 ---
@@ -686,7 +686,7 @@ See the root [README](../README.md) for all other variables.
 
 ### Table Bloat and VACUUM
 
-Soroban Pulse uses an `ON CONFLICT DO NOTHING` pattern for the `events` table to ensure idempotency. While efficient for data integrity, this pattern creates **dead tuples** every time a duplicate event is encountered. In an append-heavy workload, these dead tuples can lead to "table bloat," where the table and its indexes consume far more disk space than necessary, eventually degrading query performance and increasing index scan times.
+StellarClassic Pulse uses an `ON CONFLICT DO NOTHING` pattern for the `events` table to ensure idempotency. While efficient for data integrity, this pattern creates **dead tuples** every time a duplicate event is encountered. In an append-heavy workload, these dead tuples can lead to "table bloat," where the table and its indexes consume far more disk space than necessary, eventually degrading query performance and increasing index scan times.
 
 PostgreSQL's built-in **autovacuum** daemon handles the removal of dead tuples and the updating of query planner statistics (`ANALYZE`). For a high-traffic indexing service, the default autovacuum settings may be too conservative.
 
@@ -731,7 +731,7 @@ This executes `VACUUM ANALYZE events;` which cleans up dead tuples and updates s
 
 ## Index Usage Monitoring
 
-Soroban Pulse includes a background task that periodically runs `EXPLAIN` on the three key query patterns and logs a warning if the query planner is not using the expected index.
+StellarClassic Pulse includes a background task that periodically runs `EXPLAIN` on the three key query patterns and logs a warning if the query planner is not using the expected index.
 
 ### Checked queries
 
@@ -817,7 +817,7 @@ The response reports how many bounced addresses were received and recorded:
 
 ### Monitoring
 
-Each recorded bounce increments the `soroban_pulse_email_bounces_total`
+Each recorded bounce increments the `stellarclassic_pulse_email_bounces_total`
 Prometheus counter. A rising bounce rate is an early warning that the recipient
 list contains stale addresses or that the sending domain's reputation is
 degrading.

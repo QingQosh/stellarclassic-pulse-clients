@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Soroban Pulse API
+ * StellarClassic Pulse API
  * Indexes Soroban smart contract events on the Stellar network.
  *
  * The version of the OpenAPI document: 1.0.0

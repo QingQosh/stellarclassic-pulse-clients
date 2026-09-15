@@ -1,7 +1,7 @@
 # Database Connection Pool Exhaustion Runbook
 
 ## Symptom
-The Soroban Pulse database connection pool has reached its maximum capacity. The `soroban_pulse_db_pool_size` metric equals `soroban_pulse_db_pool_max`, and new requests may be queued or rejected with connection timeout errors.
+The StellarClassic Pulse database connection pool has reached its maximum capacity. The `stellarclassic_pulse_db_pool_size` metric equals `stellarclassic_pulse_db_pool_max`, and new requests may be queued or rejected with connection timeout errors.
 
 ## Likely Causes
 1. **Slow database queries**: Long-running queries are holding connections open
@@ -14,9 +14,9 @@ The Soroban Pulse database connection pool has reached its maximum capacity. The
 
 ### 1. Check current pool status
 ```bash
-promtool query instant 'soroban_pulse_db_pool_size'
-promtool query instant 'soroban_pulse_db_pool_idle'
-promtool query instant 'soroban_pulse_db_pool_max'
+promtool query instant 'stellarclassic_pulse_db_pool_size'
+promtool query instant 'stellarclassic_pulse_db_pool_idle'
+promtool query instant 'stellarclassic_pulse_db_pool_max'
 ```
 
 ### 2. Connect to the database and check active connections
@@ -39,7 +39,7 @@ ORDER BY query_start ASC;
 ### 3. Check for connection leaks in the application
 ```bash
 # Review recent logs for connection errors
-kubectl logs -l app=soroban-pulse -c soroban-pulse --tail=100 | grep -i "connection\|pool\|timeout"
+kubectl logs -l app=stellarclassic-pulse -c stellarclassic-pulse --tail=100 | grep -i "connection\|pool\|timeout"
 ```
 
 ### 4. Monitor query performance
@@ -62,8 +62,8 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 ### Immediate actions
 1. **Increase pool size** (temporary fix):
    ```bash
-   kubectl set env deployment/soroban-pulse DB_MAX_CONNECTIONS=20
-   kubectl rollout restart deployment/soroban-pulse
+   kubectl set env deployment/stellarclassic-pulse DB_MAX_CONNECTIONS=20
+   kubectl rollout restart deployment/stellarclassic-pulse
    ```
 
 2. **Kill long-running queries** (if safe):

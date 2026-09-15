@@ -1,6 +1,6 @@
 # HTTP/3 Support
 
-SorobanPulse supports HTTP/3 over QUIC for clients that negotiate it, with
+StellarClassicPulse supports HTTP/3 over QUIC for clients that negotiate it, with
 automatic fallback to HTTP/2 and HTTP/1.1. This document describes
 configuration, protocol negotiation, connection persistence, and the metrics
 exposed for observability.
@@ -10,7 +10,7 @@ exposed for observability.
 HTTP/3 is configured via `Http3Config` (`src/http3_support.rs`):
 
 ```rust
-use sorobanpulse::http3_support::Http3Config;
+use stellarclassicpulse::http3_support::Http3Config;
 
 let config = Http3Config {
     enabled: true,
@@ -66,10 +66,10 @@ instead of re-handshaking. Idle connections are evicted via `evict_idle`.
 accept/reject outcomes, and exposes them in Prometheus exposition format via
 `to_prometheus()`:
 
-- `sorobanpulse_http3_requests_total`
-- `sorobanpulse_http2_requests_total`
-- `sorobanpulse_http1_requests_total`
-- `sorobanpulse_protocol_downgrades_total`
+- `stellarclassicpulse_http3_requests_total`
+- `stellarclassicpulse_http2_requests_total`
+- `stellarclassicpulse_http1_requests_total`
+- `stellarclassicpulse_protocol_downgrades_total`
 
 ## Performance Comparison
 

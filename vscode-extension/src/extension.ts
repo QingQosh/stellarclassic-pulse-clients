@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext): void {
     const explorer = new ApiExplorerProvider();
 
     // Tree view
-    const treeView = vscode.window.createTreeView('sorobanpulse.apiExplorer', {
+    const treeView = vscode.window.createTreeView('stellarclassicpulse.apiExplorer', {
         treeDataProvider: explorer,
         showCollapseAll: true,
     });
@@ -23,34 +23,34 @@ export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(
         treeView,
 
-        vscode.commands.registerCommand('sorobanpulse.refreshExplorer', () => {
+        vscode.commands.registerCommand('stellarclassicpulse.refreshExplorer', () => {
             explorer.setFilter('');
             explorer.refresh();
         }),
 
-        vscode.commands.registerCommand('sorobanpulse.openRequestTester', (endpoint?: ApiEndpoint) => {
+        vscode.commands.registerCommand('stellarclassicpulse.openRequestTester', (endpoint?: ApiEndpoint) => {
             RequestTesterPanel.open(context, endpoint);
         }),
 
-        vscode.commands.registerCommand('sorobanpulse.copyUrl', async (item?: EndpointItem) => {
+        vscode.commands.registerCommand('stellarclassicpulse.copyUrl', async (item?: EndpointItem) => {
             if (!item) { return; }
-            const base = vscode.workspace.getConfiguration('sorobanpulse').get<string>('baseUrl', 'http://localhost:3000');
+            const base = vscode.workspace.getConfiguration('stellarclassicpulse').get<string>('baseUrl', 'http://localhost:3000');
             const url = base.replace(/\/$/, '') + item.endpoint.path;
             await vscode.env.clipboard.writeText(url);
             vscode.window.showInformationMessage(`Copied: ${url}`);
         }),
 
-        vscode.commands.registerCommand('sorobanpulse.openSettings', () => {
-            vscode.commands.executeCommand('workbench.action.openSettings', 'sorobanpulse');
+        vscode.commands.registerCommand('stellarclassicpulse.openSettings', () => {
+            vscode.commands.executeCommand('workbench.action.openSettings', 'stellarclassicpulse');
         }),
 
         // Issue #963: secure API key management (SecretStorage-backed).
-        vscode.commands.registerCommand('sorobanpulse.setApiKey', () => setApiKey(context)),
-        vscode.commands.registerCommand('sorobanpulse.setAdminApiKey', () => setAdminApiKey(context)),
-        vscode.commands.registerCommand('sorobanpulse.clearApiKeys', () => clearApiKeys(context)),
+        vscode.commands.registerCommand('stellarclassicpulse.setApiKey', () => setApiKey(context)),
+        vscode.commands.registerCommand('stellarclassicpulse.setAdminApiKey', () => setAdminApiKey(context)),
+        vscode.commands.registerCommand('stellarclassicpulse.clearApiKeys', () => clearApiKeys(context)),
 
         // Issue #963: webhook test interface.
-        vscode.commands.registerCommand('sorobanpulse.testWebhook', () => testWebhook()),
+        vscode.commands.registerCommand('stellarclassicpulse.testWebhook', () => testWebhook()),
     );
 }
 
