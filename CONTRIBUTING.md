@@ -302,3 +302,14 @@ See [RELEASE.md](RELEASE.md) for the complete release process, including:
 - Docker image publishing
 
 Only maintainers can cut releases. If you'd like to propose a release, open an issue or contact the maintainers.
+
+## Drips Wave Program
+
+This repo participates in the [Stellar Wave Program](https://drips.network/wave).
+Issues tagged `drips-wave` are available for community contributors to pick up and earn rewards.
+
+### How to contribute via Wave
+
+1. Browse [`drips-wave` issues](https://github.com/QingQosh/stellarclassic-pulse-clients/issues?q=label%3Adrips-wave)
+2. Apply at [drips.network/wave](https://drips.network/wave)
+3. Once accepted, fork the repo, implement the fix, and open a PR
