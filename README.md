@@ -1,3 +1,5 @@
+# StellarClassic Pulse Clients 🛠️
+
 # StellarClassicPulse Clients
 
 Client-side tooling for StellarClassicPulse — the dashboard UI, CLI, multi-language SDKs, and VS Code extension.
