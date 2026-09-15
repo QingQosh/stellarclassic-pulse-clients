@@ -1,0 +1,21 @@
+- name: drips-wave
+  color: "7B5EA7"
+  description: Issue is part of the Drips Stellar Wave Program
+- name: good first issue
+  color: "7057ff"
+  description: Good for newcomers
+- name: help wanted
+  color: "008672"
+  description: Extra attention is needed
+- name: dashboard
+  color: "0ea5e9"
+  description: Related to the React dashboard
+- name: cli
+  color: "8b5cf6"
+  description: Related to the CLI tool
+- name: sdk
+  color: "10b981"
+  description: Related to the SDKs
+- name: vscode
+  color: "3b82f6"
+  description: Related to the VS Code extension
