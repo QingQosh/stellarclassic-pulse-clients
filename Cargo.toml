@@ -9,9 +9,17 @@ repository = "https://github.com/Soroban-Pulse/SorobanPulse"
 
 [dependencies]
 # Web framework
+axum = { version = "0.8", features = ["macros", "ws"] }
 actix-web = "4.4"
 actix-rt = "2.9"
 actix-cors = "0.7"
+axum-extra = { version = "0.9", features = ["typed-header"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.5", features = ["trace", "cors", "compression-full", "metrics", "request-id", "limit"] }
+tower_governor = { version = "0.8", features = ["axum"] }
+http = "1"
+http-body-util = "0.1"
+utoipa = { version = "4", features = ["axum_extras", "uuid", "chrono"] }
 
 # Async runtime
 tokio = { version = "1.35", features = ["full"] }
@@ -55,6 +63,7 @@ opentelemetry-jaeger = { version = "0.20", optional = true }
 # Metrics
 prometheus = "0.13"
 metrics = "0.21"
+metrics-exporter-prometheus = "0.14"
 
 # Configuration
 config = "0.13"
@@ -69,6 +78,7 @@ uuid = { version = "1.6", features = ["serde", "v4"] }
 
 # HTTP client
 reqwest = { version = "0.11", features = ["json", "stream"] }
+url = "2.5"
 
 # GraphQL
 async-graphql = "7.0"
@@ -86,6 +96,13 @@ blake3 = "1"
 toml = "0.8"
 secrecy = "0.5"
 rand = "0.8"
+dashmap = "6"
+moka = { version = "0.12", features = ["future"] }
+bloomfilter = "3"
+flate2 = "1"
+jsonschema = "0.18"
+stellar-xdr = { version = "26", features = ["std", "curr", "serde"] }
+lettre = { version = "0.11", default-features = false, features = ["tokio1-rustls-tls", "smtp-transport", "builder"] }
 
 # Service mesh integration
 tonic = { version = "0.10", optional = true }
@@ -95,7 +112,6 @@ prost = { version = "0.12", optional = true }
 rdkafka = { version = "0.36", features = ["cmake-build"], optional = true }
 google-cloud-pubsub = { version = "0.33", optional = true }
 google-cloud-googleapis = { version = "0.16", optional = true }
-url = { version = "2.5", optional = true }
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
@@ -126,7 +142,7 @@ full-observability = ["tracing-opentelemetry", "opentelemetry-jaeger"]
 
 # Messaging integrations
 kafka = ["dep:rdkafka"]
-sqs = ["dep:url"]
+sqs = []
 pubsub = ["dep:google-cloud-pubsub", "dep:google-cloud-googleapis"]
 
 [profile.release]
