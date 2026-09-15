@@ -39,3 +39,8 @@ npm run publish        # publishes to VS Code Marketplace (requires vsce login)
 
 - VS Code `^1.85.0`
 - A running StellarClassic Pulse server
+
+## Contributing
+
+This extension is part of the [StellarClassic Pulse](https://github.com/QingQosh/stellarclassic-pulse-clients) project.
+Contributions are welcome — see [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
