@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Drips Wave Program
+    url: https://drips.network/wave
+    about: Apply to work on a bounty issue via the Stellar Wave Program
+  - name: Security Vulnerability
+    url: https://github.com/QingQosh/stellarclassic-pulse-clients/blob/main/SECURITY.md
+    about: Report a security vulnerability responsibly
