@@ -87,3 +87,8 @@ npm run compile
 ## Environment variables
 
 Copy `.env.example` and set `SOROBAN_PULSE_API_URL` to point at your backend instance.
+
+## Contributing via Drips Wave
+
+This project participates in the [Stellar Wave Program](https://drips.network/wave).
+Browse issues tagged `drips-wave` and apply at [drips.network/wave](https://drips.network/wave).
